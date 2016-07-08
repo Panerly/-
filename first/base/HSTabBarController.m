@@ -27,6 +27,9 @@
     
     //添加自控制器
     HomeViewController *home = [[HomeViewController alloc] init];
+//    UIImage *homeImage = [UIImage imageNamed:@"home2"];
+//    UIImage *homeSelectedImage = [UIImage imageNamed:@"home2_selected"];
+
     [self addOneChlildVc:home title:@"首页" imageName:@"home" selectedImageName:@"home_selected"];
     
     
@@ -62,10 +65,9 @@
     
     // 设置图标
     childVc.tabBarItem.image = [UIImage imageNamed:imageName];
-    
     // 设置选中的图标
     UIImage *selectedImage = [UIImage imageNamed:selectedImageName];
-    
+
     // 声明这张图片用原图(别渲染)
     selectedImage = [selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     childVc.tabBarItem.selectedImage = selectedImage;

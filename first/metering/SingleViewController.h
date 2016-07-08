@@ -23,5 +23,5 @@
 @property (weak, nonatomic) IBOutlet UIImageView *secondImage;
 @property (weak, nonatomic) IBOutlet UIImageView *thirdImage;
 
-
+@property (nonatomic, strong) UIView *scanView;
 @end

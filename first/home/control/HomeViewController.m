@@ -9,7 +9,6 @@
 #import "HomeViewController.h"
 #import "City.h"
 #import "WeatherModel.h"
-#import <CoreLocation/CoreLocation.h>
 #import "MeteringViewController.h"
 #import "UIImage+GIF.h"
 #import "SCToastView.h"
@@ -210,7 +209,7 @@
 }
 - (void)timesOut{
     [loading removeFromSuperview];
-    [SCToastView showInView:self.view text:@"定位失败！" duration:3 autoHide:YES];
+    [SCToastView showInView:self.view text:@"定位超时！" duration:3 autoHide:YES];
     [_locationManager stopUpdatingLocation];
 }
 

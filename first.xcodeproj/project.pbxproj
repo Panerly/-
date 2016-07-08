@@ -95,7 +95,6 @@
 		459241E61D18E1690007A5A5 /* SCPieChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 459241D81D18E1690007A5A5 /* SCPieChartDataItem.m */; };
 		459241E71D18E1690007A5A5 /* SCTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 459241DA1D18E1690007A5A5 /* SCTool.m */; };
 		459241E81D18E1690007A5A5 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 459241DC1D18E1690007A5A5 /* UICountingLabel.m */; };
-		459241EC1D1921420007A5A5 /* MapNavigationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 459241EB1D1921420007A5A5 /* MapNavigationManager.m */; };
 		45978D631CED7E6400BF3C0E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 45978D621CED7E6400BF3C0E /* main.m */; };
 		45978D6C1CED7E6400BF3C0E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45978D6A1CED7E6400BF3C0E /* Main.storyboard */; };
 		45978D6E1CED7E6400BF3C0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45978D6D1CED7E6400BF3C0E /* Assets.xcassets */; };
@@ -187,7 +186,6 @@
 		45EB6AB61D23759A003A2FA0 /* MeterEditStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45EB6AB51D23759A003A2FA0 /* MeterEditStoryboard.storyboard */; };
 		45EDA2161D1101D70074B786 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EDA2141D1101D70074B786 /* DetailViewController.m */; };
 		45EDA2171D1101D70074B786 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45EDA2151D1101D70074B786 /* DetailViewController.xib */; };
-		45EDA2211D112AB80074B786 /* GuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EDA2201D112AB80074B786 /* GuideViewController.m */; };
 		45EDA2331D113A2C0074B786 /* PhotoCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EDA22C1D113A2C0074B786 /* PhotoCollectionView.m */; };
 		45EDA2341D113A2C0074B786 /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EDA22E1D113A2C0074B786 /* PhotoCollectionViewCell.m */; };
 		45EDA2351D113A2C0074B786 /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EDA2301D113A2C0074B786 /* PhotoScrollView.m */; };
@@ -391,8 +389,6 @@
 		459241DA1D18E1690007A5A5 /* SCTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTool.m; sourceTree = "<group>"; };
 		459241DB1D18E1690007A5A5 /* UICountingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICountingLabel.h; sourceTree = "<group>"; };
 		459241DC1D18E1690007A5A5 /* UICountingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICountingLabel.m; sourceTree = "<group>"; };
-		459241EA1D1921420007A5A5 /* MapNavigationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapNavigationManager.h; sourceTree = "<group>"; };
-		459241EB1D1921420007A5A5 /* MapNavigationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapNavigationManager.m; sourceTree = "<group>"; };
 		45978D5E1CED7E6400BF3C0E /* 杭州水表.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "杭州水表.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		45978D621CED7E6400BF3C0E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		45978D6B1CED7E6400BF3C0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -536,8 +532,6 @@
 		45EDA2131D1101D70074B786 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		45EDA2141D1101D70074B786 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		45EDA2151D1101D70074B786 /* DetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
-		45EDA21F1D112AB80074B786 /* GuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideViewController.h; sourceTree = "<group>"; };
-		45EDA2201D112AB80074B786 /* GuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideViewController.m; sourceTree = "<group>"; };
 		45EDA22B1D113A2C0074B786 /* PhotoCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionView.h; sourceTree = "<group>"; };
 		45EDA22C1D113A2C0074B786 /* PhotoCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionView.m; sourceTree = "<group>"; };
 		45EDA22D1D113A2C0074B786 /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
@@ -868,15 +862,6 @@
 			path = SCChart;
 			sourceTree = "<group>";
 		};
-		459241E91D1921420007A5A5 /* 地图导航 */ = {
-			isa = PBXGroup;
-			children = (
-				459241EA1D1921420007A5A5 /* MapNavigationManager.h */,
-				459241EB1D1921420007A5A5 /* MapNavigationManager.m */,
-			);
-			path = "地图导航";
-			sourceTree = "<group>";
-		};
 		45978D551CED7E6400BF3C0E = {
 			isa = PBXGroup;
 			children = (
@@ -902,7 +887,6 @@
 		45978D601CED7E6400BF3C0E /* first */ = {
 			isa = PBXGroup;
 			children = (
-				45EDA21B1D112A5F0074B786 /* 导航 */,
 				45DCA36E1CEF004E00E42468 /* base */,
 				45DCA2FC1CEEDE7100E42468 /* home(首页) */,
 				45DCA2FD1CEEDE8300E42468 /* me(设置) */,
@@ -950,7 +934,6 @@
 		45B443581CF41115000644B2 /* 三方 */ = {
 			isa = PBXGroup;
 			children = (
-				459241E91D1921420007A5A5 /* 地图导航 */,
 				459241C31D18E1690007A5A5 /* SCChart */,
 				45D634DF1D17A5CC004358B8 /* Masonry */,
 				45FF5D271D0FD8C000F3D4E4 /* SDWebImage */,
@@ -1528,39 +1511,6 @@
 			name = DetailVC;
 			sourceTree = "<group>";
 		};
-		45EDA21B1D112A5F0074B786 /* 导航 */ = {
-			isa = PBXGroup;
-			children = (
-				45EDA21C1D112A5F0074B786 /* controller */,
-				45EDA21D1D112A5F0074B786 /* model */,
-				45EDA21E1D112A5F0074B786 /* view */,
-			);
-			path = "导航";
-			sourceTree = "<group>";
-		};
-		45EDA21C1D112A5F0074B786 /* controller */ = {
-			isa = PBXGroup;
-			children = (
-				45EDA21F1D112AB80074B786 /* GuideViewController.h */,
-				45EDA2201D112AB80074B786 /* GuideViewController.m */,
-			);
-			path = controller;
-			sourceTree = "<group>";
-		};
-		45EDA21D1D112A5F0074B786 /* model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = model;
-			sourceTree = "<group>";
-		};
-		45EDA21E1D112A5F0074B786 /* view */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = view;
-			sourceTree = "<group>";
-		};
 		45EDA2221D1135090074B786 /* ShowImage */ = {
 			isa = PBXGroup;
 			children = (
@@ -1899,7 +1849,6 @@
 				4501031E1CF2EFE50070E38A /* HyLoglnButton.m in Sources */,
 				45D635011D17A5CC004358B8 /* NSArray+MASAdditions.m in Sources */,
 				458D28BE1D2B6E4600F64790 /* UserNameViewController.m in Sources */,
-				459241EC1D1921420007A5A5 /* MapNavigationManager.m in Sources */,
 				450103211CF2F0CD0070E38A /* SpinerLayer.m in Sources */,
 				452ACC431D20FF5000B50002 /* SearchResultViewController.m in Sources */,
 				453F2CAC1D2634A70048A4DB /* MeterEditScrollView.m in Sources */,
@@ -1927,7 +1876,6 @@
 				45D634FE1D17A5CC004358B8 /* MASLayoutConstraint.m in Sources */,
 				459241E11D18E1690007A5A5 /* SCCircleChart.m in Sources */,
 				45C705F81D1244CB002164C6 /* ChartViewController.m in Sources */,
-				45EDA2211D112AB80074B786 /* GuideViewController.m in Sources */,
 				45771FBF1D0E7DD9006BF7F3 /* NSString+URL.m in Sources */,
 				459241DD1D18E1690007A5A5 /* SCBar.m in Sources */,
 				45FF5D511D0FD8C000F3D4E4 /* SDWebImagePrefetcher.m in Sources */,

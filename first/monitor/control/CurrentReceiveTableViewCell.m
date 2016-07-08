@@ -8,7 +8,6 @@
 
 #import "CurrentReceiveTableViewCell.h"
 #import "UIImageView+WebCache.h"
-#import "GuideViewController.h"
 #import "PhotoViewController.h"
 #import "CurrentReceiveViewController.h"
 
@@ -32,9 +31,33 @@
 
 - (IBAction)naviButton:(id)sender {
 
-    GuideViewController *guideVC = [[GuideViewController alloc] init];
+//    GuideViewController *guideVC = [[GuideViewController alloc] init];
+//    
+//    [[self findVC].navigationController showViewController:guideVC sender:nil];
     
-    [[self findVC].navigationController showViewController:guideVC sender:nil];
+    //检测定位功能是否开启
+    if([CLLocationManager locationServicesEnabled]){
+        CLLocationCoordinate2D loc = CLLocationCoordinate2DMake(39.26, 117.30);
+        MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
+        MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:loc addressDictionary:nil]];
+        [MKMapItem openMapsWithItems:@[currentLocation, toLocation]
+                       launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                                       MKLaunchOptionsShowsTrafficKey: [NSNumber numberWithBool:YES]}];
+        
+    }else{
+        
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"定位信息" message:@"您没有开启定位功能" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        
+        [alertVC addAction:action];
+        [[self findVC] presentViewController:alertVC animated:YES completion:^{
+            
+        }];
+    }
+
 }
 
 - (UIViewController *)findVC

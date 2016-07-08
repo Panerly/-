@@ -14,7 +14,10 @@ static const char *kScanQRCodeQueueName = "ScanQRCodeQueue";
 @interface SingleViewController ()<AVCaptureMetadataOutputObjectsDelegate>
 {
     UIImagePickerController *_imagePickerController;
+    //确定传的是哪个照片
     NSInteger num;
+    //扫描确认btn
+    UIButton *scanBtn;
 }
 @property (nonatomic) AVCaptureSession *captureSession;
 @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
@@ -54,9 +57,47 @@ static BOOL flag;
     [self systemLightSwitch:flag];
 }
 - (void)QRcode {
+    
+    _scanView = [[UIView alloc] initWithFrame:self.view.bounds];
+    _scanView.center = self.view.center;
+    _scanView.backgroundColor = [UIColor blackColor];
+    _scanView.alpha = .8;
+    [self.view addSubview:_scanView];
+    
+    scanBtn = [[UIButton alloc] init];
+    [scanBtn setTitle:@"确定" forState:UIControlStateNormal];
+    scanBtn.backgroundColor = [UIColor redColor];
+    scanBtn.clipsToBounds = YES;
+    scanBtn.layer.cornerRadius = 5;
+    [scanBtn addTarget:self action:@selector(conformBtn) forControlEvents:UIControlEventTouchUpInside];
+    [_scanView addSubview:scanBtn];
+    [scanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.equalTo(CGSizeMake(80, 30));
+        make.centerX.equalTo(_scanView.centerX);
+        make.bottom.equalTo(_scanView.bottom).with.offset(-50);
+    }];
+    
     [self startReading];
     
 }
+
+- (void)conformBtn
+{
+    [UIView animateWithDuration:.5 animations:^{
+        _videoPreviewLayer.transform = CATransform3DMakeScale(1.5, 1.5, 1.5);
+    } completion:^(BOOL finished) {
+        
+        [UIView animateWithDuration:.5 animations:^{
+            _scanView.transform = CGAffineTransformMakeScale(.01, .01);
+            _videoPreviewLayer.transform = CATransform3DMakeScale(.01, .01, .01);
+        } completion:^(BOOL finished) {
+            [_scanView removeFromSuperview];
+            [_videoPreviewLayer removeFromSuperlayer];
+        }];
+    }];
+}
+
+//开始读取
 - (BOOL)startReading
 {
     // 获取 AVCaptureDevice 实例
@@ -86,9 +127,12 @@ static BOOL flag;
     
     // 创建输出对象
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
+    _videoPreviewLayer.cornerRadius = 10;
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
-    [_videoPreviewLayer setFrame:self.view.layer.bounds];
+    [_videoPreviewLayer setFrame:CGRectMake(20, _scanView.center.y-PanScreenHeight/6, PanScreenWidth - 40, PanScreenHeight/3)];
     [self.view.layer addSublayer:_videoPreviewLayer];
+    
+    
     // 开始会话
     [_captureSession startRunning];
     
@@ -123,16 +167,31 @@ static BOOL flag;
 {
     [self stopReading];
     NSLog(@"%@",result);
+    UILabel *resultLabel = [[UILabel alloc] init];
+    resultLabel.text = result;
+    resultLabel.textColor = [UIColor whiteColor];
+    resultLabel.textAlignment = NSTextAlignmentCenter;
+    [_scanView addSubview:resultLabel];
+    [resultLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.equalTo(CGSizeMake(200, 25));
+        make.centerX.equalTo(_scanView.centerX);
+        make.top.equalTo(_scanView.mas_top).with.offset(84);
+    }];
+    
     if (!_lastResult) {
         return;
     }
     _lastResult = NO;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"二维码扫描"
-                                                    message:result
-                                                   delegate:nil
-                                          cancelButtonTitle:@"取消"
-                                          otherButtonTitles: nil];
-    [alert show];
+    
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"条形码扫描" message:result preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alertVC addAction:action];
+    [self presentViewController:alertVC animated:YES completion:^{
+        
+    }];
+
     // 以下处理了结果，继续下次扫描
     _lastResult = YES;
 }

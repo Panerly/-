@@ -194,14 +194,14 @@
     
     
 //#warning 测试用直接进入首页
-//    __weak typeof(self) weakSelf = self;
-//    HSTabBarController *tabBarCtrl = [[HSTabBarController alloc] init];
-//    
-//    tabBarCtrl.transitioningDelegate = self;
-//    
-//    [weakSelf presentViewController:tabBarCtrl animated:YES completion:^{
-//        
-//    }];
+    __weak typeof(self) weakSelf = self;
+    HSTabBarController *tabBarCtrl = [[HSTabBarController alloc] init];
+    
+    tabBarCtrl.transitioningDelegate = self;
+    
+    [weakSelf presentViewController:tabBarCtrl animated:YES completion:^{
+        
+    }];
    
 //    //保存账号
 //    [wrapper setObject:self.passWord.text forKey:(id)kSecAttrAccount];

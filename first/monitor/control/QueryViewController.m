@@ -31,7 +31,7 @@
     [super viewDidLoad];
     
     self.title = @"大表数据查询";
-    self.switchBtn.selectedSegmentIndex = 1;
+    self.switchBtn.selectedSegmentIndex = 0;
     
     //设置时流量统计为默认值
     _flag = 0;

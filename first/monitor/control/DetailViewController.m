@@ -104,7 +104,7 @@
     queryVC.meterTypeValue = self.crModel.meter_name2;
     queryVC.communicationTypeValue = self.crModel.meter_name2;
     queryVC.installAddrValue = self.crModel.meter_user_addr;
-    
+
     [self.navigationController showViewController:queryVC sender:nil];
     
 }

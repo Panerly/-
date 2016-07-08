@@ -20,7 +20,6 @@
 #define waterInfoAPI @"http://192.168.3.156:8080/waterweb/servlet/LServlet"
 #import "AFNetworking.h"
 #import "SCChart.h"
-#import "MapNavigationManager.h"
 #define weatherAPIkey @"87aa67335bd8e0739a06cfccc6edecb5"
 #define weatherAPI @"http://apis.baidu.com/apistore/weatherservice/cityname"
 #define hisWeatherAPI @"http://apis.baidu.com/apistore/weatherservice/recentweathers"
@@ -44,5 +43,9 @@
 #define MAS_SHORTHAND_GLOBALS
 
 #import "Masonry.h"
+#import <CoreLocation/CoreLocation.h>
+#import <MapKit/MKFoundation.h>
+#import <MapKit/MKPlacemark.h>
+#import <MapKit/MKMapItem.h>
 
 #endif
