@@ -22,6 +22,7 @@
     NSMutableArray *yFlowArr;
     //用于判断是显示流量or水表读数
     NSUInteger _flag;
+    NSInteger selectedIndex;
 }
 @end
 
@@ -143,8 +144,20 @@
 - (IBAction)curveAction:(id)sender {
     
     SCViewController *curveVC = [[SCViewController alloc] init];
+    
     curveVC.xArr= _xArr;
-    curveVC.yArr = _yArr;
+    
+    if (selectedIndex == 0) {
+        curveVC.yArr = yFlowArr;
+    }
+    else if (selectedIndex == 1) {
+        curveVC.xArr = 0;
+        curveVC.yArr = 0;
+    }
+    else if (selectedIndex == 2) {
+        
+        curveVC.yArr = _yArr;
+    }
     [self.navigationController showViewController:curveVC sender:nil];
 }
 
@@ -162,6 +175,8 @@
         
     }];
     [alertVC addAction:action];
+    
+    selectedIndex = sender.selectedSegmentIndex;
     
     switch (sender.selectedSegmentIndex) {
         case 0://时流量查询
@@ -259,7 +274,7 @@
 }
 
 
-//查询日流量
+//查询时流量
 - (void)requestDayData:(NSString *)fromDate :(NSString *)toDate
 {
     defaults = [NSUserDefaults standardUserDefaults];
@@ -293,8 +308,10 @@
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (responseObject) {
+            
            [yFlowArr removeAllObjects];
             [_yArr removeAllObjects];
+            
             NSString *count = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"count"]];
             if ([count isEqualToString:@"0"]) {
                 [SCToastView showInView:_tableView text:@"暂无数据" duration:4 autoHide:YES];
@@ -310,8 +327,8 @@
                 
                 QueryModel *queryModel = [[QueryModel alloc] initWithDictionary:dic error:&error];
                 [self.dataArr addObject:queryModel];
-                [self.yArr addObject:queryModel.collect_num];
-                [yFlowArr addObject:queryModel.collect_avg];
+                [self.yArr addObject:queryModel.collect_avg];
+                [yFlowArr addObject:queryModel.collect_num];
             }
             _xArr = _dataArr;
             

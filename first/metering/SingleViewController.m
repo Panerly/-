@@ -33,11 +33,14 @@ static BOOL flag;
     self.title = @"抄表·单户";
     flag = YES;
     
+    [self _getCode];
+    
     UIBarButtonItem *light = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"light"] style:UIBarButtonItemStylePlain target:self action:@selector(openLight)];
     UIBarButtonItem *scan = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"qrcode_icon"] style:UIBarButtonItemStylePlain target:self action:@selector(QRcode)];
     self.navigationItem.rightBarButtonItems = @[scan,light];
     
     [self _makeImageTouchLess];
+    
 }
 
 - (void)_makeImageTouchLess
@@ -274,8 +277,43 @@ static BOOL flag;
     NSLog(@"保存照片");
 }
 
+- (void)_getCode
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    self.userNameLabel = [defaults objectForKey:@"userName"];
+    self.passWordLabel = [defaults objectForKey:@"passWord"];
+    self.ipLabel = [defaults objectForKey:@"ip"];
+    self.dbLabel = [defaults objectForKey:@"db"];
+}
+
 - (IBAction)uploadPhoto:(id)sender {
     NSLog(@"上传照片");
+    NSLog(@"%@",_firstImage.image);
+    NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/UploadHandleServlet",self.ipLabel];
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:config];
+    
+    NSDictionary *parameters = @{
+                                 @"db":self.dbLabel,
+                                 @"meter_id":@"dfhq-003",
+                                 @"mFile":_firstImage.image
+                                 };
+    
+    AFHTTPResponseSerializer *serializer = manager.responseSerializer;
+    
+    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/plain"];
+    
+    NSURLSessionTask *task =[manager POST:logInUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"%@",responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@",error);
+    }];
+    [task resume];
 }
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {

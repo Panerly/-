@@ -526,6 +526,13 @@
         make.size.equalTo(CGSizeMake(50, 25));
     }];
     
+    _switchBtn = [[UISwitch alloc] init];
+    _switchBtn.tag = 500;
+    [_scrollView addSubview:_switchBtn];
+    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(alarmIntroduce.mas_bottom).with.offset(5);
+        make.centerX.equalTo(enableLabel.centerX);
+    }];
     
     //水表倒流
     _reversalAlarmLabel = [[UILabel alloc] init];
@@ -557,6 +564,13 @@
         make.left.equalTo(_reversalAlarmTextField.mas_right).with.offset(5);
         make.top.equalTo(_excessiveAlarmTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
+    }];
+    _switchBtn = [[UISwitch alloc] init];
+    _switchBtn.tag = 501;
+    [_scrollView addSubview:_switchBtn];
+    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_reversalAlarmLabel.mas_bottom).with.offset(5);
+        make.centerX.equalTo(enableLabel.centerX);
     }];
     
     
@@ -591,6 +605,13 @@
         make.top.equalTo(_reversalAlarmTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
+    _switchBtn = [[UISwitch alloc] init];
+    _switchBtn.tag = 502;
+    [_scrollView addSubview:_switchBtn];
+    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(reversalAlarmUnit.mas_bottom).with.offset(5);
+        make.centerX.equalTo(enableLabel.centerX);
+    }];
     
     
     //日用量超量程
@@ -623,6 +644,13 @@
         make.left.equalTo(_limitOfUsageAlarmTextField.mas_right).with.offset(5);
         make.top.equalTo(_longTimeNotServerTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
+    }];
+    _switchBtn = [[UISwitch alloc] init];
+    _switchBtn.tag = 503;
+    [_scrollView addSubview:_switchBtn];
+    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(longTimeNotServer.mas_bottom).with.offset(5);
+        make.centerX.equalTo(enableLabel.centerX);
     }];
     
     
@@ -668,6 +696,13 @@
         make.top.equalTo(longtimeNotUse.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
+    _switchBtn = [[UISwitch alloc] init];
+    _switchBtn.tag = 504;
+    [_scrollView addSubview:_switchBtn];
+    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(longtimeNotUse.mas_bottom).with.offset(5);
+        make.centerX.equalTo(enableLabel.centerX);
+    }];
     
     
     //时段用水上限
@@ -704,6 +739,7 @@
     }];
 
 }
+
 - (UIButton *)locaBtn
 {
     [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"正在定位..." duration:1 autoHide:YES];

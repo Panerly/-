@@ -24,4 +24,12 @@
 @property (weak, nonatomic) IBOutlet UIImageView *thirdImage;
 
 @property (nonatomic, strong) UIView *scanView;
+
+@property (nonatomic, strong) NSString *ipLabel;
+
+@property (nonatomic, strong) NSString *dbLabel;
+
+@property (nonatomic, strong) NSString *userNameLabel;
+
+@property (nonatomic, strong) NSString *passWordLabel;
 @end

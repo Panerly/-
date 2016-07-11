@@ -209,7 +209,7 @@
 }
 - (void)timesOut{
     [loading removeFromSuperview];
-    [SCToastView showInView:self.view text:@"定位超时！" duration:3 autoHide:YES];
+//    [SCToastView showInView:self.view text:@"定位超时！" duration:3 autoHide:YES];
     [_locationManager stopUpdatingLocation];
 }
 
@@ -231,6 +231,7 @@
     [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *placemarks, NSError *error) {
         if(error || placemarks.count == 0){
             NSLog(@"error = %@",error);
+            [SCToastView showInView:self.view text:@"定位失败！" duration:3 autoHide:YES];
         }else{
             if ([loading isKindOfClass:[self.view class]]) {
                 

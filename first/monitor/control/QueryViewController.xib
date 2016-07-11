@@ -106,9 +106,9 @@
                     <rect key="frame" x="-60" y="-14" width="121" height="29"/>
                     <animations/>
                     <segments>
-                        <segment title="时流量统计"/>
-                        <segment title="日流量统计"/>
-                        <segment title="月流量统计"/>
+                        <segment title="时流量(m³/h)"/>
+                        <segment title="日流量(吨)"/>
+                        <segment title="月流量(吨)"/>
                     </segments>
                     <connections>
                         <action selector="flowStatistics:" destination="-1" eventType="valueChanged" id="WkL-s4-s2g"/>

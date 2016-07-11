@@ -75,6 +75,7 @@
 //用水过量报警
 @property (nonatomic, strong) UILabel *excessiveAlarmLabel;
 @property (nonatomic, strong) UITextField *excessiveAlarmTextField;
+@property (nonatomic, strong) UISwitch *switchBtn;
 //水表倒流报警
 @property (nonatomic, strong) UILabel *reversalAlarmLabel;
 @property (nonatomic, strong) UITextField *reversalAlarmTextField;

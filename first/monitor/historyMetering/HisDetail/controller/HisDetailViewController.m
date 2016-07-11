@@ -109,7 +109,7 @@
                 hisDetailModel.collect_dt = [dic objectForKey:@"collect_dt"];
                 
                 [self.dataArr addObject:hisDetailModel];
-                [_yArr addObject:hisDetailModel.collect_num];
+                [_yArr addObject:hisDetailModel.collect_avg];
             }
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
             [loading removeFromSuperview];
