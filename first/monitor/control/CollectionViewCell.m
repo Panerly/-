@@ -2,7 +2,7 @@
 //  CollectionViewCell.m
 //  first
 //
-//  Created by HS on 16/6/15.
+//  Created by HS on 16/7/12.
 //  Copyright © 2016年 HS. All rights reserved.
 //
 
@@ -10,8 +10,5 @@
 
 @implementation CollectionViewCell
 
-- (void)awakeFromNib {
-    // Initialization code
-}
 
 @end

@@ -77,7 +77,7 @@
 {
     //刷新控件
 
-    loading = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 133, 100)];
+    loading = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
     loading.center = self.view.center;
     UIImage *image = [UIImage sd_animatedGIFNamed:@"刷新5"];
     [loading setImage:image];

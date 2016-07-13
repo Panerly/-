@@ -97,7 +97,7 @@
 
 //备注信息
 @property (nonatomic, strong) UILabel *remarksLabel;
-@property (nonatomic, strong) UITextField *remarksTextField;
+@property (nonatomic, strong) UITextView *remarksTextView;
 
 //定位button
 @property (nonatomic, strong) UIButton *locaBtn;

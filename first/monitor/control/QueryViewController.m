@@ -75,7 +75,7 @@
 {
     self.manageMeterNum.text = [NSString stringWithFormat:@"表编号: %@",self.meter_id];
     self.meterType.text = [NSString stringWithFormat:@"表类型: %@",self.meterTypeValue];
-    self.communicationType.text = [NSString stringWithFormat:@"通讯类型: %@",self.communicationTypeValue];
+    self.communicationType.text = [NSString stringWithFormat:@"口径: %@",self.communicationTypeValue];
     self.installAddr.text = [NSString stringWithFormat:@"安装地址: %@",self.installAddrValue];
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
@@ -16,7 +16,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AppIcon60x60.png" translatesAutoresizingMaskIntoConstraints="NO" id="biz-0o-bBw">
-                        <rect key="frame" x="8" y="8" width="50" height="50"/>
+                        <rect key="frame" x="8" y="19" width="50" height="50"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="ZpB-k2-ulE"/>
@@ -24,11 +24,11 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGs-Yt-bOZ">
-                        <rect key="frame" x="271" y="53" width="25" height="25"/>
+                        <rect key="frame" x="236" y="19" width="50" height="50"/>
                         <animations/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="25" id="ART-S7-NZt"/>
-                            <constraint firstAttribute="width" constant="25" id="XVg-Ir-Rvq"/>
+                            <constraint firstAttribute="height" constant="50" id="ART-S7-NZt"/>
+                            <constraint firstAttribute="width" constant="50" id="XVg-Ir-Rvq"/>
                         </constraints>
                         <state key="normal" title="导航" image="定位2.png"/>
                         <connections>
@@ -36,11 +36,11 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8kQ-QK-T4o">
-                        <rect key="frame" x="321" y="53" width="25" height="25"/>
+                        <rect key="frame" x="311" y="19" width="50" height="50"/>
                         <animations/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="25" id="64f-vd-Snu"/>
-                            <constraint firstAttribute="width" constant="25" id="b6q-eu-CKI"/>
+                            <constraint firstAttribute="height" constant="50" id="64f-vd-Snu"/>
+                            <constraint firstAttribute="width" constant="50" id="b6q-eu-CKI"/>
                         </constraints>
                         <state key="normal" title="照片" image="pic.png"/>
                         <connections>
@@ -48,10 +48,10 @@
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="杭州水表有限公司" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YC5-Bi-7pm">
-                        <rect key="frame" x="73" y="8" width="288" height="40"/>
+                        <rect key="frame" x="73" y="8" width="168" height="80"/>
                         <animations/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="40" id="K8x-GT-GiY"/>
+                            <constraint firstAttribute="height" constant="80" id="K8x-GT-GiY"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -61,22 +61,36 @@
                 <animations/>
                 <constraints>
                     <constraint firstItem="8kQ-QK-T4o" firstAttribute="leading" secondItem="gGs-Yt-bOZ" secondAttribute="trailing" constant="25" id="L0A-BY-vwf"/>
+                    <constraint firstItem="8kQ-QK-T4o" firstAttribute="top" secondItem="ZTO-qr-Vwi" secondAttribute="topMargin" id="LU9-KG-uhm"/>
                     <constraint firstItem="gGs-Yt-bOZ" firstAttribute="top" secondItem="YC5-Bi-7pm" secondAttribute="bottom" constant="5" id="Tjb-Ur-4q5"/>
                     <constraint firstItem="8kQ-QK-T4o" firstAttribute="top" secondItem="YC5-Bi-7pm" secondAttribute="bottom" constant="5" id="Ues-5d-Jst"/>
                     <constraint firstItem="YC5-Bi-7pm" firstAttribute="top" secondItem="ZTO-qr-Vwi" secondAttribute="topMargin" id="XwK-Dz-8JQ"/>
                     <constraint firstAttribute="leadingMargin" secondItem="biz-0o-bBw" secondAttribute="leading" id="Y7A-0z-aKY"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="YC5-Bi-7pm" secondAttribute="trailing" id="ggE-Ky-7y3"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="8kQ-QK-T4o" secondAttribute="trailing" constant="15" id="qFX-Yz-r8J"/>
+                    <constraint firstItem="gGs-Yt-bOZ" firstAttribute="centerY" secondItem="ZTO-qr-Vwi" secondAttribute="centerY" id="ZCT-kA-8u9"/>
+                    <constraint firstItem="8kQ-QK-T4o" firstAttribute="centerY" secondItem="ZTO-qr-Vwi" secondAttribute="centerY" id="dER-2b-XHL"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="YC5-Bi-7pm" secondAttribute="trailing" constant="120" id="ggE-Ky-7y3"/>
+                    <constraint firstItem="biz-0o-bBw" firstAttribute="centerY" secondItem="ZTO-qr-Vwi" secondAttribute="centerY" id="hfp-1B-nao"/>
+                    <constraint firstItem="gGs-Yt-bOZ" firstAttribute="top" secondItem="ZTO-qr-Vwi" secondAttribute="topMargin" id="p4t-eG-45k"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="8kQ-QK-T4o" secondAttribute="trailing" id="qFX-Yz-r8J"/>
                     <constraint firstItem="YC5-Bi-7pm" firstAttribute="leading" secondItem="biz-0o-bBw" secondAttribute="trailing" constant="15" id="uMF-4C-Lgi"/>
                     <constraint firstAttribute="topMargin" secondItem="biz-0o-bBw" secondAttribute="top" id="y2H-GZ-ap7"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="y2H-GZ-ap7"/>
+                        <exclude reference="Tjb-Ur-4q5"/>
+                        <exclude reference="p4t-eG-45k"/>
+                        <exclude reference="LU9-KG-uhm"/>
+                        <exclude reference="Ues-5d-Jst"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <animations/>
             <connections>
                 <outlet property="userImage" destination="biz-0o-bBw" id="ALe-xg-ux5"/>
                 <outlet property="userName" destination="YC5-Bi-7pm" id="g5y-jr-hpG"/>
             </connections>
-            <point key="canvasLocation" x="395.5" y="194"/>
+            <point key="canvasLocation" x="455.5" y="198"/>
         </tableViewCell>
     </objects>
     <resources>

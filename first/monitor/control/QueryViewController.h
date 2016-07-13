@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *meterType;
 @property (nonatomic, strong) NSString *meterTypeValue;
 
+//此处通讯类型修改为口径
 @property (weak, nonatomic) IBOutlet UILabel *communicationType;
 @property (nonatomic, strong) NSString *communicationTypeValue;
 

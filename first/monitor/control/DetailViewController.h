@@ -30,6 +30,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *readingTime;
 //抄见度数
 @property (weak, nonatomic) IBOutlet UILabel *degrees;
+//警报
+@property (weak, nonatomic) IBOutlet UILabel *alarm;
 
 @property (nonatomic, strong) CRModel *crModel;
 

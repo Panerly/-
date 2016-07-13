@@ -8,7 +8,7 @@
 
 #import "CurrentReceiveTableViewCell.h"
 #import "UIImageView+WebCache.h"
-#import "PhotoViewController.h"
+#import "FirstCollectionViewController.h"
 #import "CurrentReceiveViewController.h"
 
 @implementation CurrentReceiveTableViewCell
@@ -31,10 +31,6 @@
 
 - (IBAction)naviButton:(id)sender {
 
-//    GuideViewController *guideVC = [[GuideViewController alloc] init];
-//    
-//    [[self findVC].navigationController showViewController:guideVC sender:nil];
-    
     //检测定位功能是否开启
     if([CLLocationManager locationServicesEnabled]){
         CLLocationCoordinate2D loc = CLLocationCoordinate2DMake(39.26, 117.30);
@@ -74,7 +70,7 @@
     return nil;
 }
 - (IBAction)scenePhotos:(id)sender {
-    PhotoViewController *showImageVC = [[PhotoViewController alloc] init];
+    FirstCollectionViewController *showImageVC = [[FirstCollectionViewController alloc] init];
     [[self findVC].navigationController showViewController:showImageVC sender:nil];
 }
 @end

@@ -66,7 +66,7 @@
             _installAddrTextField.text = [responseObject objectForKey:@"username"];
             _longitudeTextField.text = [responseObject objectForKey:@"x"];
             _latitudeTextField.text = [responseObject objectForKey:@"y"];
-            _remarksTextField.text = [responseObject objectForKey:@"user_remark"];
+            _remarksTextView.text = [responseObject objectForKey:@"user_remark"];
             
             NSDictionary *dic = [responseObject objectForKey:@"meter1"];
             _meterID.text = [NSString stringWithFormat:@"表位号: %@",[dic objectForKey:@"meter_id"]];
@@ -102,7 +102,7 @@
 - (void)_configScrollView
 {
     _scrollView = [[UIScrollView alloc] init];
-    _scrollView.contentSize= CGSizeMake(PanScreenWidth, 1.7*PanScreenHeight);
+    _scrollView.contentSize= CGSizeMake(PanScreenWidth, 2*PanScreenHeight);
     _scrollView.scrollEnabled = YES;
     _scrollView.pagingEnabled = NO;
     _scrollView.showsVerticalScrollIndicator = YES;
@@ -453,7 +453,7 @@
     [_scrollView addSubview:setAlarm];
     [setAlarm mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_scrollView.mas_centerX);
-        make.top.equalTo(_longitudeLabel.mas_bottom).with.offset(10);
+        make.top.equalTo(_longitudeLabel.mas_bottom).with.offset(30);
         make.size.equalTo(CGSizeMake(120, 35));
     }];
     
@@ -569,7 +569,7 @@
     _switchBtn.tag = 501;
     [_scrollView addSubview:_switchBtn];
     [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_reversalAlarmLabel.mas_bottom).with.offset(5);
+        make.top.equalTo(excessiveAlarmUnit.mas_bottom).with.offset(5);
         make.centerX.equalTo(enableLabel.centerX);
     }];
     
@@ -665,6 +665,14 @@
         make.top.equalTo(dayOverFlow.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(120, 25));
     }];
+    _switchBtn = [[UISwitch alloc] init];
+    _switchBtn.tag = 504;
+    [_scrollView addSubview:_switchBtn];
+    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(dayOverFlowUnit.mas_bottom).with.offset(5);
+        make.centerX.equalTo(enableLabel.centerX);
+    }];
+    
     //月用水上限
     _limitOfUsageLabel = [[UILabel alloc] init];
     _limitOfUsageLabel.text = @"月用水上限";
@@ -697,7 +705,7 @@
         make.size.equalTo(CGSizeMake(50, 25));
     }];
     _switchBtn = [[UISwitch alloc] init];
-    _switchBtn.tag = 504;
+    _switchBtn.tag = 505;
     [_scrollView addSubview:_switchBtn];
     [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(longtimeNotUse.mas_bottom).with.offset(5);
@@ -727,15 +735,18 @@
         make.top.equalTo(intervalLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
-    _remarksTextField = [[UITextField alloc] init];
-    _remarksTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _remarksTextField.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_remarksTextField];
-    [_remarksTextField mas_makeConstraints:^(MASConstraintMaker *make) {
+    _remarksTextView = [[UITextView alloc] init];
+    _remarksTextView.font = [UIFont systemFontOfSize:13];
+    _remarksTextView.layer.borderColor = [[UIColor blackColor] CGColor];
+    _remarksTextView.layer.borderWidth = 1;
+    _remarksTextView.layer.cornerRadius = 6;
+    _remarksTextView.layer.masksToBounds = YES;
+    [_scrollView addSubview:_remarksTextView];
+    [_remarksTextView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_remarksLabel.mas_right);
         make.top.equalTo(intervalLabel.mas_bottom).with.offset(5);
         make.right.equalTo(self.view.mas_right).with.offset(-10);
-        make.bottom.equalTo(_scrollView.mas_bottom);
+        make.height.equalTo(100);
     }];
 
 }

@@ -289,29 +289,43 @@ static BOOL flag;
 
 - (IBAction)uploadPhoto:(id)sender {
     NSLog(@"上传照片");
-    NSLog(@"%@",_firstImage.image);
-    NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/UploadHandleServlet",self.ipLabel];
-    
+
+    NSString *uploadUrl = [NSString stringWithFormat:@"http://%@/waterweb/UploadHandleServlet",self.ipLabel];
+
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:config];
     
-    NSDictionary *parameters = @{
-                                 @"db":self.dbLabel,
-                                 @"meter_id":@"dfhq-003",
-                                 @"mFile":_firstImage.image
-                                 };
+    NSDictionary *parameters;
+    if (_firstImage.image) {
+        
+        parameters = @{
+                       @"db":self.dbLabel,
+                       @"meter_id":@"58179442",
+                       @"mFile":_firstImage.image
+                       };
+    }else{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"照片不能为空" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+        }];
+        [alert addAction:action];
+
+        [self presentViewController:alert animated:YES completion:^{
+            
+        }];
+    }
     
     AFHTTPResponseSerializer *serializer = manager.responseSerializer;
     
     serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/plain"];
     
-    NSURLSessionTask *task =[manager POST:logInUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+    NSURLSessionTask *task =[manager POST:uploadUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@",responseObject);
+        NSLog(@"上传成功：%@",responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"%@",error);
+        NSLog(@"上传失败：%@",error);
     }];
     [task resume];
 }

@@ -13,8 +13,10 @@
 //用户名
 @property (nonatomic, strong) NSString *username;
 //网络编号
-@property (nonatomic, strong)NSString *comm_id;
+@property (nonatomic, strong) NSString *comm_id;
 //用户号、表位号
-@property (nonatomic, strong)NSString *user_id;
+@property (nonatomic, strong) NSString *user_id;
+//警报
+@property (nonatomic, strong) NSString *alarm;
 
 @end

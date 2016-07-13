@@ -16,6 +16,8 @@
 //用量
 @property (weak, nonatomic) IBOutlet UILabel *dosageLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *collect_avg;
+
 @property (nonatomic, strong) QueryModel *queryModel;
 
 @end

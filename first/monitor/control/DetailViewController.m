@@ -36,7 +36,7 @@
 {
     self.title = self.titleName;
 //    self.netNum.text = [NSString stringWithFormat:@"网络编号:   %@", self.crModel.meter_name2];
-    self.userNum.text = [NSString stringWithFormat:@"用户号:   %@", self.crModel.meter_name];
+    self.userNum.text = [NSString stringWithFormat:@"用户号:   %@", self.crModel.meter_id];
     self.meterNum.text = [NSString stringWithFormat:@"表位号:   %@", self.crModel.meter_id];
     self.userName.text = [NSString stringWithFormat:@"用户名:   %@", self.crModel.meter_name];
     self.userAddr.text = [NSString stringWithFormat:@"用户地址:   %@", self.crModel.meter_user_addr];
@@ -80,10 +80,11 @@
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if (responseObject) {
-            
+
             NSDictionary *dic = [responseObject objectForKey:@"meter1"];
             
             self.netNum.text = [NSString stringWithFormat:@"网络编号:   %@", [dic objectForKey:@"comm_id"]];
+            self.alarm.text = [NSString stringWithFormat:@"警报:   %@", [dic objectForKey:@"alarm"]];
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -102,7 +103,8 @@
     
     queryVC.manageMeterNumValue = self.crModel.meter_id;
     queryVC.meterTypeValue = self.crModel.meter_name2;
-    queryVC.communicationTypeValue = self.crModel.meter_name2;
+    //此处将通讯方式修改为口径
+    queryVC.communicationTypeValue = self.crModel.meter_cali;
     queryVC.installAddrValue = self.crModel.meter_user_addr;
 
     [self.navigationController showViewController:queryVC sender:nil];

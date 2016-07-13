@@ -18,4 +18,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *DBConfig;
 - (IBAction)saveBtn:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UILabel *userCountLabel;
+- (IBAction)userCountBtn:(id)sender;
+@property (nonatomic, strong) UIPickerView *pickerView;
+
 @end

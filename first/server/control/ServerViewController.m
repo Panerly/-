@@ -8,6 +8,7 @@
 
 #import "ServerViewController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "HelpViewController.h"
 
 @interface ServerViewController ()<CLLocationManagerDelegate>
 @property (nonatomic, strong) CLLocationManager* locationManager;
@@ -37,6 +38,7 @@
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
+    HelpViewController *helpView = [[HelpViewController alloc] init];
     switch (sender.tag) {
             
         case 200:
@@ -50,9 +52,8 @@
         break;
             
         case 202:
-            [alertVC addAction:action];
-            [self presentViewController:alertVC animated:YES completion:^{
-            }];
+            
+            [self.navigationController showViewController:helpView sender:nil];
         break;
             
         case 203:

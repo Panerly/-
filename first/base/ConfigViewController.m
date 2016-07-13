@@ -10,11 +10,17 @@
 //#import "LoginViewController.h"
 //#import "KeychainItemWrapper.h"
 
-@interface ConfigViewController ()
+@interface ConfigViewController ()<UIPickerViewDelegate, UIPickerViewDataSource>
 //{
 //    KeychainItemWrapper *wrapper;
 //}
-
+{
+    NSUserDefaults *defaults;
+    BOOL flag;
+    NSArray *_pickerIPArr;
+    NSArray *_pickerNameArr;
+    NSArray *_dBArr;
+}
 @end
 
 @implementation ConfigViewController
@@ -23,9 +29,17 @@
     [super viewDidLoad];
     
 //    [self configKeyChainItemWrapper];
+    flag = NO;
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    defaults = [NSUserDefaults standardUserDefaults];
+
     
+    _pickerIPArr = [NSArray array];
+    _pickerNameArr = [NSArray array];
+    _dBArr = [NSArray array];
+    _pickerNameArr = @[@"杭州水表",@"杭州水务",@"浙江工商大学",@"中国科技大学",@"池州供排水",@"宣城水司",@"杭州下沙街道",@"成都节水办"];
+    _dBArr = @[@"bigmeter_water",@"bigmeter",@"bigmeter_zjgs",@"bigmeter_zkd",@"bigmeter_chizhou",@"bigmeter_xc",@"bigmeter_xs",@"bigmeter_chengdu"];
+    _pickerIPArr = @[@"60.191.39.206:8080",@"122.224.204.102:8080",@"124.160.64.122:8080",@"202.141.176.120:8080",@"218.23.188.30:8080",@"58.243.104.26:8080",@"183.129.135.2:8080",@"125.70.9.203:5002"];
     
     self.IPConfig.text = [defaults objectForKey:@"ip"];
     self.DBConfig.text = [defaults objectForKey:@"db"];
@@ -46,7 +60,10 @@
 //}
 
 
-
+- (void)viewWillAppear:(BOOL)animated
+{
+    _userCountLabel.text = [NSString stringWithFormat:@"%@",[defaults objectForKey:@"count"]];
+}
 //从storyboard加载
 - (instancetype)init
 {
@@ -81,10 +98,10 @@
 //    //保存密码
 //    [wrapper setObject:self.IPConfig.text forKey:(id)kSecValueData];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     [defaults setObject:self.IPConfig.text forKey:@"ip"];
     [defaults setObject:self.DBConfig.text forKey:@"db"];
+    [defaults setObject:_userCountLabel.text forKey:@"count"];
     
     [defaults synchronize];
     
@@ -92,5 +109,85 @@
         
     }];
     
+}
+- (IBAction)userCountBtn:(id)sender {
+    
+    if (!_pickerView) {
+        
+        _pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, PanScreenHeight, PanScreenWidth, 200)];
+        _pickerView.backgroundColor = [UIColor lightGrayColor];
+    }
+//    for (int i = 0; i < _pickerNameArr.count; i++) {
+//        if ([_pickerNameArr[i] containsObject:_userCountLabel.text]) {
+//            
+//            [_pickerView selectedRowInComponent:i];
+//        }
+//    }
+    _pickerView.delegate = self;
+    _pickerView.dataSource = self;
+    if (flag == NO) {
+       
+        
+        [self.view addSubview:_pickerView];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            _pickerView.frame = CGRectMake(0, PanScreenHeight-200, PanScreenWidth, 200);
+        } completion:^(BOOL finished) {
+            
+            flag = !flag;
+        }];
+    
+    } else {
+        
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _pickerView.frame = CGRectMake(0, PanScreenHeight, PanScreenWidth, 200);
+            
+        } completion:^(BOOL finished) {
+            
+            [_pickerView removeFromSuperview];
+            flag = !flag;
+        }];
+        
+    }
+    
+}
+
+//- (NSInteger)selectedRowInComponent:(NSInteger)component; 
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [UIView animateWithDuration:.3 animations:^{
+        
+        _pickerView.frame = CGRectMake(0, PanScreenHeight, PanScreenWidth, 200);
+        
+    } completion:^(BOOL finished) {
+        
+        [_pickerView removeFromSuperview];
+        flag = !flag;
+    }];
+}
+
+#pragma mark - UIPickerViewDataSource
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+//// returns the # of rows in each component..
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return _pickerNameArr.count;
+}
+#pragma mark - UIPickerViewDelegate
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    return _pickerNameArr[row];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    _userCountLabel.text = [NSString stringWithFormat:@"IP名称:  %@",_pickerNameArr[row]];
+    _IPConfig.text = _pickerIPArr[row];
+    _DBConfig.text = _dBArr[row];
 }
 @end

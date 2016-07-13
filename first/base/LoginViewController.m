@@ -31,7 +31,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_weater2.jpg"]];
+//    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_weater2.jpg"]];
+    UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    bgImageView.image = [UIImage imageNamed:@"bg_weater2.jpg"];
+    [self.view addSubview:bgImageView];
     
     defaults = [NSUserDefaults standardUserDefaults];
     _flag = 1;
