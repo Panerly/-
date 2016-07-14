@@ -62,7 +62,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    _userCountLabel.text = [NSString stringWithFormat:@"%@",[defaults objectForKey:@"count"]];
+    _userCountLabel.text = [NSString stringWithFormat:@"%@",[defaults objectForKey:@"unit"]];
 }
 //从storyboard加载
 - (instancetype)init
@@ -101,8 +101,6 @@
     
     [defaults setObject:self.IPConfig.text forKey:@"ip"];
     [defaults setObject:self.DBConfig.text forKey:@"db"];
-    [defaults setObject:_userCountLabel.text forKey:@"count"];
-    
     [defaults synchronize];
     
     [self dismissViewControllerAnimated:YES completion:^{
@@ -111,20 +109,19 @@
     
 }
 - (IBAction)userCountBtn:(id)sender {
-    
+
     if (!_pickerView) {
         
         _pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, PanScreenHeight, PanScreenWidth, 200)];
-        _pickerView.backgroundColor = [UIColor lightGrayColor];
+        _pickerView.backgroundColor = [UIColor lightGrayColor];_pickerView.delegate = self;
+        _pickerView.dataSource = self;
+        for (int i = 0; i < _pickerNameArr.count; i++) {
+            if ([_pickerNameArr[i] isEqualToString:[defaults objectForKey:@"count"]]) {
+                [_pickerView selectRow:i inComponent:0 animated:YES];
+                [_pickerView reloadComponent:0];
+            }
+        }
     }
-//    for (int i = 0; i < _pickerNameArr.count; i++) {
-//        if ([_pickerNameArr[i] containsObject:_userCountLabel.text]) {
-//            
-//            [_pickerView selectedRowInComponent:i];
-//        }
-//    }
-    _pickerView.delegate = self;
-    _pickerView.dataSource = self;
     if (flag == NO) {
        
         
@@ -153,8 +150,6 @@
     
 }
 
-//- (NSInteger)selectedRowInComponent:(NSInteger)component; 
-
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [UIView animateWithDuration:.3 animations:^{
@@ -174,19 +169,22 @@
     return 1;
 }
 
-//// returns the # of rows in each component..
+// returns the # of rows in each component..
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     return _pickerNameArr.count;
 }
 #pragma mark - UIPickerViewDelegate
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    
     return _pickerNameArr[row];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    _userCountLabel.text = [NSString stringWithFormat:@"IP名称:  %@",_pickerNameArr[row]];
+    _userCountLabel.text = [NSString stringWithFormat:@"所属单位:  %@",_pickerNameArr[row]];
+    [defaults setObject:_pickerNameArr[row] forKey:@"count"];
+    [defaults setObject:_userCountLabel.text forKey:@"unit"];
     _IPConfig.text = _pickerIPArr[row];
     _DBConfig.text = _dBArr[row];
 }

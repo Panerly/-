@@ -18,15 +18,54 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    [self _createBtn];
 }
-- (instancetype)init
+//- (instancetype)init
+//{
+//    self = [super init];
+//    if (self) {
+//        self = [[UIStoryboard storyboardWithName:@"Server" bundle:nil] instantiateViewControllerWithIdentifier:@"server"];
+//    }
+//    return self;
+//}
+
+- (void)_createBtn
 {
-    self = [super init];
-    if (self) {
-        self = [[UIStoryboard storyboardWithName:@"Server" bundle:nil] instantiateViewControllerWithIdentifier:@"server"];
+    self.view.backgroundColor = [UIColor whiteColor];
+    CGFloat width = self.view.frame.size.width/6+15;
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];//button的类型;
+    
+    NSArray *titleArr = @[@"水费缴纳",@"意见建议",@"帮助说明",@"保修求助",@"服务热线"];
+    NSArray *imageArr = @[@"waterCharg",@"suggestions",@"explain",@"help",@"call_icon"];
+    
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < titleArr.count-i-j; j++) {
+            
+            button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width *(j+1) + (j*40), width, width)];
+
+            [button setBackgroundImage:[UIImage imageNamed:imageArr[i+j+j]] forState:UIControlStateNormal];
+            
+            //    在UIButton中有三个对EdgeInsets的设置：ContentEdgeInsets、titleEdgeInsets、imageEdgeInsets
+            //    [button setImage:[UIImage imageNamed:@"his"] forState:UIControlStateNormal];//给button添加image
+            button.imageEdgeInsets = UIEdgeInsetsMake(5,13,21,button.titleLabel.bounds.size.width);//设置image在button上的位置（上top，左left，下bottom，右right）这里可以写负值，对上写－5，那么image就象上移动5个像素
+            
+            [button setTitle:titleArr[i+j+j] forState:UIControlStateNormal];//设置button的title
+            button.titleLabel.font = [UIFont systemFontOfSize:16];//title字体大小
+            button.titleLabel.textAlignment = NSTextAlignmentCenter;//设置title的字体居中
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];//设置title在一般情况下为白色字体
+            [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];//设置title在button被选中情况下为灰色字体
+            button.titleEdgeInsets = UIEdgeInsetsMake(110, -button.titleLabel.bounds.size.width, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
+            
+            button.tag = 200+i+j+j;
+            
+            [button addTarget:self action:@selector(waterCharge:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [self.view addSubview:button];
+        }
+        
     }
-    return self;
 }
 
 - (void)didReceiveMemoryWarning {

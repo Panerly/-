@@ -39,7 +39,7 @@
     loading = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     loading.center = self.view.center;
     loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(PanScreenWidth/2 - 60, PanScreenHeight/2 + 25, 150, 30)];
-    loadingLabel.text = @"正在拼命加载中...";
+    loadingLabel.text = @"加载中...";
     
     UIImage *image = [UIImage sd_animatedGIFNamed:@"刷新1"];
     [loading setImage:image];

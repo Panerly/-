@@ -128,7 +128,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="S5O-iq-7Aj"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <variation key="default">
                                             <mask key="constraints">

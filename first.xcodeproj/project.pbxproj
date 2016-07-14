@@ -117,6 +117,7 @@
 		45978D711CED7E6400BF3C0E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45978D6F1CED7E6400BF3C0E /* LaunchScreen.storyboard */; };
 		45978D7C1CED7E6400BF3C0E /* firstTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45978D7B1CED7E6400BF3C0E /* firstTests.m */; };
 		45978D871CED7E6400BF3C0E /* firstUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45978D861CED7E6400BF3C0E /* firstUITests.m */; };
+		45A215C41D372DD2007B4765 /* FlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 45A215C31D372DD2007B4765 /* FlowLayout.m */; };
 		45B4435D1CF41A58000644B2 /* ConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B4435C1CF41A58000644B2 /* ConfigViewController.m */; };
 		45B4435F1CF41FB8000644B2 /* Config.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45B4435E1CF41FB8000644B2 /* Config.storyboard */; };
 		45B443611CF44752000644B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B443601CF44752000644B2 /* Security.framework */; };
@@ -436,6 +437,8 @@
 		45978D821CED7E6400BF3C0E /* firstUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = firstUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45978D861CED7E6400BF3C0E /* firstUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = firstUITests.m; sourceTree = "<group>"; };
 		45978D881CED7E6400BF3C0E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		45A215C21D372DD2007B4765 /* FlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlowLayout.h; sourceTree = "<group>"; };
+		45A215C31D372DD2007B4765 /* FlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlowLayout.m; sourceTree = "<group>"; };
 		45B4435B1CF41A58000644B2 /* ConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigViewController.h; sourceTree = "<group>"; };
 		45B4435C1CF41A58000644B2 /* ConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigViewController.m; sourceTree = "<group>"; };
 		45B4435E1CF41FB8000644B2 /* Config.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Config.storyboard; sourceTree = "<group>"; };
@@ -1571,6 +1574,8 @@
 				4590EC131D34AB9E002C49D2 /* CollectionViewCell.m */,
 				4590EBE41D34945B002C49D2 /* SecondViewController.h */,
 				4590EBE51D34945B002C49D2 /* SecondViewController.m */,
+				45A215C21D372DD2007B4765 /* FlowLayout.h */,
+				45A215C31D372DD2007B4765 /* FlowLayout.m */,
 			);
 			name = "ShowImage(图片浏览)";
 			sourceTree = "<group>";
@@ -1881,6 +1886,7 @@
 				45771FEC1D0E8428006BF7F3 /* JSONAPI.m in Sources */,
 				45DCA37A1CEF004E00E42468 /* LoginViewController.m in Sources */,
 				45D634FD1D17A5CC004358B8 /* MASConstraintMaker.m in Sources */,
+				45A215C41D372DD2007B4765 /* FlowLayout.m in Sources */,
 				4590EBE61D34945B002C49D2 /* SecondViewController.m in Sources */,
 				459241E81D18E1690007A5A5 /* UICountingLabel.m in Sources */,
 				45D44BBE1D1CFADA00024E1B /* SCCircleCell.m in Sources */,

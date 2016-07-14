@@ -23,7 +23,7 @@
     [super viewDidLoad];
     
     self.userIcon.clipsToBounds = YES;
-    self.userIcon.layer.cornerRadius = 30;
+    self.userIcon.layer.cornerRadius = 50;
     defaults = [NSUserDefaults standardUserDefaults];
     
     

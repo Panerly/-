@@ -27,15 +27,17 @@
     //让顶部不留空白
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.view.backgroundColor = [UIColor colorWithRed:246/255.0 green:245/255.0 blue:242/255.0 alpha:1];
+    self.view.backgroundColor = [UIColor lightGrayColor];
     
-    text = [[UITextView alloc] initWithFrame:CGRectMake(10, 84, PanScreenWidth - 20, 200)];
-    
+    text = [[UITextView alloc] initWithFrame:CGRectMake(10, 84, PanScreenWidth - 20, 150)];
+    text.layer.cornerRadius = 8;
+    text.font = [UIFont systemFontOfSize:20];
+    text.layer.shadowColor = [[UIColor redColor] CGColor];
+    text.layer.borderWidth = 2;
+    text.layer.masksToBounds = YES;
     text.tag = 100;
     
     [self.view addSubview:text];
-    
-    self.view.backgroundColor = [UIColor colorWithRed:50/255.0 green:50/255.0 blue:50/255.0 alpha:1];
     
 }
 

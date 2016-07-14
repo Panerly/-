@@ -31,7 +31,10 @@
     [self _createTableView];
 }
 
-
+- (void)viewWillAppear:(BOOL)animated
+{
+    [_tableView reloadData];
+}
 
 - (void)_createTableView
 {

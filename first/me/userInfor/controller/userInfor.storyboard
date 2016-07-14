@@ -23,8 +23,12 @@
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="a5y-fX-gGq"/>
-                                    <constraint firstAttribute="width" constant="60" id="u7I-Ry-u55"/>
+                                    <constraint firstAttribute="height" constant="60" id="a5y-fX-gGq">
+                                        <variation key="widthClass=compact" constant="100"/>
+                                    </constraint>
+                                    <constraint firstAttribute="width" constant="60" id="u7I-Ry-u55">
+                                        <variation key="widthClass=compact" constant="100"/>
+                                    </constraint>
                                 </constraints>
                                 <state key="normal" title="头像" image="AppIcon60x60.png"/>
                                 <variation key="default">
@@ -107,7 +111,9 @@
                             <constraint firstItem="X6s-TL-n13" firstAttribute="leading" secondItem="vX5-2s-jw8" secondAttribute="leadingMargin" constant="-20" id="Ivt-u1-hUn"/>
                             <constraint firstItem="MyE-Cy-th1" firstAttribute="centerX" secondItem="vX5-2s-jw8" secondAttribute="centerX" id="XE6-ih-7WZ"/>
                             <constraint firstItem="fjk-ru-Y3g" firstAttribute="top" secondItem="MyE-Cy-th1" secondAttribute="bottom" constant="23" id="Xyr-1l-xUO"/>
-                            <constraint firstItem="MyE-Cy-th1" firstAttribute="top" secondItem="xPC-MV-H5A" secondAttribute="bottom" constant="80" id="ZCa-eW-Jdr"/>
+                            <constraint firstItem="MyE-Cy-th1" firstAttribute="top" secondItem="xPC-MV-H5A" secondAttribute="bottom" constant="80" id="ZCa-eW-Jdr">
+                                <variation key="widthClass=compact" constant="50"/>
+                            </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="fjk-ru-Y3g" secondAttribute="trailing" constant="150" id="bUR-NR-wl7">
                                 <variation key="widthClass=compact" constant="10"/>
                             </constraint>

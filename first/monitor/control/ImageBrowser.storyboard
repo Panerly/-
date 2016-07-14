@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -45,6 +46,7 @@
                                     <constraint firstAttribute="bottomMargin" secondItem="KHI-3l-umG" secondAttribute="bottom" id="hzx-kk-oZW"/>
                                     <constraint firstItem="KHI-3l-umG" firstAttribute="leading" secondItem="gMl-Jt-KCI" secondAttribute="leadingMargin" id="sFT-oB-3c4"/>
                                 </constraints>
+                                <size key="customSize" width="154" height="174"/>
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="KHI-3l-umG"/>
@@ -111,7 +113,7 @@
                                 <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <exclude reference="EKh-eN-YSf"/>
-                                        <include reference="stW-JA-TW2"/>
+                                        <exclude reference="stW-JA-TW2"/>
                                     </mask>
                                 </variation>
                             </imageView>

@@ -168,7 +168,7 @@
     
     [logInButton setTitle:@"登录" forState:UIControlStateNormal];
     
-    [logInButton addTarget:self action:@selector(LoginBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [logInButton addTarget:self action:@selector(LoginBtn) forControlEvents:UIControlEventTouchUpInside];
     
     logInButton.backgroundColor = [UIColor redColor];
     
@@ -193,7 +193,7 @@
 
 
 //登录
-- (IBAction)LoginBtn:(id)sender {
+- (IBAction)LoginBtn {
     
     
 //#warning 测试用直接进入首页
@@ -236,11 +236,11 @@
     
     [UIView animateWithDuration:.25 animations:^{
         
+        logInButton.frame = CGRectMake(20, CGRectGetHeight(self.view.bounds) - (40 + 80), [UIScreen mainScreen].bounds.size.width - 40, 40);
         _hsLogoView.transform = CGAffineTransformIdentity;
         _userName.transform = CGAffineTransformIdentity;
         _passWord.transform = CGAffineTransformIdentity;
         _userBaseView.transform = CGAffineTransformIdentity;
-        logInButton.frame = CGRectMake(20, CGRectGetHeight(self.view.bounds) - (40 + 80), [UIScreen mainScreen].bounds.size.width - 40, 40);
         [_passWord resignFirstResponder];
         [_userName resignFirstResponder];
     }];
