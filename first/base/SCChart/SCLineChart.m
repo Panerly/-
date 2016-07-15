@@ -12,13 +12,29 @@
 #import "SCTool.h"
 
 @implementation SCLineChart
-
+{
+    UILabel *disLabel;
+    UIView *popView;
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
         self.clipsToBounds = YES;
+#warning 此处添加弹出视图
+        //PopView
+        popView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 70, 30)];
+        [popView setBackgroundColor:[UIColor lightGrayColor]];
+        [popView setAlpha:0.0f];
+        
+        disLabel = [[UILabel alloc]initWithFrame:popView.frame];
+        disLabel.numberOfLines = 0;
+        disLabel.font = [UIFont systemFontOfSize:12];
+        [disLabel setTextAlignment:NSTextAlignmentCenter];
+        
+        [popView addSubview:disLabel];
+        [self addSubview:popView];
     }
     return self;
 }
@@ -98,8 +114,8 @@
 {
     _xLabels = xLabels;
     CGFloat num = 0;
-    if (xLabels.count>=20) {
-        num=20.0;
+    if (xLabels.count>=31) {
+        num=31.0;
     }else if (xLabels.count<=1){
         num=1.0;
     }else{
@@ -110,6 +126,7 @@
     for (int i=0; i<xLabels.count; i++) {
         NSString *labelText = xLabels[i];
         SCChartLabel * label = [[SCChartLabel alloc] initWithFrame:CGRectMake(i * _xLabelWidth+UUYLabelwidth, self.frame.size.height - UULabelHeight, _xLabelWidth, UULabelHeight)];
+        label.font = [UIFont systemFontOfSize:6];
         label.text = labelText;
         [self addSubview:label];
     }
@@ -231,8 +248,24 @@
                          value:[valueString floatValue]];
                 
 //                [progressline stroke];
+#warning 此处添加触摸事件
+                //添加触摸点
+                UIButton *bt = [UIButton buttonWithType:UIButtonTypeCustom];
+                
+                [bt setBackgroundColor:[UIColor clearColor]];
+                
+                [bt setFrame:CGRectMake(0, 0, 16, 16)];
+                bt.layer.cornerRadius = 8;
+                [bt setCenter:point];
+                bt.tag = [valueString floatValue];
+                [bt addTarget:self
+                       action:@selector(btAction:)
+             forControlEvents:UIControlEventTouchUpInside];
+                
+                [self addSubview:bt];
             }
             index += 1;
+            
         }
         
         _chartLine.path = progressline.CGPath;
@@ -252,7 +285,18 @@
         _chartLine.strokeEnd = 1.0;
     }
 }
-
+- (void)btAction:(UIButton *)button
+{
+    [disLabel setText:[NSString stringWithFormat:@"读数:%d\n时间:暂无",button.tag]];
+    
+    UIButton *bt = (UIButton*)button;
+    popView.center = CGPointMake(bt.center.x, bt.center.y - popView.frame.size.height/2);
+    popView.layer.cornerRadius = 5;
+    [popView setAlpha:1.0f];
+    [UIView animateWithDuration:1.5f animations:^{
+        [popView setAlpha:0.0f];
+    }];
+}
 - (void)addPoint:(CGPoint)point index:(NSInteger)index isShow:(BOOL)isHollow value:(CGFloat)value
 {
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(5, 5, 8, 8)];

@@ -38,13 +38,19 @@
     
     loading = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     loading.center = self.view.center;
-    loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(PanScreenWidth/2 - 60, PanScreenHeight/2 + 25, 150, 30)];
+    loadingLabel = [[UILabel alloc] init];
     loadingLabel.text = @"加载中...";
+    loadingLabel.textAlignment = NSTextAlignmentCenter;
     
     UIImage *image = [UIImage sd_animatedGIFNamed:@"刷新1"];
     [loading setImage:image];
     [self.view addSubview:loading];
     [self.view addSubview:loadingLabel];
+    [loadingLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(loading.centerY).with.offset(55);
+        make.centerX.equalTo(loading.centerX);
+        make.size.equalTo(CGSizeMake(100, 50));
+    }];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView

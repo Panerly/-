@@ -8,12 +8,15 @@
 
 #import "UserInfoViewController.h"
 #import "UserNameViewController.h"
+#import "DateView.h"
+
 
 @interface UserInfoViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     NSString *cellID;
     NSData *imageData;
     NSUserDefaults *defaults;
+    UIDatePicker *datePicker;
 }
 @end
 
@@ -106,10 +109,19 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     if (indexPath.row == 1) {
-        cell.textLabel.text = @"生日";
+        if (![defaults objectForKey:@"bornDate"]) {
+            
+            cell.textLabel.text = @"生日";
+        }
+        cell.textLabel.text = [NSString stringWithFormat:@"生日 : %@",[defaults objectForKey:@"bornDate"]];
+        
     }
     if (indexPath.row == 2) {
-        cell.textLabel.text = @"性别";
+        
+        if (![defaults objectForKey:@"sex"]) {
+            cell.textLabel.text = @"性别 : 男";
+        }
+        cell.textLabel.text = [NSString stringWithFormat:@"性别 ：%@",[defaults objectForKey:@"sex"]];
     }
     return cell;
 }
@@ -123,10 +135,57 @@
         [self showViewController:userNameVC sender:nil];
     }else if (indexPath.row == 1){
         
+//        DateView *dateView = [[DateView alloc]initWithFrame:self.view.frame];
+//        
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:@"reload" object:nil];
+//        
+//        [self.view addSubview:dateView];
+//        
+//        if ([defaults objectForKey:@"bornStr"]) {
+//            NSLog(@"%@",[defaults objectForKey:@"bornStr"]);
+//            //优化用户的体验 将选择后的日期保存下来
+//            
+//            NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+//            
+//            formatter.dateFormat = @"yyyy年MM月dd日";
+//            
+//            NSDate *date = [formatter dateFromString:[defaults objectForKey:@"bornStr"]];
+//            
+//            dateView.dateView.date = date;
+//        }
+//        
+//        //dataView消失动画效果
+//        
+//        [UIView animateWithDuration:0.3 animations:^{
+//            dateView.save.transform = CGAffineTransformIdentity;
+//            dateView.dateView.transform = CGAffineTransformIdentity;
+//        }];
+        
+        [self setDatePicker];
         
     }else if (indexPath.row == 2){
-        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NULL message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *boy = [UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [defaults setObject:@"男" forKey:@"sex"];
+            [_tableView reloadData];
+        }];
+        UIAlertAction *girl = [UIAlertAction actionWithTitle:@"女" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [defaults setObject:@"女" forKey:@"sex"];
+            [_tableView reloadData];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alert addAction:boy];
+        [alert addAction:girl];
+        [alert addAction:cancel];
+        [self presentViewController:alert animated:YES completion:^{
+            
+        }];
     }
+    
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(nullable NSDictionary<NSString *,id> *)editingInfo {
@@ -143,6 +202,37 @@
     if (self.view.window == nil && [self isViewLoaded]) {
         self.view = nil;
     }
+}
+
+- (void)setDatePicker
+{
+    NSString *bornDate;
+    if (!datePicker) {
+    
+        datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, PanScreenHeight-100-49, PanScreenWidth, 100)];
+        datePicker.datePickerMode = UIDatePickerModeDate;
+        datePicker.backgroundColor = [UIColor lightGrayColor];
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, PanScreenHeight-100, PanScreenWidth, 30)];
+        btn.backgroundColor = [UIColor redColor];
+        [btn setTitle:@"确定" forState:UIControlStateNormal];
+        [datePicker addSubview:btn];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        formatter.dateFormat = @"yyyy年MM月dd日";
+        bornDate = [formatter stringFromDate:[defaults objectForKey:@"bornStr"]];
+    }
+    [self.view addSubview:datePicker];
+    
+    [defaults setObject:bornDate forKey:@"bornDate"];
+    [_tableView reloadData];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [UIView animateWithDuration:.5 animations:^{
+        datePicker.frame = CGRectMake(0, PanScreenHeight, PanScreenWidth, 100);
+    } completion:^(BOOL finished) {
+        [datePicker removeFromSuperview];
+    }];
 }
 
 /*

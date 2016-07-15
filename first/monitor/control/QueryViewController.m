@@ -10,6 +10,7 @@
 #import "QueryTableViewCell.h"
 #import "SCViewController.h"
 #import "SCToastView.h"
+#import "QueryModel.h"
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 
 @interface QueryViewController ()<UITableViewDelegate,UITableViewDataSource,SCChartDataSource>
@@ -23,6 +24,8 @@
     //用于判断是显示流量or水表读数
     NSUInteger _flag;
     NSInteger selectedIndex;
+    UIPinchGestureRecognizer *pinch;
+    UIScrollView *scrollView;
 }
 @end
 
@@ -91,11 +94,15 @@
 //创建曲线图
 - (void)_createCurveView
 {
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    scrollView = [[UIScrollView alloc] init];
     scrollView.scrollEnabled = YES;
     scrollView.zoomScale = 2;
     
-    scrollView.contentSize = CGSizeMake(PanScreenWidth*1.5, 150);
+    //添加缩放手势
+    pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(scaleAction:)];
+    [scrollView addGestureRecognizer:pinch];
+    
+    scrollView.contentSize = CGSizeMake(PanScreenWidth, 150);
     [_curveView addSubview:scrollView];
     [scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_curveView.mas_left).with.offset(10);
@@ -104,7 +111,31 @@
         make.bottom.equalTo(_curveView.bottom);
     }];
     
-    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*1.5, 150) withSource:self withStyle:SCChartLineStyle];
+    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth, 150) withSource:self withStyle:SCChartLineStyle];
+    [chartView showInView:scrollView];
+}
+static CGFloat i = 1.0;
+- (void)scaleAction:(UIPinchGestureRecognizer*)pinch
+{
+    if (i == 0) {
+        i = 1.0f;
+    } else {
+        if (pinch.velocity < 0.0f) {
+//            i = 1;
+            i = i-0.1;
+            if (i == 0) {
+                i = 1.0;
+            }
+        }else
+        {
+            i = 0.1+i;
+//            i++;
+        }
+    }
+    NSLog(@"%f",i);
+    scrollView.contentSize = CGSizeMake(PanScreenWidth*i, 150);
+    [chartView removeFromSuperview];
+    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*i, 150) withSource:self withStyle:SCChartLineStyle];
     [chartView showInView:scrollView];
 }
 
@@ -125,10 +156,9 @@
 //数值多重数组 Y轴值数组
 - (NSArray *)SCChart_yValueArray:(SCChart *)chart {
     NSMutableArray *ary = [NSMutableArray array];
-//    [[_yArr valueForKeyPath:@"@max.intValue"] integerValue];
     for (int i = 0; i <_yArr.count; i++) {
         NSString *num = _yArr[i];
-        NSString *str = [NSString stringWithFormat:@"%@m³/h",num];
+        NSString *str = [NSString stringWithFormat:@"%@",num];
         [ary addObject:str];
     }
     return @[ary];
@@ -139,7 +169,10 @@
 - (NSArray *)SCChart_ColorArray:(SCChart *)chart {
     return @[SCGreen,SCRed,SCBrown];
 }
-
+//判断显示横线条
+- (BOOL)SCChart:(SCChart *)chart ShowHorizonLineAtIndex:(NSInteger)index {
+    return YES;
+}
 
 - (IBAction)curveAction:(id)sender {
     
@@ -373,6 +406,18 @@
     }
     cell.queryModel = self.dataArr[indexPath.row];
     return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"水表信息" message:[NSString stringWithFormat:@"\n水表流量: %@m³/h\n\n水表读数: %@吨\n\n抄收时间: %@",((QueryModel *)self.dataArr[indexPath.row]).collect_avg, ((QueryModel *)self.dataArr[indexPath.row]).collect_num, ((QueryModel *)self.dataArr[indexPath.row]).collect_dt] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:^{
+        
+    }];
 }
 
 @end

@@ -197,6 +197,7 @@
 		45DCA37D1CEF01DD00E42468 /* monitor.png in Resources */ = {isa = PBXBuildFile; fileRef = 45DCA37B1CEF01DD00E42468 /* monitor.png */; };
 		45DCA37E1CEF01DD00E42468 /* monitor_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 45DCA37C1CEF01DD00E42468 /* monitor_selected.png */; };
 		45DCA3851CEF024F00E42468 /* MonitorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45DCA3841CEF024F00E42468 /* MonitorViewController.m */; };
+		45E195A11D3880660055F50C /* DateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45E195A01D3880660055F50C /* DateView.m */; };
 		45E7DB181D1B975A0011340D /* userInfor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E7DB171D1B975A0011340D /* userInfor.storyboard */; };
 		45EB6AB01D236835003A2FA0 /* MeterEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EB6AAF1D236835003A2FA0 /* MeterEditViewController.m */; };
 		45EB6AB61D23759A003A2FA0 /* MeterEditStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45EB6AB51D23759A003A2FA0 /* MeterEditStoryboard.storyboard */; };
@@ -562,6 +563,8 @@
 		45DCA37C1CEF01DD00E42468 /* monitor_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = monitor_selected.png; sourceTree = "<group>"; };
 		45DCA3831CEF024F00E42468 /* MonitorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonitorViewController.h; sourceTree = "<group>"; };
 		45DCA3841CEF024F00E42468 /* MonitorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonitorViewController.m; sourceTree = "<group>"; };
+		45E1959F1D3880660055F50C /* DateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateView.h; sourceTree = "<group>"; };
+		45E195A01D3880660055F50C /* DateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateView.m; sourceTree = "<group>"; };
 		45E7DB171D1B975A0011340D /* userInfor.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = userInfor.storyboard; sourceTree = "<group>"; };
 		45EB6AAE1D236835003A2FA0 /* MeterEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterEditViewController.h; sourceTree = "<group>"; };
 		45EB6AAF1D236835003A2FA0 /* MeterEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterEditViewController.m; sourceTree = "<group>"; };
@@ -1205,6 +1208,7 @@
 		45DCA2FD1CEEDE8300E42468 /* me(设置) */ = {
 			isa = PBXGroup;
 			children = (
+				45E1959E1D3880430055F50C /* BornDate */,
 				45E7DB131D1B96F10011340D /* userInfor */,
 				45DCA3091CEEDF1C00E42468 /* control */,
 				45DCA30A1CEEDF1C00E42468 /* model */,
@@ -1473,6 +1477,15 @@
 			children = (
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		45E1959E1D3880430055F50C /* BornDate */ = {
+			isa = PBXGroup;
+			children = (
+				45E1959F1D3880660055F50C /* DateView.h */,
+				45E195A01D3880660055F50C /* DateView.m */,
+			);
+			path = BornDate;
 			sourceTree = "<group>";
 		};
 		45E7DB131D1B96F10011340D /* userInfor */ = {
@@ -1885,6 +1898,7 @@
 				45978D631CED7E6400BF3C0E /* main.m in Sources */,
 				45771FEC1D0E8428006BF7F3 /* JSONAPI.m in Sources */,
 				45DCA37A1CEF004E00E42468 /* LoginViewController.m in Sources */,
+				45E195A11D3880660055F50C /* DateView.m in Sources */,
 				45D634FD1D17A5CC004358B8 /* MASConstraintMaker.m in Sources */,
 				45A215C41D372DD2007B4765 /* FlowLayout.m in Sources */,
 				4590EBE61D34945B002C49D2 /* SecondViewController.m in Sources */,
@@ -2141,7 +2155,7 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/first/base/PrefixHeader.pch";
 				INFOPLIST_FILE = first/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hs.hzsb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2161,7 +2175,7 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/first/base/PrefixHeader.pch";
 				INFOPLIST_FILE = first/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hs.hzsb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
