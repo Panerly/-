@@ -30,20 +30,20 @@
 //    UIImage *homeImage = [UIImage imageNamed:@"home2"];
 //    UIImage *homeSelectedImage = [UIImage imageNamed:@"home2_selected"];
 
-    [self addOneChlildVc:home title:@"首页" imageName:@"home" selectedImageName:@"home_selected"];
+    [self addOneChlildVc:home title:@"首页" imageName:@"home2@2x" selectedImageName:@"home_selected2@2x"];
     
     
     MeteringViewController *meter = [[MeteringViewController alloc] init];
-    [self addOneChlildVc:meter title:@"抄表" imageName:@"metering" selectedImageName:@"metering_selected"];
+    [self addOneChlildVc:meter title:@"抄表" imageName:@"metering@2x" selectedImageName:@"metering_selected@2x"];
     
     MonitorViewController *monitor = [[MonitorViewController alloc] init];
-    [self addOneChlildVc:monitor title:@"监测" imageName:@"monitor" selectedImageName:@"monitor_selected"];
+    [self addOneChlildVc:monitor title:@"监测" imageName:@"monitor@2x" selectedImageName:@"monitor_selected@2x"];
     
     ServerViewController *server = [[ServerViewController alloc] init];
-    [self addOneChlildVc:server title:@"服务" imageName:@"server" selectedImageName:@"server_selected"];
+    [self addOneChlildVc:server title:@"服务" imageName:@"server@2x" selectedImageName:@"server_selected@2x"];
     
     SettingViewController *setting = [[SettingViewController alloc] init];
-    [self addOneChlildVc:setting title:@"设置" imageName:@"me" selectedImageName:@"me_selected"];
+    [self addOneChlildVc:setting title:@"设置" imageName:@"me@2x" selectedImageName:@"me_selected@2x"];
 }
 
 - (void)addOneChlildVc:(UIViewController *)childVc title:(NSString *)title imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName

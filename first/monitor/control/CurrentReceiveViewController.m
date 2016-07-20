@@ -70,13 +70,13 @@
     self.passWordLabel = [defaults objectForKey:@"passWord"];
     self.ipLabel = [defaults objectForKey:@"ip"];
     self.dbLabel = [defaults objectForKey:@"db"];
+    self.typeLabel = [defaults objectForKey:@"type"];
 }
 
 //请求实时抄见数据
 - (void)_requestData
 {
     //刷新控件
-
     loading = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
     loading.center = self.view.center;
     UIImage *image = [UIImage sd_animatedGIFNamed:@"刷新5"];
@@ -92,7 +92,7 @@
     NSDictionary *parameters = @{@"username":self.userNameLabel,
                                  @"password":self.passWordLabel,
                                  @"db":self.dbLabel,
-                                 @"type":@5,
+                                 @"type":self.typeLabel,
                                  };
     
     AFHTTPResponseSerializer *serializer = manager.responseSerializer;

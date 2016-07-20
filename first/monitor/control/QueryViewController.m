@@ -26,6 +26,8 @@
     NSInteger selectedIndex;
     UIPinchGestureRecognizer *pinch;
     UIScrollView *scrollView;
+    
+    NSMutableArray *origArray;
 }
 @end
 
@@ -54,6 +56,7 @@
     self.xArr = [NSMutableArray array];
     self.yArr = [NSMutableArray array];
     yFlowArr = [NSMutableArray array];
+    origArray = [NSMutableArray array];
 }
 
 - (void)_getSysTime
@@ -101,8 +104,8 @@
     //添加缩放手势
     pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(scaleAction:)];
     [scrollView addGestureRecognizer:pinch];
-    
-    scrollView.contentSize = CGSizeMake(PanScreenWidth, 150);
+
+    scrollView.contentSize = CGSizeMake(PanScreenWidth*2, 150);
     [_curveView addSubview:scrollView];
     [scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_curveView.mas_left).with.offset(10);
@@ -111,28 +114,45 @@
         make.bottom.equalTo(_curveView.bottom);
     }];
     
-    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth, 150) withSource:self withStyle:SCChartLineStyle];
+    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*2, 150) withSource:self withStyle:SCChartLineStyle];
     [chartView showInView:scrollView];
 }
+
 static CGFloat i = 1.0;
-- (void)scaleAction:(UIPinchGestureRecognizer*)pinch
+
+//缩放frame实现缩放表格
+
+- (void)scaleAction:(UIPinchGestureRecognizer*)pinchs
 {
     if (i == 0) {
         i = 1.0f;
     } else {
-        if (pinch.velocity < 0.0f) {
-//            i = 1;
+//        //此处做缩放时x轴要显示的内容的更改
+//        if (i<3) {
+//            NSMutableArray *array = [NSMutableArray array];
+//            [array removeAllObjects];
+//            for (int i = 0; i < _xArr.count; i++) {
+//                [array addObject:[NSString stringWithFormat:@"%d",i]];
+//            }
+//            _xArr = array;
+//        }else{
+//            _xArr = origArray;
+//        }
+     
+        if (pinchs.velocity < 0.0f) {
+            
             i = i-0.1;
             if (i == 0) {
+                i = 1.0;
+            }
+            if (i<=1) {
                 i = 1.0;
             }
         }else
         {
             i = 0.1+i;
-//            i++;
         }
     }
-    NSLog(@"%f",i);
     scrollView.contentSize = CGSizeMake(PanScreenWidth*i, 150);
     [chartView removeFromSuperview];
     chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*i, 150) withSource:self withStyle:SCChartLineStyle];
@@ -142,7 +162,15 @@ static CGFloat i = 1.0;
 #pragma mark - @required
 //横坐标标题数组
 - (NSArray *)SCChart_xLableArray:(SCChart *)chart {
-    return [self getXTitles:(int)_xArr.count];
+    if (i<3) {
+        NSMutableArray *array = [NSMutableArray array];
+        [array removeAllObjects];
+        for (int i = 0; i < _xArr.count; i++) {
+            [array addObject:[NSString stringWithFormat:@"%d",i]];
+        }
+        return array;
+    }
+    return _xArr;
 }
 - (NSArray *)getXTitles:(int)num {
     NSMutableArray *xTitles = [NSMutableArray array];
@@ -274,14 +302,18 @@ static CGFloat i = 1.0;
             NSError *error = nil;
             
             [self.dataArr removeAllObjects];
+            [_xArr removeAllObjects];
+            [_yArr removeAllObjects];
+            [origArray removeAllObjects];
             
             for (NSDictionary *dic in meter1Dic) {
-                
                 QueryModel *queryModel = [[QueryModel alloc] initWithDictionary:dic error:&error];
                 [self.dataArr addObject:queryModel];
                 [_yArr addObject:queryModel.collect_num];
+                [_xArr addObject:queryModel.collect_dt];
             }
-            _xArr = _dataArr;
+            origArray = _xArr;
+//            _xArr = _dataArr;
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
             [chartView setNeedsDisplay];
             [chartView strokeChart];
@@ -340,10 +372,11 @@ static CGFloat i = 1.0;
     NSURLSessionTask *task =[manager POST:url parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
         if (responseObject) {
-            
-           [yFlowArr removeAllObjects];
+            [yFlowArr removeAllObjects];
             [_yArr removeAllObjects];
+            [origArray removeAllObjects];
             
             NSString *count = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"count"]];
             if ([count isEqualToString:@"0"]) {
@@ -356,15 +389,17 @@ static CGFloat i = 1.0;
             
             [self.dataArr removeAllObjects];
             
+            [_xArr removeAllObjects];
+            
             for (NSDictionary *dic in meter1Dic) {
-                
+
                 QueryModel *queryModel = [[QueryModel alloc] initWithDictionary:dic error:&error];
                 [self.dataArr addObject:queryModel];
                 [self.yArr addObject:queryModel.collect_avg];
                 [yFlowArr addObject:queryModel.collect_num];
+                [_xArr addObject:[dic objectForKey:@"collect_dt"]];
             }
-            _xArr = _dataArr;
-            
+            origArray = _xArr;
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
             [chartView setNeedsDisplay];
             [chartView strokeChart];

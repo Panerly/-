@@ -290,20 +290,27 @@ static BOOL flag;
 - (IBAction)uploadPhoto:(id)sender {
     NSLog(@"上传照片");
 
-    NSString *uploadUrl = [NSString stringWithFormat:@"http://%@/waterweb/UploadHandleServlet",self.ipLabel];
+    NSString *uploadUrl = [NSString stringWithFormat:@"http://192.168.3.156:8080/waterweb/UploadImageServlet"];
 
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:config];
     
     NSDictionary *parameters;
+    
+    NSData *data = UIImageJPEGRepresentation(_firstImage.image, 1.0f);
+//    NSString *encodedImageStr = [data base64Encoding];
     if (_firstImage.image) {
         
+//        parameters = @{
+//                       @"db":self.dbLabel,
+//                       @"meter_id":@"58179442",
+//                       @"mFile":_firstImage.image
+//                       };
         parameters = @{
-                       @"db":self.dbLabel,
-                       @"meter_id":@"58179442",
-                       @"mFile":_firstImage.image
+                       @"img":data
                        };
+        
     }else{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"照片不能为空" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -318,7 +325,7 @@ static BOOL flag;
     
     AFHTTPResponseSerializer *serializer = manager.responseSerializer;
     
-    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/plain"];
+    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
     
     NSURLSessionTask *task =[manager POST:uploadUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
         

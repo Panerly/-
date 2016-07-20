@@ -96,6 +96,8 @@
     
     for (int i=0; i<xLabels.count; i++) {
         SCChartLabel * label = [[SCChartLabel alloc] initWithFrame:CGRectMake((i *  _xLabelWidth ), self.frame.size.height - UULabelHeight, _xLabelWidth, UULabelHeight)];
+        
+#warning mark - 此处做树状图的x轴赋值
         label.text = xLabels[i];
         [myScrollView addSubview:label];
     }

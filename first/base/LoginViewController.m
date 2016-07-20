@@ -31,13 +31,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_weater2.jpg"]];
     UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:self.view.frame];
     bgImageView.image = [UIImage imageNamed:@"bg_weater2.jpg"];
     [self.view addSubview:bgImageView];
     
     defaults = [NSUserDefaults standardUserDefaults];
     _flag = 1;
+    
     [self _getCode];
 //    [self configKeyChainItemWrapper];
     
@@ -96,22 +96,22 @@
 {
     _hsLogoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
     if ([device isEqualToString:@"4"]) {
-        _hsLogoView.frame = CGRectMake(0, 0, PanScreenWidth/2, PanScreenHeight/6);
+        _hsLogoView.frame = CGRectMake(0, 0, PanScreenHeight/6*2.05, PanScreenHeight/6);
         _hsLogoView.center = CGPointMake(self.view.center.x, _hsLogoView.frame.size.height/2 + 30);
         
     }else if([device isEqualToString:@"6p"])
     {
-        _hsLogoView.frame = CGRectMake(0, 0, PanScreenWidth/1.5, PanScreenHeight/6);
+        _hsLogoView.frame = CGRectMake(0, 0, PanScreenHeight/6*2.05, PanScreenHeight/6);
         _hsLogoView.center = CGPointMake(self.view.center.x, _hsLogoView.frame.size.height/2 + 30);
     }
     else if ([device isEqualToString:@"6"])
     {
-    _hsLogoView.frame = CGRectMake(0, 0, PanScreenWidth/1.5, PanScreenHeight/6);
+    _hsLogoView.frame = CGRectMake(0, 0, PanScreenHeight/6*2.05, PanScreenHeight/6);
     _hsLogoView.center = CGPointMake(self.view.center.x, _hsLogoView.frame.size.height/2 + 50);
     }
     else if ([device isEqualToString:@"5"])
     {
-        _hsLogoView.frame = CGRectMake(0, 0, PanScreenWidth/1.5, PanScreenHeight/6);
+        _hsLogoView.frame = CGRectMake(0, 0, PanScreenHeight/6*2.05, PanScreenHeight/6);
         _hsLogoView.center = CGPointMake(self.view.center.x, _hsLogoView.frame.size.height/2 + 50);
     }
     [self.view addSubview:_hsLogoView];
@@ -314,8 +314,19 @@
                     
                     [defaults setObject:weakSelf.passWord.text forKey:@"passWord"];
                     
+                    [defaults setObject:[responseObject objectForKey:@"type"] forKey:@"type"];
+                    
+                    [defaults setObject:[responseObject objectForKey:@"area_list"] forKey:@"area_list"];
+                    
+                    [defaults setObject:[responseObject objectForKey:@"meter_cali_list"] forKey:@"meter_cali_list"];
+                    
+                    [defaults setObject:[responseObject objectForKey:@"meter_name_list"] forKey:@"meter_name_list"];
+                    
+                    [defaults setObject:[responseObject objectForKey:@"sb_type_list"] forKey:@"sb_type_list"];
+                    
+                    [defaults setObject:[responseObject objectForKey:@"type_list"] forKey:@"type_list"];
+                    
                     [defaults synchronize];
-
                     
                     //成功进入
                     [logInButton ExitAnimationCompletion:^{

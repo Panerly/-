@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -53,15 +52,23 @@
                                     <constraint firstAttribute="height" constant="400" id="Bwn-jS-Urg">
                                         <variation key="widthClass=compact" constant="300"/>
                                     </constraint>
+                                    <constraint firstAttribute="height" constant="300" id="R20-r1-tu6">
+                                        <variation key="widthClass=compact" constant="250"/>
+                                    </constraint>
+                                    <constraint firstAttribute="width" constant="320" id="vLA-cj-JKc"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="Bwn-jS-Urg"/>
+                                        <exclude reference="R20-r1-tu6"/>
+                                        <exclude reference="vLA-cj-JKc"/>
                                     </mask>
                                 </variation>
                                 <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <exclude reference="Bwn-jS-Urg"/>
+                                        <include reference="R20-r1-tu6"/>
+                                        <include reference="vLA-cj-JKc"/>
                                     </mask>
                                 </variation>
                             </imageView>
@@ -141,9 +148,9 @@
                                 <exclude reference="VmI-d5-cfK"/>
                                 <include reference="HZp-i3-d08"/>
                                 <include reference="s4z-25-4rd"/>
-                                <include reference="0ZG-aR-UX6"/>
+                                <exclude reference="0ZG-aR-UX6"/>
                                 <exclude reference="5nQ-Wc-NvL"/>
-                                <include reference="8Xz-9S-zf8"/>
+                                <exclude reference="8Xz-9S-zf8"/>
                                 <exclude reference="9KD-3W-BeI"/>
                                 <exclude reference="BDE-C1-Uz6"/>
                                 <include reference="E1J-ir-fJe"/>
@@ -152,7 +159,7 @@
                                 <exclude reference="aMv-EW-HPv"/>
                                 <exclude reference="bzg-3e-gsf"/>
                                 <exclude reference="iK0-mn-9Sx"/>
-                                <include reference="lBa-iI-RE9"/>
+                                <exclude reference="lBa-iI-RE9"/>
                                 <exclude reference="s2d-3S-QCm"/>
                                 <exclude reference="sYi-bY-RgI"/>
                             </mask>

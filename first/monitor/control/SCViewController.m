@@ -105,7 +105,7 @@ static NSString *reuseIdentifierBar = @"SCBarCell";
     label.backgroundColor = [[UIColor lightGrayColor]colorWithAlphaComponent:0.3];
     switch (section) {
         case 0:
-            label.text = @"折线图·水表读数·20天内";
+            label.text = @"折线图·水表读数";
             break;
         case 1:
             label.text = @"柱状图·水表读数·所有数据";

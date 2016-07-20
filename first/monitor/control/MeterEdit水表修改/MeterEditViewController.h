@@ -28,6 +28,8 @@
 
 
 @property (nonatomic, strong) UIScrollView *scrollView;
+//安装地址
+@property (nonatomic, strong) NSString *user_addr;
 //用户号
 @property (nonatomic, strong) UILabel *userID;
 //表位号
@@ -75,16 +77,23 @@
 //用水过量报警
 @property (nonatomic, strong) UILabel *excessiveAlarmLabel;
 @property (nonatomic, strong) UITextField *excessiveAlarmTextField;
-@property (nonatomic, strong) UISwitch *switchBtn;
+@property (nonatomic, strong) UISwitch *excessiveSwitchBtn;
 //水表倒流报警
 @property (nonatomic, strong) UILabel *reversalAlarmLabel;
 @property (nonatomic, strong) UITextField *reversalAlarmTextField;
+@property (nonatomic, strong) UISwitch *reversalSwitchBtn;
+
+//日用水量上限
+@property (nonatomic, strong) UISwitch *limitOfDayUsageSwitchBtn;
 //月用水量上限
 @property (nonatomic, strong) UILabel *limitOfUsageLabel;
 @property (nonatomic, strong) UITextField *limitOfUsageAlarmTextField;
+@property (nonatomic, strong) UISwitch *limitOfUsageSwitchBtn;
 //长时间不在线
 @property (nonatomic, strong) UITextField *longTimeNotServerTextField;
-
+@property (nonatomic, strong) UISwitch *longTimeNotServerSwitchBtn;
+//长时间没有用水
+@property (nonatomic, strong) UISwitch *longtimeNotUseSwitchBtn;
 
 //时段用水上限值
 //从
@@ -93,7 +102,7 @@
 //到
 @property (nonatomic, strong) UILabel *toLabel;
 @property (nonatomic, strong) UITextField *toTextField;
-
+@property (nonatomic, strong) UISwitch *fromToSwitchBtn;
 
 //备注信息
 @property (nonatomic, strong) UILabel *remarksLabel;
@@ -101,6 +110,11 @@
 
 //定位button
 @property (nonatomic, strong) UIButton *locaBtn;
+
+//id 唯一标识符
+@property (nonatomic, strong) NSMutableArray *idArray;
+//参数
+@property (nonatomic, strong) NSMutableArray *numArray;
 
 @property (nonatomic, strong) UIButton *saveBtn;
 @end

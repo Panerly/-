@@ -43,7 +43,10 @@
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < titleArr.count-i-j; j++) {
             
-            button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width *(j+1) + (j*40), width, width)];
+            if (j == 0) {
+                button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, 80, width, width)];
+            }else
+            button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width *(j+1) + (j*40)+10, width, width)];
 
             [button setBackgroundImage:[UIImage imageNamed:imageArr[i+j+j]] forState:UIControlStateNormal];
             

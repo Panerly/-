@@ -97,7 +97,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -108,15 +108,15 @@
         cell.textLabel.text = @"修改昵称";
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
+//    if (indexPath.row == 1) {
+//        if (![defaults objectForKey:@"bornDate"]) {
+//            
+//            cell.textLabel.text = @"生日";
+//        }
+//        cell.textLabel.text = [NSString stringWithFormat:@"生日 : %@",[defaults objectForKey:@"bornDate"]];
+//        
+//    }
     if (indexPath.row == 1) {
-        if (![defaults objectForKey:@"bornDate"]) {
-            
-            cell.textLabel.text = @"生日";
-        }
-        cell.textLabel.text = [NSString stringWithFormat:@"生日 : %@",[defaults objectForKey:@"bornDate"]];
-        
-    }
-    if (indexPath.row == 2) {
         
         if (![defaults objectForKey:@"sex"]) {
             cell.textLabel.text = @"性别 : 男";
@@ -134,36 +134,6 @@
         UserNameViewController *userNameVC = [[UserNameViewController alloc] init];
         [self showViewController:userNameVC sender:nil];
     }else if (indexPath.row == 1){
-        
-//        DateView *dateView = [[DateView alloc]initWithFrame:self.view.frame];
-//        
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:@"reload" object:nil];
-//        
-//        [self.view addSubview:dateView];
-//        
-//        if ([defaults objectForKey:@"bornStr"]) {
-//            NSLog(@"%@",[defaults objectForKey:@"bornStr"]);
-//            //优化用户的体验 将选择后的日期保存下来
-//            
-//            NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-//            
-//            formatter.dateFormat = @"yyyy年MM月dd日";
-//            
-//            NSDate *date = [formatter dateFromString:[defaults objectForKey:@"bornStr"]];
-//            
-//            dateView.dateView.date = date;
-//        }
-//        
-//        //dataView消失动画效果
-//        
-//        [UIView animateWithDuration:0.3 animations:^{
-//            dateView.save.transform = CGAffineTransformIdentity;
-//            dateView.dateView.transform = CGAffineTransformIdentity;
-//        }];
-        
-        [self setDatePicker];
-        
-    }else if (indexPath.row == 2){
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:NULL message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *boy = [UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             

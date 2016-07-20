@@ -12,6 +12,7 @@
 @interface MeterEditViewController ()<CLLocationManagerDelegate>
 {
     SCToastView *toastView;
+    NSMutableArray *alarmNsetList;
 }
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @end
@@ -25,9 +26,9 @@
     
     [self _getCode];
     
-    [self _requestData];
-    
     [self _configScrollView];
+    
+    [self _requestData];
     
     _dataArr = [NSMutableArray array];
     
@@ -62,11 +63,38 @@
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if (responseObject) {
+            alarmNsetList = [NSMutableArray array];
+            [alarmNsetList removeAllObjects];
+            NSLog(@"%@",responseObject);
+            for (NSDictionary *dic in [responseObject objectForKey:@"alarmNsetList"]) {
+                [alarmNsetList addObject:[dic objectForKey:@"TorF"]];
+                
+            }
+            _idArray = [NSMutableArray array];
+            [_idArray removeAllObjects];
+            for (NSDictionary *idDic in [responseObject objectForKey:@"alarmNsetList"]) {
+                [_idArray addObject:[idDic objectForKey:@"id"]];
+            }
+            
+            _numArray = [NSMutableArray array];
+            for (NSDictionary *numDic in [responseObject objectForKey:@"alarmNsetList"]) {
+                [_numArray addObject:[numDic objectForKey:@"num"]];
+            }
+            
+            [_excessiveSwitchBtn setOn:[[alarmNsetList objectAtIndex:0] isEqualToString:@"0"] ? NO : YES];
+            [_reversalSwitchBtn setOn:[[alarmNsetList objectAtIndex:2]isEqualToString:@"0"] ? NO : YES];
+            [_longTimeNotServerSwitchBtn setOn:[[alarmNsetList objectAtIndex:3]isEqualToString:@"0"] ? NO : YES];
+            [_limitOfDayUsageSwitchBtn setOn:[[alarmNsetList objectAtIndex:4]isEqualToString:@"0"] ? NO : YES];
+            [_longtimeNotUseSwitchBtn setOn:[[alarmNsetList objectAtIndex:1]isEqualToString:@"0"] ? NO : YES];
+            [_limitOfUsageSwitchBtn setOn:[[alarmNsetList objectAtIndex:5]isEqualToString:@"0"] ? NO : YES];
+            [_fromToSwitchBtn setOn:[[alarmNsetList objectAtIndex:6]isEqualToString:@"0"] ? NO : YES];
+            
             _userID.text = [NSString stringWithFormat:@"用户号: %@",[responseObject objectForKey:@"user_id"]];
             _installAddrTextField.text = [responseObject objectForKey:@"username"];
             _longitudeTextField.text = [responseObject objectForKey:@"x"];
             _latitudeTextField.text = [responseObject objectForKey:@"y"];
             _remarksTextView.text = [responseObject objectForKey:@"user_remark"];
+            _user_addr= [responseObject objectForKey:@"user_addr"];
             
             NSDictionary *dic = [responseObject objectForKey:@"meter1"];
             _meterID.text = [NSString stringWithFormat:@"表位号: %@",[dic objectForKey:@"meter_id"]];
@@ -173,7 +201,7 @@
     _installAddrTextField = [[UITextField alloc] init];
     [_scrollView addSubview:_installAddrTextField];
     _installAddrTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _installAddrTextField.font = [UIFont systemFontOfSize:13];
+    _installAddrTextField.font = [UIFont systemFontOfSize:11];
     [_installAddrTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_installAddrLabel.mas_right);
         make.top.equalTo(_meterID.mas_bottom).with.offset(10);
@@ -525,11 +553,9 @@
         make.top.equalTo(alarmIntroduce.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
-    
-    _switchBtn = [[UISwitch alloc] init];
-    _switchBtn.tag = 500;
-    [_scrollView addSubview:_switchBtn];
-    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _excessiveSwitchBtn = [[UISwitch alloc] init];
+    [_scrollView addSubview:_excessiveSwitchBtn];
+    [_excessiveSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(alarmIntroduce.mas_bottom).with.offset(5);
         make.centerX.equalTo(enableLabel.centerX);
     }];
@@ -565,10 +591,9 @@
         make.top.equalTo(_excessiveAlarmTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
-    _switchBtn = [[UISwitch alloc] init];
-    _switchBtn.tag = 501;
-    [_scrollView addSubview:_switchBtn];
-    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _reversalSwitchBtn = [[UISwitch alloc] init];
+    [_scrollView addSubview:_reversalSwitchBtn];
+    [_reversalSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(excessiveAlarmUnit.mas_bottom).with.offset(5);
         make.centerX.equalTo(enableLabel.centerX);
     }];
@@ -605,10 +630,9 @@
         make.top.equalTo(_reversalAlarmTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
-    _switchBtn = [[UISwitch alloc] init];
-    _switchBtn.tag = 502;
-    [_scrollView addSubview:_switchBtn];
-    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _longTimeNotServerSwitchBtn = [[UISwitch alloc] init];
+    [_scrollView addSubview:_longTimeNotServerSwitchBtn];
+    [_longTimeNotServerSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(reversalAlarmUnit.mas_bottom).with.offset(5);
         make.centerX.equalTo(enableLabel.centerX);
     }];
@@ -645,10 +669,9 @@
         make.top.equalTo(_longTimeNotServerTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
-    _switchBtn = [[UISwitch alloc] init];
-    _switchBtn.tag = 503;
-    [_scrollView addSubview:_switchBtn];
-    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _limitOfDayUsageSwitchBtn = [[UISwitch alloc] init];
+    [_scrollView addSubview:_limitOfDayUsageSwitchBtn];
+    [_limitOfDayUsageSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(longTimeNotServer.mas_bottom).with.offset(5);
         make.centerX.equalTo(enableLabel.centerX);
     }];
@@ -665,10 +688,9 @@
         make.top.equalTo(dayOverFlow.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(120, 25));
     }];
-    _switchBtn = [[UISwitch alloc] init];
-    _switchBtn.tag = 504;
-    [_scrollView addSubview:_switchBtn];
-    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _longtimeNotUseSwitchBtn = [[UISwitch alloc] init];
+    [_scrollView addSubview:_longtimeNotUseSwitchBtn];
+    [_longtimeNotUseSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(dayOverFlowUnit.mas_bottom).with.offset(5);
         make.centerX.equalTo(enableLabel.centerX);
     }];
@@ -704,10 +726,9 @@
         make.top.equalTo(longtimeNotUse.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
-    _switchBtn = [[UISwitch alloc] init];
-    _switchBtn.tag = 505;
-    [_scrollView addSubview:_switchBtn];
-    [_switchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _limitOfUsageSwitchBtn = [[UISwitch alloc] init];
+    [_scrollView addSubview:_limitOfUsageSwitchBtn];
+    [_limitOfUsageSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(longtimeNotUse.mas_bottom).with.offset(5);
         make.centerX.equalTo(enableLabel.centerX);
     }];
@@ -722,8 +743,52 @@
     [intervalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(_limitOfUsageLabel.mas_bottom).with.offset(10);
-        make.size.equalTo(CGSizeMake(120, 25));
+        make.size.equalTo(CGSizeMake(80, 25));
     }];
+    _fromLabel = [[UILabel alloc] init];
+    _fromLabel.text = @"从";
+    _fromLabel.font = [UIFont systemFontOfSize:10.0f];
+    [_scrollView addSubview:_fromLabel];
+    [_fromLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(intervalLabel.mas_right);
+        make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(10);
+        make.size.equalTo(CGSizeMake(15, 25));
+    }];
+    _fromTextField = [[UITextField alloc] init];
+    _fromTextField.borderStyle = UITextBorderStyleRoundedRect;
+    _fromTextField.font = [UIFont systemFontOfSize:13];
+    [_scrollView addSubview:_fromTextField];
+    [_fromTextField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_fromLabel.mas_right).with.offset(5);
+        make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(10);
+        make.size.equalTo(CGSizeMake(60, 25));
+    }];
+    _toLabel = [[UILabel alloc] init];
+    _toLabel.text = @"到";
+    _toLabel.font = [UIFont systemFontOfSize:10.f];
+    [_scrollView addSubview:_toLabel];
+    [_toLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_fromTextField.mas_right).with.offset(5);
+        make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(10);
+        make.size.equalTo(CGSizeMake(15, 25));
+    }];
+    _toTextField = [[UITextField alloc] init];
+    _toTextField.borderStyle = UITextBorderStyleRoundedRect;
+    _toTextField.font = [UIFont systemFontOfSize:13.0f];
+    [_scrollView addSubview:_toTextField];
+    [_toTextField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_toLabel.mas_right).with.offset(5);
+        make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(10);
+        make.size.equalTo(CGSizeMake(60, 25));
+    }];
+    _fromToSwitchBtn = [[UISwitch alloc] init];
+    [_scrollView addSubview:_fromToSwitchBtn];
+    [_fromToSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(5);
+        make.centerX.equalTo(enableLabel.centerX);
+    }];
+    
+    
     //备注信息
     _remarksLabel = [[UILabel alloc] init];
     _remarksLabel.text = @"备注信息";
@@ -748,8 +813,10 @@
         make.right.equalTo(self.view.mas_right).with.offset(-10);
         make.height.equalTo(100);
     }];
-
+    
+    
 }
+
 
 - (UIButton *)locaBtn
 {
@@ -784,7 +851,7 @@
         
         [alertVC addAction:action];
         [self presentViewController:alertVC animated:YES completion:^{
-            
+
         }];
     }
 
@@ -794,28 +861,85 @@
 //保存数据
 - (UIButton *)saveBtn
 {
+    
+    NSMutableArray *alarmArr = [NSMutableArray array];
+    [alarmArr removeAllObjects];
+//    NSArray *switchBtnArr = @[_excessiveSwitchBtn,_longtimeNotUseSwitchBtn,_longTimeNotServerSwitchBtn,_limitOfDayUsageSwitchBtn,_reversalSwitchBtn,_limitOfUsageSwitchBtn,_fromToSwitchBtn];
+//    for (int i = 0; i < alarmNsetList.count; i++) {
+//        alarmArr addObject:[NSString stringWithFormat:@"%d",((UISwitch *)switchBtnArr[i]).isOn];
+//    }
+    [alarmArr addObject:[NSString stringWithFormat:@"%d",_excessiveSwitchBtn.isOn]];
+    [alarmArr addObject:[NSString stringWithFormat:@"%d",_longtimeNotUseSwitchBtn.isOn]];
+    [alarmArr addObject:[NSString stringWithFormat:@"%d",_longTimeNotServerSwitchBtn.isOn]];
+    [alarmArr addObject:[NSString stringWithFormat:@"%d",_limitOfDayUsageSwitchBtn.isOn]];
+    [alarmArr addObject:[NSString stringWithFormat:@"%d",_reversalSwitchBtn.isOn]];
+    [alarmArr addObject:[NSString stringWithFormat:@"%d",_limitOfUsageSwitchBtn.isOn]];
+    [alarmArr addObject:[NSString stringWithFormat:@"%d",_fromToSwitchBtn.isOn]];
+    
+    NSDictionary *alarmIsNull = [NSDictionary dictionary];
+    NSMutableArray *arr = [NSMutableArray array];
+    
+    for (int i = 0; i < alarmArr.count-1; i++) {
+        alarmIsNull = @{
+                        @"TorF":alarmArr[i],
+                        @"num":_numArray[i],
+                        };
+        [arr addObject:alarmIsNull];
+    }
+    
+    NSDictionary *sevenT = @{
+                             @"TorF":alarmArr[6],
+                             @"num":_idArray[6],
+                             @"time_first":_fromTextField.text,
+                             @"time_last":_toTextField.text
+                             };
+    
+    NSMutableArray *alarmIsNullArray = [NSMutableArray arrayWithObjects:arr,sevenT, nil];
+    NSLog(@"最终---%@",alarmIsNullArray);
+    
     [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"正在保存..." duration:2 autoHide:YES];
-//    NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/EditServlet",self.ipLabel];
-//    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-//    NSDictionary *parameters = @{@"username":self.userNameLabel,
-//                                 @"password":self.passWordLabel,
-//                                 @"db":self.dbLabel,
-//                                 @"meterid":self.meter_id,
-//                                 };
-//    
-//    AFHTTPResponseSerializer *serializer = manager.responseSerializer;
-//    
-//    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
-//    
-//    NSURLSessionTask *task =[manager POST:logInUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
-//        
-//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        
-//    }];
-//
-//    [task resume];
+    NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/EditServlet1",self.ipLabel];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    NSDictionary *parameters = @{@"username":self.userNameLabel,
+                                 @"password":self.passWordLabel,
+                                 @"db":self.dbLabel,
+                                 @"meter_id":self.meter_id,
+                                 @"user_name":_installAddrTextField.text,
+                                 @"user_addr":_user_addr,
+                                 @"comm_id":_connectIDTextField.text,
+                                 @"collector_id":_collectIDTextField.text,
+                                 @"install_time":_installTimeTextField.text,
+                                 @"meter_wid":_meter_idTextField.text,
+                                 @"bz10":_wheelTypeTextField.text,
+                                 @"collector_area":_regionTextField.text,
+                                 @"meter_name":_meterTypeTextField.text,
+                                 @"meter_cali":_caliberTextField.text,
+                                 @"type":_remoteWayTextField.text,
+                                 @"type_name":_remoteTypeTextField.text,
+                                 @"x":_longitudeTextField.text,
+                                 @"y":_latitudeTextField.text,
+                                 @"time_first":_fromTextField.text,
+                                 @"time_last":_toTextField.text,
+                                 @"user_remark":_remarksTextView.text,
+                                 @"alarmIsNull":alarmIsNullArray,
+                                 @"save4edit":@"save4edit",
+                                 };
+    
+    AFHTTPResponseSerializer *serializer = manager.responseSerializer;
+    
+    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
+    
+    NSURLSessionTask *task =[manager POST:logInUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功---%@",responseObject);
+        [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存成功" duration:2 autoHide:YES];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败---%@",error);
+        [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存失败" duration:2 autoHide:YES];
+    }];
+
+    [task resume];
     return nil;
 }
 

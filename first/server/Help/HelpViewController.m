@@ -8,6 +8,7 @@
 
 #import "HelpViewController.h"
 #import "UIImage+GIF.h"
+#import "SCToastView.h"
 
 @interface HelpViewController ()<UIWebViewDelegate>
 {
@@ -20,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
     _webView = [[UIWebView alloc] initWithFrame:self.view.frame];
     _webView.delegate = self;
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.rabbitpre.com/m/FvQnIzl"]]];
@@ -29,7 +30,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
@@ -52,7 +53,10 @@
         make.size.equalTo(CGSizeMake(100, 50));
     }];
 }
-
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [SCToastView showInView:self.view text:@"加载失败！请重试" duration:2.0f autoHide:YES];
+}
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [loading removeFromSuperview];

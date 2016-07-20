@@ -9,10 +9,32 @@
 #import "MonitorViewController.h"
 #import "CurrentReceiveViewController.h"
 #import "MeterDataViewController.h"
+#import "BHInfiniteScrollView.h"
+//typedef enum : NSUInteger {
+//    Fade = 1,                   //淡入淡出
+//    Push,                       //推挤
+//    Reveal,                     //揭开
+//    MoveIn,                     //覆盖
+//    Cube,                       //立方体
+//    SuckEffect,                 //吮吸
+//    OglFlip,                    //翻转
+//    RippleEffect,               //波纹
+//    PageCurl,                   //翻页
+//    PageUnCurl,                 //反翻页
+//    CameraIrisHollowOpen,       //开镜头
+//    CameraIrisHollowClose,      //关镜头
+//    CurlDown,                   //下翻页
+//    CurlUp,                     //上翻页
+//    FlipFromLeft,               //左翻转
+//    FlipFromRight,              //右翻转
+//    
+//} AnimationType;
 
-
-@interface MonitorViewController ()
-
+@interface MonitorViewController ()<BHInfiniteScrollViewDelegate>
+{
+    
+}
+@property (nonatomic, strong) BHInfiniteScrollView* infinitePageView;
 @end
 
 @implementation MonitorViewController
@@ -21,8 +43,60 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
+//    [self _createScrollView];
+    
+    
     [self _createButton];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self _createPicPlay];
+}
+
+- (void)_createPicPlay
+{
+    NSArray* urlsArray = @[
+                           @"http://60.191.39.206:8080/waterweb/IMAGE/homeimage1.png",
+                           @"http://60.191.39.206:8080/waterweb/IMAGE/homeimage2.png",
+                           @"http://60.191.39.206:8080/waterweb/IMAGE/homeimage3.png",
+                           @"http://60.191.39.206:8080/waterweb/IMAGE/homeimage4.png",
+                           ];
+//    NSArray *titleArray = @[@"第一张",@"第二张",@"第三张",@"第四章",@"第五章"];
+    CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/3;
+    
+    _infinitePageView = [BHInfiniteScrollView infiniteScrollViewWithFrame:CGRectMake(0, 49, PanScreenWidth, viewHeight) Delegate:self ImagesArray:urlsArray PlageHolderImage:[UIImage imageNamed:@"bg_weather3.jpg"] InfiniteLoop:YES];
+    _infinitePageView.dotSize = 10;
+    _infinitePageView.pageControlAlignmentOffset = CGSizeMake(0, 10);
+//    _infinitePageView.dotColor = [UIColor colorWithRed:91.0f green:154.0f blue:227.0f alpha:.9];
+    _infinitePageView.selectedDotColor = [UIColor blueColor];
+//    infinitePageView.titleView.textColor = [UIColor whiteColor];
+//    infinitePageView.titleView.margin = 30;
+//    infinitePageView.titleView.hidden = YES;
+//    infinitePageView.titlesArray = titleArray;
+    _infinitePageView.scrollTimeInterval = 2;
+    _infinitePageView.autoScrollToNextPage = YES;
+    _infinitePageView.delegate = self;
+    [self.view addSubview:_infinitePageView];
+    [self performSelector:@selector(stop) withObject:nil afterDelay:5];
+    [self performSelector:@selector(start) withObject:nil afterDelay:10];
+}
+
+- (void)stop {
+    [_infinitePageView stopAutoScrollPage];
+}
+
+- (void)start {
+    [_infinitePageView startAutoScrollPage];
+}
+- (void)infiniteScrollView:(BHInfiniteScrollView *)infiniteScrollView didScrollToIndex:(NSInteger)index {
+}
+//点击图片做出的响应
+- (void)infiniteScrollView:(BHInfiniteScrollView *)infiniteScrollView didSelectItemAtIndex:(NSInteger)index
+{
+    
+}
+
 
 - (void)_createButton
 {
@@ -32,16 +106,15 @@
 
     NSArray *titleArr = @[@"实时抄见",@"历史抄见",@"水表数据",@"水表修改",@"用水核算",@"用量查询",@"使用帮助"];
     NSArray *imageArr = @[@"now",@"his",@"message",@"edit",@"meter",@"dos",@"userhelp"];
-    
+    CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/3;
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            
-            button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width * (j+1) + j*35, width, width)];
+            if (j == 0) {
+                button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, 59 + viewHeight, width, width)];
+            } else
+            button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width * (j+1) + j*35+viewHeight-15, width, width)];
             
             [button setBackgroundImage:[UIImage imageNamed:imageArr[i+i+j]] forState:UIControlStateNormal];
-            
-            //    在UIButton中有三个对EdgeInsets的设置：ContentEdgeInsets、titleEdgeInsets、imageEdgeInsets
-            //    [button setImage:[UIImage imageNamed:@"his"] forState:UIControlStateNormal];//给button添加image
             button.imageEdgeInsets = UIEdgeInsetsMake(5,13,21,button.titleLabel.bounds.size.width);//设置image在button上的位置（上top，左left，下bottom，右right）这里可以写负值，对上写－5，那么image就象上移动5个像素
             
             [button setTitle:titleArr[i+i+j] forState:UIControlStateNormal];//设置button的title
@@ -59,119 +132,6 @@
         }
         
     }
-
-//    for (int i = 0; i < 4; i++) {
-//        
-//        button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/4 * i+10, width, width, width)];
-//        
-//        [button setBackgroundImage:[UIImage imageNamed:imageArr[i]] forState:UIControlStateNormal];
-//        
-//        //    在UIButton中有三个对EdgeInsets的设置：ContentEdgeInsets、titleEdgeInsets、imageEdgeInsets
-//        //    [button setImage:[UIImage imageNamed:@"his"] forState:UIControlStateNormal];//给button添加image
-//        button.imageEdgeInsets = UIEdgeInsetsMake(5,13,21,button.titleLabel.bounds.size.width);//设置image在button上的位置（上top，左left，下bottom，右right）这里可以写负值，对上写－5，那么image就象上移动5个像素
-//        
-//        [button setTitle:titleArr[i] forState:UIControlStateNormal];//设置button的title
-//        button.titleLabel.font = [UIFont systemFontOfSize:16];//title字体大小
-//        button.titleLabel.textAlignment = NSTextAlignmentCenter;//设置title的字体居中
-//        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];//设置title在一般情况下为白色字体
-//        [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];//设置title在button被选中情况下为灰色字体
-//        button.titleEdgeInsets = UIEdgeInsetsMake(100, -button.titleLabel.bounds.size.width, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
-//  
-//        button.tag = 100 + i;
-//        
-//        [button addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
-//
-//        [self.view addSubview:button];
-//        
-//    }
-    
-    
-
-    
-    
-    
-
-//    NSArray *imageArr = @[@"now",@"his",@"message",@"edit"];
-//    
-//    UIButton *currentBtn = [[UIButton alloc] init];
-//    currentBtn.tag = 100;
-//    [currentBtn setBackgroundImage:[UIImage imageNamed:imageArr[0]] forState:UIControlStateNormal];
-//    [self.view addSubview:currentBtn];
-//    [currentBtn addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
-//    [currentBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(self.view.centerX).offset(-40-10);
-//        make.top.equalTo(self.view.mas_top).with.offset(84);
-//        make.size.equalTo(CGSizeMake(80, 80));
-//    }];
-//    UILabel *currLabel = [[UILabel alloc] init];
-//    currLabel.text = @"实时抄见";
-//    [self.view addSubview:currLabel];
-//    currLabel.textAlignment = NSTextAlignmentCenter;
-//    [currLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(self.view.centerX).offset(-40-10);
-//        make.top.equalTo(currentBtn.mas_bottom).with.offset(10);
-//        make.size.equalTo(CGSizeMake(80, 25));
-//    }];
-//    
-//    UIButton *hisBtn = [[UIButton alloc] init];
-//    hisBtn.tag = 101;
-//    [hisBtn setBackgroundImage:[UIImage imageNamed:imageArr[1]] forState:UIControlStateNormal];
-//    [self.view addSubview:hisBtn];
-//    [hisBtn addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
-//    [hisBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.view.centerX).offset(40+10);
-//        make.top.equalTo(self.view.mas_top).with.offset(84);
-//        make.size.equalTo(CGSizeMake(80, 80));
-//    }];
-//    UILabel *hisLabel = [[UILabel alloc] init];
-//    hisLabel.text = @"历史抄见";
-//    [self.view addSubview:hisLabel];
-//    hisLabel.textAlignment = NSTextAlignmentCenter;
-//    [hisLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.view.centerX).offset(40+10);
-//        make.top.equalTo(hisBtn.mas_bottom).with.offset(10);
-//        make.size.equalTo(CGSizeMake(80, 25));
-//    }];
-//    
-//    UIButton *meterData = [[UIButton alloc] init];
-//    meterData.tag = 102;
-//    [meterData setBackgroundImage:[UIImage imageNamed:imageArr[2]] forState:UIControlStateNormal];
-//    [self.view addSubview:meterData];
-//    [meterData addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
-//    [meterData mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(self.view.centerX).offset(-40-10);
-//        make.top.equalTo(currentBtn.mas_bottom).with.offset(50);
-//        make.size.equalTo(CGSizeMake(80, 80));
-//    }];
-//    UILabel *meterDataLabel = [[UILabel alloc] init];
-//    meterDataLabel.text = @"水表数据";
-//    [self.view addSubview:meterDataLabel];
-//    meterDataLabel.textAlignment = NSTextAlignmentCenter;
-//    [meterDataLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(self.view.centerX).offset(-40-10);
-//        make.top.equalTo(meterData.mas_bottom).with.offset(10);
-//        make.size.equalTo(CGSizeMake(80, 25));
-//    }];
-//    
-//    UIButton *editBtn = [[UIButton alloc] init];
-//    editBtn.tag = 103;
-//    [editBtn setBackgroundImage:[UIImage imageNamed:imageArr[3]] forState:UIControlStateNormal];
-//    [self.view addSubview:editBtn];
-//    [editBtn addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
-//    [editBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.view.centerX).offset(40+10);
-//        make.top.equalTo(hisBtn.mas_bottom).with.offset(50);
-//        make.size.equalTo(CGSizeMake(80, 80));
-//    }];
-//    UILabel *editLabel = [[UILabel alloc] init];
-//    editLabel.text = @"水表修改";
-//    [self.view addSubview:editLabel];
-//    editLabel.textAlignment = NSTextAlignmentCenter;
-//    [editLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.view.centerX).offset(40+10);
-//        make.top.equalTo(editBtn.mas_bottom).with.offset(10);
-//        make.size.equalTo(CGSizeMake(80, 25));
-//    }];
 }
 
 - (void)clicked:(UIButton *)sender
@@ -209,16 +169,6 @@
             break;
     }
 }
-
-//从storyboard加载
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self) {
-//        self  = [[UIStoryboard storyboardWithName:@"Monitor" bundle:nil] instantiateViewControllerWithIdentifier:@"Monitor"];
-//    }
-//    return self;
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

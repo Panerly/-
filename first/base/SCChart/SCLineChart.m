@@ -15,6 +15,8 @@
 {
     UILabel *disLabel;
     UIView *popView;
+    NSMutableArray *arr;
+    NSMutableArray *popDateArr;
 }
 - (id)initWithFrame:(CGRect)frame
 {
@@ -22,9 +24,9 @@
     if (self) {
         // Initialization code
         self.clipsToBounds = YES;
-#warning 此处添加弹出视图
+#warning mark-addPopView 此处添加弹出视图
         //PopView
-        popView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 70, 30)];
+        popView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 165, 30)];
         [popView setBackgroundColor:[UIColor lightGrayColor]];
         [popView setAlpha:0.0f];
         
@@ -112,7 +114,16 @@
 
 -(void)setXLabels:(NSArray *)xLabels
 {
+#warning mark - collect_dt 此处添加弹出视图的抄收时间
     _xLabels = xLabels;
+    popDateArr = [NSMutableArray array];
+    [popDateArr removeAllObjects];
+    if (xLabels) {
+        for (NSArray *ar in _xLabels) {
+            [popDateArr addObject:ar];
+        }
+        
+    }
     CGFloat num = 0;
     if (xLabels.count>=31) {
         num=31.0;
@@ -225,9 +236,14 @@
         [progressline setLineCapStyle:kCGLineCapRound];
         [progressline setLineJoinStyle:kCGLineJoinRound];
         NSInteger index = 0;
+        
+        arr = [[NSMutableArray alloc] init];
+        [arr removeAllObjects];
+
         for (NSString * valueString in childAry) {
             
             float grade =([valueString floatValue]-_yValueMin) / ((float)_yValueMax-_yValueMin);
+            [arr addObject:valueString];
             if (index != 0) {
                 
                 CGPoint point = CGPointMake(xPosition+index*_xLabelWidth, chartCavanHeight - grade * chartCavanHeight+UULabelHeight);
@@ -248,7 +264,7 @@
                          value:[valueString floatValue]];
                 
 //                [progressline stroke];
-#warning 此处添加触摸事件
+#warning mark- addBtn 此处添加触摸事件
                 //添加触摸点
                 UIButton *bt = [UIButton buttonWithType:UIButtonTypeCustom];
                 
@@ -257,7 +273,8 @@
                 [bt setFrame:CGRectMake(0, 0, 16, 16)];
                 bt.layer.cornerRadius = 8;
                 [bt setCenter:point];
-                bt.tag = [valueString floatValue];
+                
+                bt.tag = index;
                 [bt addTarget:self
                        action:@selector(btAction:)
              forControlEvents:UIControlEventTouchUpInside];
@@ -287,13 +304,12 @@
 }
 - (void)btAction:(UIButton *)button
 {
-    [disLabel setText:[NSString stringWithFormat:@"读数:%d\n时间:暂无",button.tag]];
-    
+    [disLabel setText:[NSString stringWithFormat:@"读数:%@\n时间:%@",arr[button.tag],popDateArr[button.tag]]];
     UIButton *bt = (UIButton*)button;
     popView.center = CGPointMake(bt.center.x, bt.center.y - popView.frame.size.height/2);
     popView.layer.cornerRadius = 5;
     [popView setAlpha:1.0f];
-    [UIView animateWithDuration:1.5f animations:^{
+    [UIView animateWithDuration:2.0f animations:^{
         [popView setAlpha:0.0f];
     }];
 }
