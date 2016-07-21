@@ -76,9 +76,34 @@ static NSString * const reuseIdentifier = @"CollectionCell";
     collectionView.backgroundColor = [UIColor whiteColor];
     
     CollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-
+    
     return cell;
 }
+
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return CGSizeMake(PanScreenWidth/3.5, PanScreenHeight/4);
+//}
+//横向间距
+//- (CGFloat) collectionView:(UICollectionView *)collectionView
+//                    layout:(UICollectionViewLayout *)collectionViewLayout
+//minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+//{
+//    return 2.0f;
+//}
+////设置纵向的行间距
+//- (CGFloat) collectionView:(UICollectionView *)collectionView
+//                    layout:(UICollectionViewLayout *)collectionViewLayout
+//minimumLineSpacingForSectionAtIndex:(NSInteger)section
+//{
+//    return 2.0f;
+//}
+////通过调整inset使单元格顶部和底部都有间距(inset次序: 上，左，下，右边)
+//- (UIEdgeInsets) collectionView:(UICollectionView *)collectionView
+//                         layout:(UICollectionViewLayout *)collectionViewLayout
+//         insetForSectionAtIndex:(NSInteger)section
+//{
+//    return UIEdgeInsetsMake(2.0f, 0.0f, 2.0f, 0.0f);
+//}
 
 #pragma mark <UICollectionViewDelegate>
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

@@ -118,6 +118,7 @@
     _xLabels = xLabels;
     popDateArr = [NSMutableArray array];
     [popDateArr removeAllObjects];
+    
     if (xLabels) {
         for (NSArray *ar in _xLabels) {
             [popDateArr addObject:ar];
@@ -125,8 +126,8 @@
         
     }
     CGFloat num = 0;
-    if (xLabels.count>=31) {
-        num=31.0;
+    if (xLabels.count>=100) {
+        num=100.0;
     }else if (xLabels.count<=1){
         num=1.0;
     }else{
@@ -304,7 +305,26 @@
 }
 - (void)btAction:(UIButton *)button
 {
+    
+    NSInteger length = [popDateArr[button.tag] length];
+    NSLog(@"%ld",(long)length);
+    //此处根据数据源显示的frame大小
+    if (length<4) {
+        popView.frame = CGRectMake(0, 0, 85, 30);
+        disLabel.frame = popView.frame;
+        [disLabel setText:[NSString stringWithFormat:@"读数:%@\n时间:请放大",arr[button.tag]]];
+    } else if (length >= 4 && length < 20){
+        popView.frame = CGRectMake(0, 0, 11*length, 30);
+        disLabel.frame = popView.frame;
+        [disLabel setText:[NSString stringWithFormat:@"读数:%@\n时间:%@",arr[button.tag],popDateArr[button.tag]]];
+    }
+    
+    else {
+    popView.frame = CGRectMake(0, 0, 8*length, 30);
+    disLabel.frame = popView.frame;
     [disLabel setText:[NSString stringWithFormat:@"读数:%@\n时间:%@",arr[button.tag],popDateArr[button.tag]]];
+    }
+    
     UIButton *bt = (UIButton*)button;
     popView.center = CGPointMake(bt.center.x, bt.center.y - popView.frame.size.height/2);
     popView.layer.cornerRadius = 5;

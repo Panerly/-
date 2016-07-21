@@ -98,6 +98,7 @@
             
             [self.dataArr removeAllObjects];
             
+            
             for (NSDictionary *dic in meter1Dic) {
                 
 //                HisDetailModel *hisDetailModel = [[HisDetailModel alloc] initWithDictionary:dic error:&error];
@@ -107,10 +108,11 @@
                 hisDetailModel.collect_num = [dic objectForKey:@"collect_num"];
                 hisDetailModel.collect_avg = [dic objectForKey:@"collect_avg"];
                 hisDetailModel.collect_dt = [dic objectForKey:@"collect_dt"];
-                
+                                
                 [self.dataArr addObject:hisDetailModel];
                 [_yArr addObject:hisDetailModel.collect_avg];
             }
+            
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
             [loading removeFromSuperview];
             [loadingLabel removeFromSuperview];

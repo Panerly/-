@@ -26,8 +26,6 @@
     NSInteger selectedIndex;
     UIPinchGestureRecognizer *pinch;
     UIScrollView *scrollView;
-    
-    NSMutableArray *origArray;
 }
 @end
 
@@ -56,7 +54,6 @@
     self.xArr = [NSMutableArray array];
     self.yArr = [NSMutableArray array];
     yFlowArr = [NSMutableArray array];
-    origArray = [NSMutableArray array];
 }
 
 - (void)_getSysTime
@@ -114,30 +111,18 @@
         make.bottom.equalTo(_curveView.bottom);
     }];
     
-    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*2, 150) withSource:self withStyle:SCChartLineStyle];
+    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*2.5, 150) withSource:self withStyle:SCChartLineStyle];
     [chartView showInView:scrollView];
 }
 
 static CGFloat i = 1.0;
 
 //缩放frame实现缩放表格
-
 - (void)scaleAction:(UIPinchGestureRecognizer*)pinchs
 {
     if (i == 0) {
         i = 1.0f;
     } else {
-//        //此处做缩放时x轴要显示的内容的更改
-//        if (i<3) {
-//            NSMutableArray *array = [NSMutableArray array];
-//            [array removeAllObjects];
-//            for (int i = 0; i < _xArr.count; i++) {
-//                [array addObject:[NSString stringWithFormat:@"%d",i]];
-//            }
-//            _xArr = array;
-//        }else{
-//            _xArr = origArray;
-//        }
      
         if (pinchs.velocity < 0.0f) {
             
@@ -153,6 +138,7 @@ static CGFloat i = 1.0;
             i = 0.1+i;
         }
     }
+    NSLog(@"缩放倍率：%f",i);
     scrollView.contentSize = CGSizeMake(PanScreenWidth*i, 150);
     [chartView removeFromSuperview];
     chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*i, 150) withSource:self withStyle:SCChartLineStyle];
@@ -162,31 +148,58 @@ static CGFloat i = 1.0;
 #pragma mark - @required
 //横坐标标题数组
 - (NSArray *)SCChart_xLableArray:(SCChart *)chart {
-    if (i<3) {
+
+    if (i < 4.1) {
+        //空间太小 所以在4倍内显示数字
         NSMutableArray *array = [NSMutableArray array];
         [array removeAllObjects];
-        for (int i = 0; i < _xArr.count; i++) {
-            [array addObject:[NSString stringWithFormat:@"%d",i]];
+        for (int j = 0; j < _xArr.count; j++) {
+            [array addObject:[NSString stringWithFormat:@"%d",j]];
         }
         return array;
     }
-    return _xArr;
-}
-- (NSArray *)getXTitles:(int)num {
-    NSMutableArray *xTitles = [NSMutableArray array];
-    for (int i=0; i<num; i++) {
-        NSString * str = [NSString stringWithFormat:@"%d",i+1];
-        [xTitles addObject:str];
+    //缩放至4到8倍时显示抄收小时数据
+    else if (i >= 4.1 && i < 8) {
+        NSMutableArray *array = [NSMutableArray array];
+        [array removeAllObjects];
+        for (int j = 0; j < _xArr.count; j++) {
+            [array addObject:[_xArr[j] substringWithRange:NSMakeRange(10, 10)]];
+        }
+        return array;
     }
-    return xTitles;
+    //8倍以上有足够的空间 所以显示详细的时间
+    NSMutableArray *array = [NSMutableArray array];
+    [array removeAllObjects];
+    for (int j = 0; j < _xArr.count; j++) {
+        [array addObject:[_xArr[j] substringWithRange:NSMakeRange(2, 17)]];
+    }
+    return array;
 }
+//- (NSArray *)getXTitles:(int)num {
+//    NSMutableArray *xTitles = [NSMutableArray array];
+//    for (int i=0; i<num; i++) {
+//        NSString * str = [NSString stringWithFormat:@"%d",i+1];
+//        [xTitles addObject:str];
+//    }
+//    return xTitles;
+//}
 
 //数值多重数组 Y轴值数组
 - (NSArray *)SCChart_yValueArray:(SCChart *)chart {
     NSMutableArray *ary = [NSMutableArray array];
+    NSString *unit;
+    switch (self.switchBtn.selectedSegmentIndex) {
+        case 0:
+            unit = @"m³/h";
+        break;
+        case 2:
+            unit = @"吨";
+        default:
+            break;
+    }
     for (int i = 0; i <_yArr.count; i++) {
         NSString *num = _yArr[i];
-        NSString *str = [NSString stringWithFormat:@"%@",num];
+        NSString *str = [NSString stringWithFormat:@"%@%@",num,unit];
         [ary addObject:str];
     }
     return @[ary];
@@ -304,16 +317,12 @@ static CGFloat i = 1.0;
             [self.dataArr removeAllObjects];
             [_xArr removeAllObjects];
             [_yArr removeAllObjects];
-            [origArray removeAllObjects];
-            
             for (NSDictionary *dic in meter1Dic) {
                 QueryModel *queryModel = [[QueryModel alloc] initWithDictionary:dic error:&error];
                 [self.dataArr addObject:queryModel];
                 [_yArr addObject:queryModel.collect_num];
                 [_xArr addObject:queryModel.collect_dt];
             }
-            origArray = _xArr;
-//            _xArr = _dataArr;
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
             [chartView setNeedsDisplay];
             [chartView strokeChart];
@@ -376,7 +385,6 @@ static CGFloat i = 1.0;
         if (responseObject) {
             [yFlowArr removeAllObjects];
             [_yArr removeAllObjects];
-            [origArray removeAllObjects];
             
             NSString *count = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"count"]];
             if ([count isEqualToString:@"0"]) {
@@ -399,7 +407,6 @@ static CGFloat i = 1.0;
                 [yFlowArr addObject:queryModel.collect_num];
                 [_xArr addObject:[dic objectForKey:@"collect_dt"]];
             }
-            origArray = _xArr;
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
             [chartView setNeedsDisplay];
             [chartView strokeChart];
@@ -434,7 +441,7 @@ static CGFloat i = 1.0;
 {
     QueryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identy];
     
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if (!cell) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"QueryTableViewCell" owner:nil options:nil] lastObject];
@@ -449,10 +456,26 @@ static CGFloat i = 1.0;
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
-    [alert addAction:action];
-    [self presentViewController:alert animated:YES completion:^{
-        
-    }];
+    
+    UIAlertController *alertDay = [UIAlertController alertControllerWithTitle:@"水表信息" message:[NSString stringWithFormat:@"\n日用量: %@吨\n\n抄收时间: %@", ((QueryModel *)self.dataArr[indexPath.row]).collect_num, ((QueryModel *)self.dataArr[indexPath.row]).collect_dt] preferredStyle:UIAlertControllerStyleAlert];
+    
+    switch (_switchBtn.selectedSegmentIndex) {
+        case 0:
+            [alert addAction:action];
+            [self presentViewController:alert animated:YES completion:^{
+                
+            }];
+            break;
+        case 2:
+            [alertDay addAction:action];
+            [self presentViewController:alertDay animated:YES completion:^{
+                
+            }];
+            break;
+        default:
+            break;
+    }
+    
 }
 
 @end
