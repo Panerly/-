@@ -64,6 +64,7 @@
 
 - (void)_requestData:(NSString *)fromDate :(NSString *)toDate :(NSString *)callerLabel
 {
+    [SVProgressHUD showWithStatus:@"加载中"];
     NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/MessageServlet",self.ip];
     
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -94,6 +95,8 @@
         
         if (responseObject) {
 
+            [SVProgressHUD showInfoWithStatus:@"加载成功"];
+            
             NSDictionary *dicResponse = [responseObject objectForKey:@"meters"];
 
             self.dataNum.text = [NSString stringWithFormat:@"数    量: %@",[responseObject objectForKey:@"count"]];
@@ -112,17 +115,7 @@
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"服务器连接失败" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        
-        [alertVC addAction:action];
-        [self presentViewController:alertVC animated:YES completion:^{
-            
-        }];
+        [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"加载失败:%@",error]];
 
     }];
     [task resume];

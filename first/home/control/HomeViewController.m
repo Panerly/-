@@ -10,13 +10,11 @@
 #import "City.h"
 #import "WeatherModel.h"
 #import "MeteringViewController.h"
-#import "UIImage+GIF.h"
-#import "SCToastView.h"
 
 @interface HomeViewController ()<CLLocationManagerDelegate,UITableViewDelegate, UITableViewDataSource>
 {
     UIImageView *loading;
-    NSTimer *timer;
+//    NSTimer *timer;
 }
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic, strong) NSDictionary *areaidDic;
@@ -33,7 +31,7 @@
 
     //请求天气信息
     //给个默认城市：杭州
-    [self _requestWeatherData:@"杭州"];
+    [self _requestWeatherData:@"长春"];
     
     [self _createTableView];
 }
@@ -115,6 +113,7 @@
     } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         
         if (responseObject) {
+            [SVProgressHUD showInfoWithStatus:@"加载成功"];
             
             NSDictionary *responseDic = [responseObject objectForKey:@"retData"];
             
@@ -128,6 +127,34 @@
             self.todayWeatherInfo.text = [NSString stringWithFormat:@"%@",[[responseDic objectForKey:@"today"] objectForKey:@"type"]];
             self.weather.text  = [NSString stringWithFormat:@"天气:  %@",self.todayWeatherInfo.text];
             
+            if ([UIImage imageNamed:[NSString stringWithFormat:@"bg_%@.jpg",self.todayWeatherInfo.text]] == nil) {
+                [self.weather_bg setImage:[UIImage imageNamed:@"bg_weather3.jpg"]];
+            }else {
+                //此张图为深色背景 将文字颜色变为白色
+                if ([[NSString stringWithFormat:@"bg_%@.jpg",self.todayWeatherInfo.text] isEqualToString:@"bg_小到中雨.jpg"]) {
+                    _yestodayWeather.textColor = [UIColor whiteColor];
+                    _todayWeatherInfo.textColor = [UIColor whiteColor];
+                    _tomorrowWeather.textColor = [UIColor whiteColor];
+                    _yesLabel.textColor = [UIColor whiteColor];
+                    _todLabel.textColor = [UIColor whiteColor];
+                    _tomLabel.textColor = [UIColor whiteColor];
+                }
+                else {
+                    _yestodayWeather.textColor = [UIColor blackColor];
+                    _todayWeatherInfo.textColor = [UIColor blackColor];
+                    _tomorrowWeather.textColor = [UIColor blackColor];
+                    _yesLabel.textColor = [UIColor blackColor];
+                    _todLabel.textColor = [UIColor blackColor];
+                    _tomLabel.textColor = [UIColor blackColor];
+                }
+                [_weather_bg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"bg_%@.jpg",self.todayWeatherInfo.text]]];
+                CATransition *trans = [[CATransition alloc]init];
+                trans.type = kCATransitionReveal;
+                trans.duration = .5;
+                [_weather_bg.layer addAnimation:trans forKey:@"transition"];
+            }
+            
+            NSLog(@"今日天气：%@",self.todayWeatherInfo.text);
             self.yesterdayImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",self.yestodayWeather.text]];
             self.tomorrowImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",self.tomorrowWeather.text]];
             self.weatherPicImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",self.todayWeatherInfo.text]];
@@ -142,6 +169,7 @@
 
         }
         else{
+            [SVProgressHUD showErrorWithStatus:@"天气加载失败"];
             self.city.text = [NSString stringWithFormat:@"城市:  加载失败^_^!"];
             self.weather.text = [NSString stringWithFormat:@"天气:  加载失败^_^!"];
             self.temLabel.text = [NSString stringWithFormat:@"温度:  加载失败^_^!"];
@@ -190,26 +218,25 @@
 //定位当前城市
 - (IBAction)position:(id)sender {
     
-    [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"定位中..." duration:2 autoHide:YES];
+//    [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"定位中..." duration:2 autoHide:YES];
+    [SVProgressHUD showWithStatus:@"定位中"];
+//    //设置加载圆点转圈动画
+//    if (!loading) {
+//        
+//        loading = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
+//    }
+//    loading.center = self.view.center;
     
-    //设置加载圆点转圈动画
-    if (!loading) {
-        
-        loading = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
-    }
-    loading.center = self.view.center;
+//    UIImage *image = [UIImage sd_animatedGIFNamed:@"定位图"];
     
-    UIImage *image = [UIImage sd_animatedGIFNamed:@"定位图"];
-    
-    [loading setImage:image];
+//    [loading setImage:image];
 
-    timer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(timesOut) userInfo:nil repeats:NO];
+//    timer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(timesOut) userInfo:nil repeats:NO];
     
     [self locationCurrentCity];
 }
 - (void)timesOut{
-    [loading removeFromSuperview];
-//    [SCToastView showInView:self.view text:@"定位超时！" duration:3 autoHide:YES];
+    [SVProgressHUD showErrorWithStatus:@"定位超时！"];
     [_locationManager stopUpdatingLocation];
 }
 
@@ -230,8 +257,7 @@
     CLGeocoder* geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *placemarks, NSError *error) {
         if(error || placemarks.count == 0){
-            NSLog(@"error = %@",error);
-            [SCToastView showInView:self.view text:@"定位失败！" duration:3 autoHide:YES];
+            [SVProgressHUD showErrorWithStatus:@"定位失败"];
         }else{
             if ([loading isKindOfClass:[self.view class]]) {
                 

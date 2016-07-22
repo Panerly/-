@@ -9,6 +9,7 @@
 #import "MeterEditViewController.h"
 #import "SCToastView.h"
 
+
 @interface MeterEditViewController ()<CLLocationManagerDelegate>
 {
     SCToastView *toastView;

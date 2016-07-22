@@ -30,5 +30,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *tomorrowWeather;
 @property (weak, nonatomic) IBOutlet UILabel *todayWeatherInfo;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIImageView *weather_bg;
+@property (weak, nonatomic) IBOutlet UILabel *yesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *todLabel;
+@property (weak, nonatomic) IBOutlet UILabel *tomLabel;
 
 @end

@@ -20,7 +20,7 @@
 //表口径
 @property (nonatomic, strong) NSString<Optional> *meter_cali;
 //网络编号
-@property (nonatomic, strong) NSString *meter_id;
+@property (nonatomic, strong) NSString<Optional> *meter_id;
 //表名
 @property (nonatomic, strong) NSString<Optional> *meter_name;
 //用户地址

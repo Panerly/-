@@ -47,5 +47,5 @@
 #import <MapKit/MKFoundation.h>
 #import <MapKit/MKPlacemark.h>
 #import <MapKit/MKMapItem.h>
-
+#import "SVProgressHUD.h"
 #endif

@@ -9,7 +9,7 @@
 #import "QueryViewController.h"
 #import "QueryTableViewCell.h"
 #import "SCViewController.h"
-#import "SCToastView.h"
+//#import "SCToastView.h"
 #import "QueryModel.h"
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 
@@ -76,6 +76,12 @@
 //设置
 - (void)_setValue
 {
+    defaults = [NSUserDefaults standardUserDefaults];
+    self.userName = [defaults objectForKey:@"userName"];
+    self.passWord = [defaults objectForKey:@"passWord"];
+    self.ip = [defaults objectForKey:@"ip"];
+    self.db = [defaults objectForKey:@"db"];
+    
     self.manageMeterNum.text = [NSString stringWithFormat:@"表编号: %@",self.meter_id];
     self.meterType.text = [NSString stringWithFormat:@"表类型: %@",self.meterTypeValue];
     self.communicationType.text = [NSString stringWithFormat:@"口径: %@",self.communicationTypeValue];
@@ -111,7 +117,7 @@
         make.bottom.equalTo(_curveView.bottom);
     }];
     
-    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*2.5, 150) withSource:self withStyle:SCChartLineStyle];
+    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(self.view.frame.origin.x, 0,  PanScreenWidth*2.5, 150) withSource:self withStyle:SCChartLineStyle];
     [chartView showInView:scrollView];
 }
 
@@ -141,7 +147,7 @@ static CGFloat i = 1.0;
     NSLog(@"缩放倍率：%f",i);
     scrollView.contentSize = CGSizeMake(PanScreenWidth*i, 150);
     [chartView removeFromSuperview];
-    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*i, 150) withSource:self withStyle:SCChartLineStyle];
+    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(self.view.frame.origin.x * i, 0,  PanScreenWidth*i, 150) withSource:self withStyle:SCChartLineStyle];
     [chartView showInView:scrollView];
 }
 
@@ -149,7 +155,7 @@ static CGFloat i = 1.0;
 //横坐标标题数组
 - (NSArray *)SCChart_xLableArray:(SCChart *)chart {
 
-    if (i < 4.1) {
+    if (i < 2.1) {
         //空间太小 所以在4倍内显示数字
         NSMutableArray *array = [NSMutableArray array];
         [array removeAllObjects];
@@ -159,7 +165,7 @@ static CGFloat i = 1.0;
         return array;
     }
     //缩放至4到8倍时显示抄收小时数据
-    else if (i >= 4.1 && i < 8) {
+    else if (i >= 2.1 && i < 4) {
         NSMutableArray *array = [NSMutableArray array];
         [array removeAllObjects];
         for (int j = 0; j < _xArr.count; j++) {
@@ -167,7 +173,7 @@ static CGFloat i = 1.0;
         }
         return array;
     }
-    //8倍以上有足够的空间 所以显示详细的时间
+    //4倍以上有足够的空间 所以显示详细的时间
     NSMutableArray *array = [NSMutableArray array];
     [array removeAllObjects];
     for (int j = 0; j < _xArr.count; j++) {
@@ -192,6 +198,9 @@ static CGFloat i = 1.0;
         case 0:
             unit = @"m³/h";
         break;
+        case 1:
+            unit = @"吨";
+        break;
         case 2:
             unit = @"吨";
         default:
@@ -215,6 +224,7 @@ static CGFloat i = 1.0;
     return YES;
 }
 
+//详情视图
 - (IBAction)curveAction:(id)sender {
     
     SCViewController *curveVC = [[SCViewController alloc] init];
@@ -225,8 +235,8 @@ static CGFloat i = 1.0;
         curveVC.yArr = yFlowArr;
     }
     else if (selectedIndex == 1) {
-        curveVC.xArr = 0;
-        curveVC.yArr = 0;
+        curveVC.xArr = _xArr;
+        curveVC.yArr = _yArr;
     }
     else if (selectedIndex == 2) {
         
@@ -244,44 +254,107 @@ static CGFloat i = 1.0;
 
 //选择日用量或月用量的数据
 - (IBAction)flowStatistics:(UISegmentedControl *)sender {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"暂无数据" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    [alertVC addAction:action];
+//    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"暂无数据" preferredStyle:UIAlertControllerStyleAlert];
+//    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        
+//    }];
+//    [alertVC addAction:action];
     
     selectedIndex = sender.selectedSegmentIndex;
     
     switch (sender.selectedSegmentIndex) {
-        case 0://时流量查询
+        case 0://时流量查询（每十五分钟）
             [self requestDayData:_dayDateTime :_dayDateTime];
             break;
             
-        case 1://日流量查询
-            [self presentViewController:alertVC animated:YES completion:^{
-                
-            }];
-            
-        case 2://月流量查询
+        case 1://日流量查询(每小时流量)
+            [self requestHourData:_dayDateTime];
+            break;
+        case 2://月流量查询（每天）
             [self requestData:_monthDateTime :_dayDateTime];
         default:
             break;
     }
     
 }
-//请求时间段水表抄收数据
+//请求一天每小时水表抄收数据
+- (void)requestHourData:(NSString *)date {
+    
+    [SVProgressHUD showWithStatus:@"加载中"];
+    
+    NSString *url = [NSString stringWithFormat:@"http://%@/waterweb/DateServlet",self.ip];
+    
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:config];
+    
+//    NSDictionary *parameters = @{@"meter_id":self.meter_id,
+//                                 @"date1":date,
+//                                 @"username":self.userName,
+//                                 @"db":self.db,
+//                                 @"password":self.passWord
+//                                 };
+    NSDictionary *parameters = @{@"meter_id":self.meter_id,
+                                 @"date":@"2016-7-21",
+                                 @"db":self.db
+                                 };
+    
+    AFHTTPResponseSerializer *serializer = manager.responseSerializer;
+    
+    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    NSURLSessionTask *task =[manager POST:url parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (responseObject) {
+
+            [SVProgressHUD showInfoWithStatus:@"加载成功"];
+            
+            [_dataArr removeAllObjects];
+            [_xArr removeAllObjects];
+            [_yArr removeAllObjects];
+            
+            NSError *error = nil;
+            
+            for (NSDictionary *dataDic in responseObject) {
+                QueryModel *queryModel = [[QueryModel alloc] initWithDictionary:dataDic error:&error];
+                [self.dataArr addObject:queryModel];
+                [_yArr addObject:queryModel.collect_num];
+                [_xArr addObject:queryModel.collect_dt];
+            }
+            NSMutableArray *array = [NSMutableArray array];
+            [array removeAllObjects];
+            for (int i = 0; i < _xArr.count; i++) {
+                if ( i < 10) {
+                    [array addObject:[NSString stringWithFormat:@"%@ 0%d:00:00.0",[_xArr[i] substringWithRange:NSMakeRange(0, 10)],i]];
+                }else{
+                [array addObject:[NSString stringWithFormat:@"%@.0",_xArr[i]]];
+                }
+            }
+            _xArr = array;
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationTop];
+            [chartView setNeedsDisplay];
+            [chartView strokeChart];
+        }
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+
+        [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"请求失败：%@",error]];
+    }];
+    
+    [task resume];
+}
 
 //查询月流量
 - (void)requestData:(NSString *)fromDate :(NSString *)toDate
 {
-    defaults = [NSUserDefaults standardUserDefaults];
-    self.userName = [defaults objectForKey:@"userName"];
-    self.passWord = [defaults objectForKey:@"passWord"];
-    self.ip = [defaults objectForKey:@"ip"];
-    self.db = [defaults objectForKey:@"db"];
-
-    NSString *url = [NSString stringWithFormat:@"http://%@/waterweb/DosServlet",self.ip];
+    [SVProgressHUD showWithStatus:@"加载中"];
     
+    NSString *url = [NSString stringWithFormat:@"http://%@/waterweb/DosServlet",self.ip];
     
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     
@@ -304,11 +377,15 @@ static CGFloat i = 1.0;
     NSURLSessionTask *task =[manager POST:url parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
         if (responseObject) {
-            [_yArr removeAllObjects];
+
+            [SVProgressHUD showInfoWithStatus:@"加载成功"];
+            
             NSString *count = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"count"]];
             if ([count isEqualToString:@"0"]) {
-                [SCToastView showInView:_tableView text:@"暂无数据" duration:4 autoHide:YES];
+//                [SCToastView showInView:_tableView text:@"暂无数据" duration:4 autoHide:YES];
+                [SVProgressHUD showInfoWithStatus:@"暂无数据"];
             }
             NSDictionary *meter1Dic = [responseObject objectForKey:@"meters"];
 
@@ -317,6 +394,7 @@ static CGFloat i = 1.0;
             [self.dataArr removeAllObjects];
             [_xArr removeAllObjects];
             [_yArr removeAllObjects];
+            
             for (NSDictionary *dic in meter1Dic) {
                 QueryModel *queryModel = [[QueryModel alloc] initWithDictionary:dic error:&error];
                 [self.dataArr addObject:queryModel];
@@ -331,17 +409,18 @@ static CGFloat i = 1.0;
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"服务器连接失败" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        
-        [alertVC addAction:action];
-        [self presentViewController:alertVC animated:YES completion:^{
-            
-        }];
+//        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"服务器连接失败" preferredStyle:UIAlertControllerStyleAlert];
+//        
+//        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//            
+//        }];
+//        
+//        [alertVC addAction:action];
+//        [self presentViewController:alertVC animated:YES completion:^{
+//            
+//        }];
 
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"请求失败：%@",error]];
     }];
     
     [task resume];
@@ -383,12 +462,14 @@ static CGFloat i = 1.0;
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if (responseObject) {
+            [SVProgressHUD showInfoWithStatus:@"加载成功"];
+            
             [yFlowArr removeAllObjects];
             [_yArr removeAllObjects];
             
             NSString *count = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"count"]];
             if ([count isEqualToString:@"0"]) {
-                [SCToastView showInView:_tableView text:@"暂无数据" duration:4 autoHide:YES];
+                [SVProgressHUD showInfoWithStatus:@"暂无数据"];
             }
             
             NSDictionary *meter1Dic = [responseObject objectForKey:@"meters"];
@@ -407,6 +488,7 @@ static CGFloat i = 1.0;
                 [yFlowArr addObject:queryModel.collect_num];
                 [_xArr addObject:[dic objectForKey:@"collect_dt"]];
             }
+
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
             [chartView setNeedsDisplay];
             [chartView strokeChart];
@@ -414,16 +496,7 @@ static CGFloat i = 1.0;
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"服务器连接失败" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        
-        [alertVC addAction:action];
-        [self presentViewController:alertVC animated:YES completion:^{
-            
-        }];
+        [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"请求失败：%@",error]];
         
     }];
     
@@ -447,6 +520,7 @@ static CGFloat i = 1.0;
         cell = [[[NSBundle mainBundle] loadNibNamed:@"QueryTableViewCell" owner:nil options:nil] lastObject];
     }
     cell.queryModel = self.dataArr[indexPath.row];
+    
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -459,6 +533,9 @@ static CGFloat i = 1.0;
     
     UIAlertController *alertDay = [UIAlertController alertControllerWithTitle:@"水表信息" message:[NSString stringWithFormat:@"\n日用量: %@吨\n\n抄收时间: %@", ((QueryModel *)self.dataArr[indexPath.row]).collect_num, ((QueryModel *)self.dataArr[indexPath.row]).collect_dt] preferredStyle:UIAlertControllerStyleAlert];
     
+    UIAlertController *alertHour = [UIAlertController alertControllerWithTitle:@"水表信息" message:[NSString stringWithFormat:@"\n时用量: %@吨\n\n抄收时间: %@", ((QueryModel *)self.dataArr[indexPath.row]).collect_num, ((QueryModel *)self.dataArr[indexPath.row]).collect_dt] preferredStyle:UIAlertControllerStyleAlert];
+
+    
     switch (_switchBtn.selectedSegmentIndex) {
         case 0:
             [alert addAction:action];
@@ -466,6 +543,12 @@ static CGFloat i = 1.0;
                 
             }];
             break;
+        case 1:
+            [alertHour addAction:action];
+            [self presentViewController:alertHour animated:YES completion:^{
+                
+            }];
+        break;
         case 2:
             [alertDay addAction:action];
             [self presentViewController:alertDay animated:YES completion:^{

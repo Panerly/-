@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -694,22 +693,26 @@
                         <outlet property="tableView" destination="ugu-1d-a9s" id="Sra-Zn-lgq"/>
                         <outlet property="temLabel" destination="wuX-Rc-fdB" id="j5d-lp-ae0"/>
                         <outlet property="time" destination="seG-i6-UOx" id="gK7-Ip-qk5"/>
+                        <outlet property="todLabel" destination="4VV-aj-98i" id="PQk-CJ-rY1"/>
                         <outlet property="todayImage" destination="9xv-I4-AFg" id="Age-MI-gdS"/>
                         <outlet property="todayWeatherInfo" destination="5Yg-MS-mkj" id="HT3-Yx-hJL"/>
+                        <outlet property="tomLabel" destination="zUM-jj-bj3" id="gPH-Gg-H0o"/>
                         <outlet property="tomorrowImage" destination="SHM-vT-4si" id="uaj-6L-OPy"/>
                         <outlet property="tomorrowWeather" destination="X35-K4-FUJ" id="fWv-Xg-a4n"/>
                         <outlet property="weather" destination="jPa-zL-uJl" id="s6Z-B8-nMv"/>
                         <outlet property="weatherDetailEffectView" destination="3ds-4l-RvD" id="jdC-2w-fIo"/>
                         <outlet property="weatherPicImage" destination="ZNQ-kU-GIa" id="8jg-O1-4aQ"/>
+                        <outlet property="weather_bg" destination="1He-1j-IdL" id="kDu-ZQ-DH7"/>
                         <outlet property="windDriection" destination="KtC-OP-JsM" id="OC2-0Q-Fk2"/>
                         <outlet property="windForceScale" destination="Zoe-Nc-sg5" id="lIt-uz-3lQ"/>
+                        <outlet property="yesLabel" destination="Qv4-Z5-6Od" id="62g-vk-tDQ"/>
                         <outlet property="yesterdayImage" destination="dGu-xG-a3d" id="o4E-cd-xCk"/>
                         <outlet property="yestodayWeather" destination="MOT-N5-iGg" id="nan-L0-BNx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H0Q-b1-L3d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="124.5" y="214"/>
+            <point key="canvasLocation" x="142.5" y="210"/>
         </scene>
     </scenes>
     <resources>
