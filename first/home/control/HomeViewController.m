@@ -31,7 +31,7 @@
 
     //请求天气信息
     //给个默认城市：杭州
-    [self _requestWeatherData:@"长春"];
+    [self _requestWeatherData:@"杭州"];
     
     [self _createTableView];
 }
@@ -57,6 +57,7 @@
                 [self.locationManager requestAlwaysAuthorization];
             }
         }
+        [SVProgressHUD showWithStatus:@"定位中"];
         //设置代理
         self.locationManager.delegate = self;
         //设置定位精度
@@ -83,9 +84,24 @@
     }
 }
 
+- (void)loadingInfo
+{
+    self.weather.text = [NSString stringWithFormat:@"天气:  正在加载"];
+    self.temLabel.text = [NSString stringWithFormat:@"温度:  正在加载"];
+    self.windDriection.text = [NSString stringWithFormat:@"风向:  正在加载"];
+    self.windForceScale.text = [NSString stringWithFormat:@"风力:  正在加载"];
+    self.time.text = [NSString stringWithFormat:@"日期:  正在加载"];
+    self.yestodayWeather.text = [NSString stringWithFormat:@"正在加载"];
+    self.todayWeatherInfo.text = [NSString stringWithFormat:@"正在加载"];
+    self.tomorrowWeather.text = [NSString stringWithFormat:@"正在加载"];
+}
+
 //请求天气信息
 - (void)_requestWeatherData:(NSString *)cityName
 {
+//    [SVProgressHUD showWithStatus:@"正在加载天气信息"];
+    [self loadingInfo];
+
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:config];
@@ -131,24 +147,24 @@
                 [self.weather_bg setImage:[UIImage imageNamed:@"bg_weather3.jpg"]];
             }else {
                 //此张图为深色背景 将文字颜色变为白色
-                if ([[NSString stringWithFormat:@"bg_%@.jpg",self.todayWeatherInfo.text] isEqualToString:@"bg_小到中雨.jpg"]) {
-                    _yestodayWeather.textColor = [UIColor whiteColor];
-                    _todayWeatherInfo.textColor = [UIColor whiteColor];
-                    _tomorrowWeather.textColor = [UIColor whiteColor];
-                    _yesLabel.textColor = [UIColor whiteColor];
-                    _todLabel.textColor = [UIColor whiteColor];
-                    _tomLabel.textColor = [UIColor whiteColor];
-                }
-                else {
-                    _yestodayWeather.textColor = [UIColor blackColor];
-                    _todayWeatherInfo.textColor = [UIColor blackColor];
-                    _tomorrowWeather.textColor = [UIColor blackColor];
-                    _yesLabel.textColor = [UIColor blackColor];
-                    _todLabel.textColor = [UIColor blackColor];
-                    _tomLabel.textColor = [UIColor blackColor];
-                }
+//                if ([[NSString stringWithFormat:@"bg_%@.jpg",self.todayWeatherInfo.text] isEqualToString:@"bg_小到中雨.jpg"]) {
+//                    _yestodayWeather.textColor = [UIColor whiteColor];
+//                    _todayWeatherInfo.textColor = [UIColor whiteColor];
+//                    _tomorrowWeather.textColor = [UIColor whiteColor];
+//                    _yesLabel.textColor = [UIColor whiteColor];
+//                    _todLabel.textColor = [UIColor whiteColor];
+//                    _tomLabel.textColor = [UIColor whiteColor];
+//                }
+//                else {
+//                    _yestodayWeather.textColor = [UIColor blackColor];
+//                    _todayWeatherInfo.textColor = [UIColor blackColor];
+//                    _tomorrowWeather.textColor = [UIColor blackColor];
+//                    _yesLabel.textColor = [UIColor blackColor];
+//                    _todLabel.textColor = [UIColor blackColor];
+//                    _tomLabel.textColor = [UIColor blackColor];
+//                }
                 [_weather_bg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"bg_%@.jpg",self.todayWeatherInfo.text]]];
-                CATransition *trans = [[CATransition alloc]init];
+                CATransition *trans = [[CATransition alloc] init];
                 trans.type = kCATransitionReveal;
                 trans.duration = .5;
                 [_weather_bg.layer addAnimation:trans forKey:@"transition"];
@@ -160,9 +176,9 @@
             self.weatherPicImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",self.todayWeatherInfo.text]];
             self.todayImage.image = self.weatherPicImage.image;
             
-            CATransition *transition = [[CATransition alloc]init];
+            CATransition *transition = [[CATransition alloc] init];
             transition.type = @"rippleEffect";
-            transition.duration = 0.5;
+            transition.duration = .5;
             [_weatherPicImage.layer addAnimation:transition forKey:@"transition"];
             [_yesterdayImage.layer addAnimation:transition forKey:@"transition"];
             [_tomorrowImage.layer addAnimation:transition forKey:@"transition"];
@@ -219,7 +235,7 @@
 - (IBAction)position:(id)sender {
     
 //    [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"定位中..." duration:2 autoHide:YES];
-    [SVProgressHUD showWithStatus:@"定位中"];
+    
 //    //设置加载圆点转圈动画
 //    if (!loading) {
 //        
@@ -259,12 +275,16 @@
         if(error || placemarks.count == 0){
             [SVProgressHUD showErrorWithStatus:@"定位失败"];
         }else{
+            [SVProgressHUD showInfoWithStatus:@"定位成功"];
+            
             if ([loading isKindOfClass:[self.view class]]) {
                 
                 [loading removeFromSuperview];
             }
             CLPlacemark* placemark = placemarks.firstObject;
+            
             NSLog(@"placemark:%@",[[placemark addressDictionary] objectForKey:@"City"]);
+            
             UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"你的位置" message:[[placemark addressDictionary] objectForKey:@"City"] preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {

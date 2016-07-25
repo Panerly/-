@@ -152,6 +152,8 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
+    [_DBConfig resignFirstResponder];
+    [_IPConfig resignFirstResponder];
     [UIView animateWithDuration:.3 animations:^{
         
         _pickerView.frame = CGRectMake(0, PanScreenHeight, PanScreenWidth, 200);

@@ -48,8 +48,6 @@
 
 - (void)_requestData
 {
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     userNameLabel = [defaults objectForKey:@"userName"];

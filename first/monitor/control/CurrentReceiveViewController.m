@@ -83,6 +83,10 @@
     [loading setImage:image];
     [self.view addSubview:loading];
     
+    if (_tableView.mj_header.isRefreshing) {
+        [loading removeFromSuperview];
+    }
+    
     NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/servlet/LServlet",self.ipLabel];
     
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -107,6 +111,10 @@
         
         if (responseObject) {
 
+            [SVProgressHUD showInfoWithStatus:@"加载成功"];
+            
+            [_tableView.mj_header endRefreshing];
+            
             NSDictionary *responseObjectArr = [responseObject objectForKey:@"meters"];
                         
             [self.dataArr removeAllObjects];
@@ -121,7 +129,7 @@
 
             }
             
-            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
             
             [loading removeFromSuperview];
         }
@@ -150,6 +158,9 @@
 - (void)_createTabelView
 {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, PanScreenWidth, PanScreenHeight-54*2) style:UITableViewStylePlain];
+    
+    _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(_requestData)];
+    _tableView.mj_header.automaticallyChangeAlpha = YES;
     
     //调用初始化searchController
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];

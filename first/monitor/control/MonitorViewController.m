@@ -57,10 +57,10 @@
 - (void)_createPicPlay
 {
     NSArray* urlsArray = @[
-                           @"http://60.191.39.206:8080/waterweb/IMAGE/homeimage1.png",
-                           @"http://60.191.39.206:8080/waterweb/IMAGE/homeimage2.png",
-                           @"http://60.191.39.206:8080/waterweb/IMAGE/homeimage3.png",
-                           @"http://60.191.39.206:8080/waterweb/IMAGE/homeimage4.png",
+                           @"http://192.168.3.170:8080/waterweb/IMAGE/homeimage1.png",
+                           @"http://192.168.3.170:8080/waterweb/IMAGE/homeimage2.png",
+                           @"http://192.168.3.170:8080/waterweb/IMAGE/homeimage3.png",
+                           @"http://192.168.3.170:8080/waterweb/IMAGE/homeimage4.png",
                            ];
 //    NSArray *titleArray = @[@"第一张",@"第二张",@"第三张",@"第四章",@"第五章"];
     CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/3;

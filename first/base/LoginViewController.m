@@ -211,9 +211,9 @@
 //    
 //    //保存密码
 //    [wrapper setObject:self.userName.text forKey:(id)kSecValueData];
+    
     self.ipLabel = [defaults objectForKey:@"ip"];
     self.dbLabel = [defaults objectForKey:@"db"];
-    
     
     if (self.ipLabel == nil && self.dbLabel == nil) {
         UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"请配置数据库和IP！" preferredStyle:UIAlertControllerStyleAlert];
@@ -228,21 +228,22 @@
         }];
         [logInButton ErrorRevertAnimationCompletion:^{
             
-            
         }];
 
-    }else
-    {
+    }else {
     
     [UIView animateWithDuration:.25 animations:^{
         
         logInButton.frame = CGRectMake(20, CGRectGetHeight(self.view.bounds) - (40 + 80), [UIScreen mainScreen].bounds.size.width - 40, 40);
+        
         _hsLogoView.transform = CGAffineTransformIdentity;
         _userName.transform = CGAffineTransformIdentity;
         _passWord.transform = CGAffineTransformIdentity;
         _userBaseView.transform = CGAffineTransformIdentity;
+        
         [_passWord resignFirstResponder];
         [_userName resignFirstResponder];
+        
     }];
     
     //登录API 需传入的参数：用户名、密码、数据库名、IP地址
@@ -369,6 +370,22 @@
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    _flag = 1;
+    [UIView animateWithDuration:.25 animations:^{
+        
+        _hsLogoView.transform = CGAffineTransformIdentity;
+        _userName.transform = CGAffineTransformIdentity;
+        _passWord.transform = CGAffineTransformIdentity;
+        _userBaseView.transform = CGAffineTransformIdentity;
+        
+        logInButton.frame = CGRectMake(20, CGRectGetHeight(self.view.bounds) - (40 + 80), [UIScreen mainScreen].bounds.size.width - 40, 40);
+        [_passWord resignFirstResponder];
+        [_userName resignFirstResponder];
+    }];
+}
+
+- (void)viewWillAppear:(BOOL)animated
 {
     _flag = 1;
     [UIView animateWithDuration:.25 animations:^{

@@ -534,7 +534,6 @@ static CGFloat i = 1.0;
     UIAlertController *alertDay = [UIAlertController alertControllerWithTitle:@"水表信息" message:[NSString stringWithFormat:@"\n日用量: %@吨\n\n抄收时间: %@", ((QueryModel *)self.dataArr[indexPath.row]).collect_num, ((QueryModel *)self.dataArr[indexPath.row]).collect_dt] preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertController *alertHour = [UIAlertController alertControllerWithTitle:@"水表信息" message:[NSString stringWithFormat:@"\n时用量: %@吨\n\n抄收时间: %@", ((QueryModel *)self.dataArr[indexPath.row]).collect_num, ((QueryModel *)self.dataArr[indexPath.row]).collect_dt] preferredStyle:UIAlertControllerStyleAlert];
-
     
     switch (_switchBtn.selectedSegmentIndex) {
         case 0:
