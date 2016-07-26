@@ -419,7 +419,6 @@ static CGFloat i = 1.0;
 //        [self presentViewController:alertVC animated:YES completion:^{
 //            
 //        }];
-
     [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"请求失败：%@",error]];
     }];
     

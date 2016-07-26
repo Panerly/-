@@ -7,11 +7,11 @@
 //
 
 #import "ServerViewController.h"
-#import <CoreLocation/CoreLocation.h>
+
 #import "HelpViewController.h"
 
 @interface ServerViewController ()<CLLocationManagerDelegate>
-@property (nonatomic, strong) CLLocationManager* locationManager;
+
 @end
 
 @implementation ServerViewController
@@ -21,15 +21,6 @@
     
     [self _createBtn];
 }
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self) {
-//        self = [[UIStoryboard storyboardWithName:@"Server" bundle:nil] instantiateViewControllerWithIdentifier:@"server"];
-//    }
-//    return self;
-//}
-
 - (void)_createBtn
 {
     self.view.backgroundColor = [UIColor whiteColor];
@@ -77,9 +68,25 @@
 }
 - (IBAction)waterCharge:(UIButton *)sender {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"该功能暂未推出，敬请期待^_^!" preferredStyle:UIAlertControllerStyleAlert];
+    
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *email = [UIAlertAction actionWithTitle:@"发送邮件" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto://76843918@qq.com"]];
+    }];
+    
+    UIAlertAction *sms = [UIAlertAction actionWithTitle:@"发送短信" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms://15356167113"]];
+    }];
+    UIAlertAction *tel = [UIAlertAction actionWithTitle:@"拨打" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel://4001081616"]];
+    }];
+    
     HelpViewController *helpView = [[HelpViewController alloc] init];
     switch (sender.tag) {
             
@@ -90,20 +97,25 @@
         break;
             
         case 201:
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto://76843918@qq.com"]];
+            [alert addAction:cancel];
+            [alert addAction:email];
+            [self presentViewController:alert animated:YES completion:nil];
         break;
             
         case 202:
-            
             [self.navigationController showViewController:helpView sender:nil];
         break;
             
         case 203:
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms://15356167113"]];
+            [alert addAction:cancel];
+            [alert addAction:sms];
+            [self presentViewController:alert animated:YES completion:nil];
         break;
             
         case 204:
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel://4001081616"]];
+            [alert addAction:cancel];
+            [alert addAction:tel];
+            [self presentViewController:alert animated:YES completion:nil];
             break;
             
         default:

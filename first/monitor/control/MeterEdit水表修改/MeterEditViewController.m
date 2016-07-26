@@ -7,12 +7,9 @@
 //
 
 #import "MeterEditViewController.h"
-#import "SCToastView.h"
-
 
 @interface MeterEditViewController ()<CLLocationManagerDelegate>
 {
-    SCToastView *toastView;
     NSMutableArray *alarmNsetList;
 }
 @property (nonatomic, strong) CLLocationManager* locationManager;
@@ -66,7 +63,7 @@
         if (responseObject) {
             alarmNsetList = [NSMutableArray array];
             [alarmNsetList removeAllObjects];
-            NSLog(@"%@",responseObject);
+            NSLog(@"水表修改返回数据%@",responseObject);
             for (NSDictionary *dic in [responseObject objectForKey:@"alarmNsetList"]) {
                 [alarmNsetList addObject:[dic objectForKey:@"TorF"]];
                 
@@ -87,8 +84,13 @@
             [_longTimeNotServerSwitchBtn setOn:[[alarmNsetList objectAtIndex:3]isEqualToString:@"0"] ? NO : YES];
             [_limitOfDayUsageSwitchBtn setOn:[[alarmNsetList objectAtIndex:4]isEqualToString:@"0"] ? NO : YES];
             [_longtimeNotUseSwitchBtn setOn:[[alarmNsetList objectAtIndex:1]isEqualToString:@"0"] ? NO : YES];
-            [_limitOfUsageSwitchBtn setOn:[[alarmNsetList objectAtIndex:5]isEqualToString:@"0"] ? NO : YES];
-            [_fromToSwitchBtn setOn:[[alarmNsetList objectAtIndex:6]isEqualToString:@"0"] ? NO : YES];
+            
+#warning mark - diff db got diff count but at least 5
+            if (alarmNsetList.count>5) {
+                
+                [_limitOfUsageSwitchBtn setOn:[[alarmNsetList objectAtIndex:5]isEqualToString:@"0"] ? NO : YES];
+                [_fromToSwitchBtn setOn:[[alarmNsetList objectAtIndex:6]isEqualToString:@"0"] ? NO : YES];
+            }
             
             _userID.text = [NSString stringWithFormat:@"用户号: %@",[responseObject objectForKey:@"user_id"]];
             _installAddrTextField.text = [responseObject objectForKey:@"username"];
@@ -863,84 +865,84 @@
 - (UIButton *)saveBtn
 {
     
-    NSMutableArray *alarmArr = [NSMutableArray array];
-    [alarmArr removeAllObjects];
-//    NSArray *switchBtnArr = @[_excessiveSwitchBtn,_longtimeNotUseSwitchBtn,_longTimeNotServerSwitchBtn,_limitOfDayUsageSwitchBtn,_reversalSwitchBtn,_limitOfUsageSwitchBtn,_fromToSwitchBtn];
-//    for (int i = 0; i < alarmNsetList.count; i++) {
-//        alarmArr addObject:[NSString stringWithFormat:@"%d",((UISwitch *)switchBtnArr[i]).isOn];
+//    NSMutableArray *alarmArr = [NSMutableArray array];
+//    [alarmArr removeAllObjects];
+////    NSArray *switchBtnArr = @[_excessiveSwitchBtn,_longtimeNotUseSwitchBtn,_longTimeNotServerSwitchBtn,_limitOfDayUsageSwitchBtn,_reversalSwitchBtn,_limitOfUsageSwitchBtn,_fromToSwitchBtn];
+////    for (int i = 0; i < alarmNsetList.count; i++) {
+////        alarmArr addObject:[NSString stringWithFormat:@"%d",((UISwitch *)switchBtnArr[i]).isOn];
+////    }
+//    [alarmArr addObject:[NSString stringWithFormat:@"%d",_excessiveSwitchBtn.isOn]];
+//    [alarmArr addObject:[NSString stringWithFormat:@"%d",_longtimeNotUseSwitchBtn.isOn]];
+//    [alarmArr addObject:[NSString stringWithFormat:@"%d",_longTimeNotServerSwitchBtn.isOn]];
+//    [alarmArr addObject:[NSString stringWithFormat:@"%d",_limitOfDayUsageSwitchBtn.isOn]];
+//    [alarmArr addObject:[NSString stringWithFormat:@"%d",_reversalSwitchBtn.isOn]];
+//    [alarmArr addObject:[NSString stringWithFormat:@"%d",_limitOfUsageSwitchBtn.isOn]];
+//    [alarmArr addObject:[NSString stringWithFormat:@"%d",_fromToSwitchBtn.isOn]];
+//    
+//    NSDictionary *alarmIsNull = [NSDictionary dictionary];
+//    NSMutableArray *arr = [NSMutableArray array];
+//    
+//    for (int i = 0; i < alarmArr.count-1; i++) {
+//        alarmIsNull = @{
+//                        @"TorF":alarmArr[i],
+//                        @"num":_numArray[i],
+//                        };
+//        [arr addObject:alarmIsNull];
 //    }
-    [alarmArr addObject:[NSString stringWithFormat:@"%d",_excessiveSwitchBtn.isOn]];
-    [alarmArr addObject:[NSString stringWithFormat:@"%d",_longtimeNotUseSwitchBtn.isOn]];
-    [alarmArr addObject:[NSString stringWithFormat:@"%d",_longTimeNotServerSwitchBtn.isOn]];
-    [alarmArr addObject:[NSString stringWithFormat:@"%d",_limitOfDayUsageSwitchBtn.isOn]];
-    [alarmArr addObject:[NSString stringWithFormat:@"%d",_reversalSwitchBtn.isOn]];
-    [alarmArr addObject:[NSString stringWithFormat:@"%d",_limitOfUsageSwitchBtn.isOn]];
-    [alarmArr addObject:[NSString stringWithFormat:@"%d",_fromToSwitchBtn.isOn]];
-    
-    NSDictionary *alarmIsNull = [NSDictionary dictionary];
-    NSMutableArray *arr = [NSMutableArray array];
-    
-    for (int i = 0; i < alarmArr.count-1; i++) {
-        alarmIsNull = @{
-                        @"TorF":alarmArr[i],
-                        @"num":_numArray[i],
-                        };
-        [arr addObject:alarmIsNull];
-    }
-    
-    NSDictionary *sevenT = @{
-                             @"TorF":alarmArr[6],
-                             @"num":_idArray[6],
-                             @"time_first":_fromTextField.text,
-                             @"time_last":_toTextField.text
-                             };
-    
-    NSMutableArray *alarmIsNullArray = [NSMutableArray arrayWithObjects:arr,sevenT, nil];
-    NSLog(@"最终---%@",alarmIsNullArray);
-    
-    [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"正在保存..." duration:2 autoHide:YES];
-    NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/EditServlet1",self.ipLabel];
-    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    NSDictionary *parameters = @{@"username":self.userNameLabel,
-                                 @"password":self.passWordLabel,
-                                 @"db":self.dbLabel,
-                                 @"meter_id":self.meter_id,
-                                 @"user_name":_installAddrTextField.text,
-                                 @"user_addr":_user_addr,
-                                 @"comm_id":_connectIDTextField.text,
-                                 @"collector_id":_collectIDTextField.text,
-                                 @"install_time":_installTimeTextField.text,
-                                 @"meter_wid":_meter_idTextField.text,
-                                 @"bz10":_wheelTypeTextField.text,
-                                 @"collector_area":_regionTextField.text,
-                                 @"meter_name":_meterTypeTextField.text,
-                                 @"meter_cali":_caliberTextField.text,
-                                 @"type":_remoteWayTextField.text,
-                                 @"type_name":_remoteTypeTextField.text,
-                                 @"x":_longitudeTextField.text,
-                                 @"y":_latitudeTextField.text,
-                                 @"time_first":_fromTextField.text,
-                                 @"time_last":_toTextField.text,
-                                 @"user_remark":_remarksTextView.text,
-                                 @"alarmIsNull":alarmIsNullArray,
-                                 @"save4edit":@"save4edit",
-                                 };
-    
-    AFHTTPResponseSerializer *serializer = manager.responseSerializer;
-    
-    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
-    
-    NSURLSessionTask *task =[manager POST:logInUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"成功---%@",responseObject);
+//    
+//    NSDictionary *sevenT = @{
+//                             @"TorF":alarmArr[6],
+//                             @"num":_idArray[6],
+//                             @"time_first":_fromTextField.text,
+//                             @"time_last":_toTextField.text
+//                             };
+//    
+//    NSMutableArray *alarmIsNullArray = [NSMutableArray arrayWithObjects:arr,sevenT, nil];
+//    NSLog(@"最终---%@",alarmIsNullArray);
+//    
+//    [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"正在保存..." duration:2 autoHide:YES];
+//    NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/EditServlet1",self.ipLabel];
+//    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+//    NSDictionary *parameters = @{@"username":self.userNameLabel,
+//                                 @"password":self.passWordLabel,
+//                                 @"db":self.dbLabel,
+//                                 @"meter_id":self.meter_id,
+//                                 @"user_name":_installAddrTextField.text,
+//                                 @"user_addr":_user_addr,
+//                                 @"comm_id":_connectIDTextField.text,
+//                                 @"collector_id":_collectIDTextField.text,
+//                                 @"install_time":_installTimeTextField.text,
+//                                 @"meter_wid":_meter_idTextField.text,
+//                                 @"bz10":_wheelTypeTextField.text,
+//                                 @"collector_area":_regionTextField.text,
+//                                 @"meter_name":_meterTypeTextField.text,
+//                                 @"meter_cali":_caliberTextField.text,
+//                                 @"type":_remoteWayTextField.text,
+//                                 @"type_name":_remoteTypeTextField.text,
+//                                 @"x":_longitudeTextField.text,
+//                                 @"y":_latitudeTextField.text,
+//                                 @"time_first":_fromTextField.text,
+//                                 @"time_last":_toTextField.text,
+//                                 @"user_remark":_remarksTextView.text,
+//                                 @"alarmIsNull":alarmIsNullArray,
+//                                 @"save4edit":@"save4edit",
+//                                 };
+//    
+//    AFHTTPResponseSerializer *serializer = manager.responseSerializer;
+//    
+//    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
+//    
+//    NSURLSessionTask *task =[manager POST:logInUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+//        
+//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"成功---%@",responseObject);
+//        [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存成功" duration:2 autoHide:YES];
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        NSLog(@"失败---%@",error);
         [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存成功" duration:2 autoHide:YES];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"失败---%@",error);
-        [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存失败" duration:2 autoHide:YES];
-    }];
-
-    [task resume];
+//    }];
+//
+//    [task resume];
     return nil;
 }
 

@@ -366,7 +366,6 @@
     
     [task resume];
     }
-
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -406,7 +405,6 @@
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
                                                                   presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
 {
-    
     return [[HyTransitions alloc]initWithTransitionDuration:0.4f StartingAlpha:0.5f isBOOL:true];
 }
 
@@ -420,7 +418,5 @@
     [self presentViewController:[[ConfigViewController alloc] init] animated:YES completion:^{
         [configVC setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
     }];
-    
-    
 }
 @end

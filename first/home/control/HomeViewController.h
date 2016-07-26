@@ -10,13 +10,17 @@
 #import "WeatherModel.h"
 
 @interface HomeViewController : UIViewController
+
 @property (nonatomic, strong) NSString *yestoday;
 @property (nonatomic, strong) NSString *tomorrow;
+
 @property (weak, nonatomic) IBOutlet UIImageView *weatherPicImage;
 @property (weak, nonatomic) IBOutlet UIImageView *yesterdayImage;
 @property (weak, nonatomic) IBOutlet UIImageView *todayImage;
 @property (weak, nonatomic) IBOutlet UIImageView *tomorrowImage;
+
 @property (weak, nonatomic) IBOutlet UIVisualEffectView *weatherDetailEffectView;
+
 @property (weak, nonatomic) IBOutlet UILabel *city;
 @property (weak, nonatomic) IBOutlet UILabel *weather;
 
@@ -24,8 +28,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *windDriection;
 @property (weak, nonatomic) IBOutlet UILabel *windForceScale;
 @property (weak, nonatomic) IBOutlet UILabel *time;
+
 - (IBAction)position:(id)sender;
+
 @property (nonatomic, strong) NSMutableArray *dataArray;
+
 @property (weak, nonatomic) IBOutlet UILabel *yestodayWeather;
 @property (weak, nonatomic) IBOutlet UILabel *tomorrowWeather;
 @property (weak, nonatomic) IBOutlet UILabel *todayWeatherInfo;

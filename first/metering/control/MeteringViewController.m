@@ -9,6 +9,7 @@
 #import "MeteringViewController.h"
 #import "MeteringSingleViewController.h"
 #import "SingleViewController.h"
+#import "UIImage+GIF.h"
 
 @interface MeteringViewController ()<UITableViewDataSource, UITableViewDelegate>
 {
@@ -30,8 +31,9 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [self _createTableView];
+//    [self _createTableView];
 }
+
 
 - (void)_createTableView
 {
@@ -45,7 +47,23 @@
 {
     self = [super init];
     if (self) {
-        self = [[UIStoryboard storyboardWithName:@"Metering" bundle:nil] instantiateViewControllerWithIdentifier:@"Metering"];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
+        imageView.center = self.view.center;
+        UIImage *image = [UIImage sd_animatedGIFNamed:@"cry2"];
+        [imageView setImage:image];
+        [self.view addSubview:imageView];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, PanScreenWidth, 25)];
+        label.text = @"此功能暂未推出！";
+        label.textAlignment = NSTextAlignmentCenter;
+        [self.view addSubview:label];
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(imageView.mas_bottom).with.offset(10);
+            make.centerX.equalTo(self.view.centerX);
+        }];
+        
+//        self = [[UIStoryboard storyboardWithName:@"Metering" bundle:nil] instantiateViewControllerWithIdentifier:@"Metering"];
     }
     return self;
 }

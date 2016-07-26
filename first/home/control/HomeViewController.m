@@ -86,6 +86,7 @@
 
 - (void)loadingInfo
 {
+    self.city.text = [NSString stringWithFormat:@"城市:  正在加载"];
     self.weather.text = [NSString stringWithFormat:@"天气:  正在加载"];
     self.temLabel.text = [NSString stringWithFormat:@"温度:  正在加载"];
     self.windDriection.text = [NSString stringWithFormat:@"风向:  正在加载"];
@@ -125,6 +126,7 @@
     NSURLSessionTask *hisTask = [manager dataTaskWithRequest:requestHistory uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
         
     } downloadProgress:^(NSProgress * _Nonnull downloadProgress) {
+        
         
     } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         
@@ -171,6 +173,7 @@
             }
             
             NSLog(@"今日天气：%@",self.todayWeatherInfo.text);
+            
             self.yesterdayImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",self.yestodayWeather.text]];
             self.tomorrowImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",self.tomorrowWeather.text]];
             self.weatherPicImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",self.todayWeatherInfo.text]];
@@ -196,7 +199,7 @@
             self.todayWeatherInfo.text = [NSString stringWithFormat:@"加载失败!"];
             self.tomorrowWeather.text = [NSString stringWithFormat:@"加载失败!"];
             
-            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"数据加载失败，请重新定位^_^!" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"天气信息加载失败，请重新定位^_^!" preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 
@@ -265,6 +268,11 @@
     [self reverseGeocoder:location];
     
 }
+//定位失败
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    [SVProgressHUD showErrorWithStatus:@"定位失败!"];
+}
 
 #pragma mark Geocoder
 //反地理编码
@@ -283,7 +291,8 @@
             }
             CLPlacemark* placemark = placemarks.firstObject;
             
-            NSLog(@"placemark:%@",[[placemark addressDictionary] objectForKey:@"City"]);
+            NSLog(@"定位城市:%@",[[placemark addressDictionary] objectForKey:@"City"]);
+            self.city.text = [NSString stringWithFormat:@"城市:  %@",[[placemark addressDictionary] objectForKey:@"City"]];
             
             UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"你的位置" message:[[placemark addressDictionary] objectForKey:@"City"] preferredStyle:UIAlertControllerStyleAlert];
             

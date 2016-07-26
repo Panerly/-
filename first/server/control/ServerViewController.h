@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ServerViewController : UIViewController
-- (IBAction)waterCharge:(UIButton *)sender;
 
 @end
