@@ -11,15 +11,14 @@
 
 @interface MeterEditViewController : UIViewController
 
+@property (nonatomic, strong) UIPickerView *pickerView;
 
 @property (nonatomic, strong) NSMutableArray *dataArr;
 
+//用户信息
 @property (nonatomic, strong) NSString *ipLabel;
-
 @property (nonatomic, strong) NSString *dbLabel;
-
 @property (nonatomic, strong) NSString *userNameLabel;
-
 @property (nonatomic, strong) NSString *passWordLabel;
 
 @property (nonatomic, strong) NSString *meter_id;
@@ -85,6 +84,7 @@
 
 //日用水量上限
 @property (nonatomic, strong) UISwitch *limitOfDayUsageSwitchBtn;
+@property (nonatomic, strong) UITextField *limitOfDayUsageAlarmTextField;
 //月用水量上限
 @property (nonatomic, strong) UILabel *limitOfUsageLabel;
 @property (nonatomic, strong) UITextField *limitOfUsageAlarmTextField;
@@ -92,6 +92,7 @@
 //长时间不在线
 @property (nonatomic, strong) UITextField *longTimeNotServerTextField;
 @property (nonatomic, strong) UISwitch *longTimeNotServerSwitchBtn;
+@property (nonatomic, strong) UILabel *longTimeNotServer;
 //长时间没有用水
 @property (nonatomic, strong) UISwitch *longtimeNotUseSwitchBtn;
 

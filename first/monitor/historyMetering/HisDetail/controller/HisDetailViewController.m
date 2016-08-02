@@ -10,7 +10,7 @@
 #import "HisDetailTableViewCell.h"
 #import "SCViewController.h"
 #import "HisDetailModel.h"
-#import "UIImage+GIF.h"
+#import "KSDatePicker.h"
 
 @interface HisDetailViewController ()<UITableViewDelegate, UITableViewDataSource>
 {
@@ -21,6 +21,8 @@
     UILabel *loadingLabel;
 }
 @end
+
+static CGFloat i = 0;
 
 @implementation HisDetailViewController
 
@@ -38,6 +40,16 @@
     
     self.xArr = [NSMutableArray array];
     self.yArr = [NSMutableArray array];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *time = [formatter stringFromDate:[NSDate date]];
+    
+    _formDate.text = time;
+    _toDate.text = time;
 }
 
 - (void)_getUserInfo
@@ -94,23 +106,19 @@
             
             NSDictionary *meter1Dic = [responseObject objectForKey:@"meters"];
             dataCount = [[responseObject objectForKey:@"count"] integerValue];
-//            NSError *error = nil;
+            NSError *error = nil;
             
             [self.dataArr removeAllObjects];
             
             
             for (NSDictionary *dic in meter1Dic) {
                 
-//                HisDetailModel *hisDetailModel = [[HisDetailModel alloc] initWithDictionary:dic error:&error];
-//                [self.dataArr addObject:hisDetailModel];
+                HisDetailModel *hisDetailModel = [[HisDetailModel alloc] initWithDictionary:dic error:&error];
                 
-                HisDetailModel *hisDetailModel = [[HisDetailModel alloc] init];
-                hisDetailModel.collect_num = [dic objectForKey:@"collect_num"];
-                hisDetailModel.collect_avg = [dic objectForKey:@"collect_avg"];
-                hisDetailModel.collect_dt = [dic objectForKey:@"collect_dt"];
-                                
                 [self.dataArr addObject:hisDetailModel];
+                
                 [_yArr addObject:hisDetailModel.collect_avg];
+                i = [hisDetailModel.collect_avg floatValue] + i;
             }
             
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
@@ -183,6 +191,28 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat avg = i / _dataArr.count;
+    NSInteger m =  [((HisDetailModel *)self.dataArr[indexPath.row]).collect_avg floatValue];
+    NSLog(@"%ld",m);
+    UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"百分比用量" message:[NSString stringWithFormat:@"\n平均流量值：%lfm³\n\n高于平均用水量：%lfm³",avg,m-avg] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"百分比用量" message:[NSString stringWithFormat:@"\n平均流量值：%lfm³\n\n低于平均用水量：%lfm³",avg,avg-m] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alert1 addAction:action];
+    [alert2 addAction:action];
+    [SCToastView showInView:self.view text:@"加载中" duration:.5 autoHide:YES];
+    
+    if ((m-avg) >= 0) {
+        
+        [self presentViewController:alert1 animated:YES completion:nil];
+    } else {
+        [self presentViewController:alert2 animated:YES completion:nil];
+    }
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -207,5 +237,32 @@
     curveVC.hidesBottomBarWhenPushed = YES;
     
     [self.navigationController showViewController:curveVC sender:nil];
+}
+- (IBAction)dateBtn:(UIButton *)sender {
+    [_formDate resignFirstResponder];
+    [_toDate resignFirstResponder];
+    
+    KSDatePicker* picker = [[KSDatePicker alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 300)];
+    
+    picker.appearance.radius = 5;
+    
+    //设置回调
+    picker.appearance.resultCallBack = ^void(KSDatePicker* datePicker,NSDate* currentDate,KSDatePickerButtonType buttonType){
+        
+        if (buttonType == KSDatePickerButtonCommit) {
+            
+            NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"yyyy-MM-dd"];
+            if (sender.tag == 100) {
+                
+                _formDate.text = [formatter stringFromDate:currentDate];
+            }else {
+                _toDate.text = [formatter stringFromDate:currentDate];
+            }
+        }
+    };
+    // 显示
+    [picker show];
+
 }
 @end

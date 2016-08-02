@@ -24,7 +24,7 @@
     if (self) {
         // Initialization code
         self.clipsToBounds = YES;
-#warning mark-addPopView 此处添加弹出视图
+#warning mark - add PopView 此处添加弹出视图
         //PopView
         popView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 165, 30)];
         [popView setBackgroundColor:[UIColor lightGrayColor]];
@@ -114,7 +114,7 @@
 
 -(void)setXLabels:(NSArray *)xLabels
 {
-#warning mark - collect_dt 此处添加弹出视图的抄收时间
+#warning mark - add collect_dt 此处添加弹出视图的抄收时间
     _xLabels = xLabels;
     popDateArr = [NSMutableArray array];
     [popDateArr removeAllObjects];
@@ -265,7 +265,7 @@
                          value:[valueString floatValue]];
                 
 //                [progressline stroke];
-#warning mark- addBtn 此处添加触摸事件
+#warning mark - add Btn 此处添加触摸事件
                 //添加触摸点
                 UIButton *bt = [UIButton buttonWithType:UIButtonTypeCustom];
                 
@@ -313,14 +313,14 @@
         popView.frame = CGRectMake(0, 0, 85, 30);
         disLabel.frame = popView.frame;
         [disLabel setText:[NSString stringWithFormat:@"读数:%@\n时间:请放大",arr[button.tag]]];
-    } else if (length >= 4 && length < 20){
+    } else if (length >= 4 && length < 15){
         popView.frame = CGRectMake(0, 0, 11*length, 30);
         disLabel.frame = popView.frame;
         [disLabel setText:[NSString stringWithFormat:@"读数:%@\n时间:%@",arr[button.tag],popDateArr[button.tag]]];
     }
     
-    else {
-    popView.frame = CGRectMake(0, 0, 8*length, 30);
+    else{
+    popView.frame = CGRectMake(0, 0, 150, 30);
     disLabel.frame = popView.frame;
     [disLabel setText:[NSString stringWithFormat:@"读数:%@\n时间:%@",arr[button.tag],popDateArr[button.tag]]];
     }

@@ -10,6 +10,7 @@
 #import "CurrentReceiveViewController.h"
 #import "MeterDataViewController.h"
 #import "BHInfiniteScrollView.h"
+#import "IntroductionViewController.h"
 //typedef enum : NSUInteger {
 //    Fade = 1,                   //淡入淡出
 //    Push,                       //推挤
@@ -32,7 +33,8 @@
 
 @interface MonitorViewController ()<BHInfiniteScrollViewDelegate>
 {
-    
+    UIButton *button;
+    NSMutableArray *arr;
 }
 @property (nonatomic, strong) BHInfiniteScrollView* infinitePageView;
 @end
@@ -44,23 +46,48 @@
     self.view.backgroundColor = [UIColor colorWithRed:231.0f/255 green:231.0f/255 blue:231.0f/255 alpha:1];
 
 //    [self _createScrollView];
+//    [self _createButton];
     
-    
-    [self _createButton];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    if (!button) {
+        
+        [self _createButton];
+    }
+    
     [self _createPicPlay];
+
+    for (int i = 100; i < 104; i++) {
+            
+//        ((UIButton *)arr[i-100]).transform = CGAffineTransformTranslate(button.transform, 0, -PanScreenHeight/2);
+        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeScale(.1, .1);
+
+    }
+    
+    for (int i = 100; i < 104; i++) {
+        
+        CGFloat duration = (i - 99) * 0.2;
+        
+        [UIView animateWithDuration:duration animations:^{
+            
+            ((UIButton *)arr[i-100]).transform = CGAffineTransformIdentity;
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    
 }
 
 - (void)_createPicPlay
 {
     NSArray* urlsArray = @[
-                           @"http://192.168.3.170:8080/waterweb/IMAGE/homeimage1.png",
-                           @"http://192.168.3.170:8080/waterweb/IMAGE/homeimage2.png",
-                           @"http://192.168.3.170:8080/waterweb/IMAGE/homeimage3.png",
-                           @"http://192.168.3.170:8080/waterweb/IMAGE/homeimage4.png",
+                           @"http://60.191.39.206:8000/waterweb/IMAGE/homeimage1.png",
+                           @"http://60.191.39.206:8000/waterweb/IMAGE/homeimage2.png",
+                           @"http://60.191.39.206:8000/waterweb/IMAGE/homeimage3.png",
+                           @"http://60.191.39.206:8000/waterweb/IMAGE/homeimage4.png",
                            ];
 //    NSArray *titleArray = @[@"第一张",@"第二张",@"第三张",@"第四章",@"第五章"];
     CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/3;
@@ -94,7 +121,8 @@
 //点击图片做出的响应
 - (void)infiniteScrollView:(BHInfiniteScrollView *)infiniteScrollView didSelectItemAtIndex:(NSInteger)index
 {
-    
+    IntroductionViewController *intrVC = [[IntroductionViewController alloc] init];
+    [self.navigationController showViewController:intrVC sender:nil];
 }
 
 
@@ -102,8 +130,10 @@
 {
     CGFloat width = self.view.frame.size.width/5+15;
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];//button的类型;
-
+    button = [UIButton buttonWithType:UIButtonTypeCustom];//button的类型;
+    
+    arr = [[NSMutableArray alloc] init];
+    
     NSArray *titleArr = @[@"实时抄见",@"历史抄见",@"水表数据",@"水表修改",@"用水核算",@"用量查询",@"使用帮助"];
     NSArray *imageArr = @[@"now",@"his",@"message",@"edit",@"meter",@"dos",@"userhelp"];
     CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/3;
@@ -125,6 +155,8 @@
             button.titleEdgeInsets = UIEdgeInsetsMake(110, -button.titleLabel.bounds.size.width, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
             
             button.tag = 100 + i+j+i;
+            
+            [arr addObject:button];
             
             [button addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
             

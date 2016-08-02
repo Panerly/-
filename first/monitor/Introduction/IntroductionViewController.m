@@ -1,40 +1,38 @@
 //
-//  HelpViewController.m
+//  IntroductionViewController.m
 //  first
 //
-//  Created by HS on 16/7/12.
+//  Created by HS on 16/8/2.
 //  Copyright © 2016年 HS. All rights reserved.
 //
 
-#import "HelpViewController.h"
-#import "UIImage+GIF.h"
-#import "SCToastView.h"
+#import "IntroductionViewController.h"
 
-@interface HelpViewController ()<UIWebViewDelegate>
+@interface IntroductionViewController ()<UIWebViewDelegate>
 {
     UIImageView *loading;
     UILabel *loadingLabel;
 }
 @end
 
-@implementation HelpViewController
+@implementation IntroductionViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    _webView = [[UIWebView alloc] initWithFrame:self.view.frame];
+    // Do any additional setup after loading the view.
+    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, PanScreenWidth, PanScreenHeight+30)];
     _webView.delegate = self;
-    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.rabbitpre.com/m/FvQnIzl"]]];
+    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.rabbitpre.com/m/jyyyI3E"]]];
     [self.view addSubview:_webView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
     if (self.view.window == nil && [self isViewLoaded]) {
         self.view = nil;
     }
 }
-
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     //刷新控件
@@ -64,7 +62,6 @@
     [loading removeFromSuperview];
     [loadingLabel removeFromSuperview];
 }
-
 /*
 #pragma mark - Navigation
 

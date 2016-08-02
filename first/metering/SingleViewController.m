@@ -19,6 +19,7 @@ static const char *kScanQRCodeQueueName = "ScanQRCodeQueue";
     //扫描确认btn
     UIButton *scanBtn;
 }
+
 @property (nonatomic) AVCaptureSession *captureSession;
 @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
 @property (nonatomic) BOOL lastResult;
@@ -26,6 +27,7 @@ static const char *kScanQRCodeQueueName = "ScanQRCodeQueue";
 @end
 
 @implementation SingleViewController
+
 static BOOL flag;
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -35,7 +37,7 @@ static BOOL flag;
     
     [self _getCode];
     
-    UIBarButtonItem *light = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"light"] style:UIBarButtonItemStylePlain target:self action:@selector(openLight)];
+    UIBarButtonItem *light = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"light@2x"] style:UIBarButtonItemStylePlain target:self action:@selector(openLight)];
     UIBarButtonItem *scan = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"qrcode_icon"] style:UIBarButtonItemStylePlain target:self action:@selector(QRcode)];
     self.navigationItem.rightBarButtonItems = @[scan,light];
     
@@ -61,7 +63,9 @@ static BOOL flag;
 }
 - (void)QRcode {
     
-    _scanView = [[UIView alloc] initWithFrame:self.view.bounds];
+    if (!_scanView) {
+        _scanView = [[UIView alloc] initWithFrame:self.view.bounds];
+    }
     _scanView.center = self.view.center;
     _scanView.backgroundColor = [UIColor blackColor];
     _scanView.alpha = .8;

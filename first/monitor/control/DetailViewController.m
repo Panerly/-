@@ -46,6 +46,33 @@
     self.degrees.text = [NSString stringWithFormat:@"抄见度数:   %@吨", self.crModel.collect_num];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    _userNum.transform = CGAffineTransformMakeScale(.1, .1);
+    _meterNum.transform = CGAffineTransformMakeScale(.1, .1);
+    _userName.transform = CGAffineTransformMakeScale(.1, .1);
+    _userAddr.transform = CGAffineTransformMakeScale(.1, .1);
+    _caliber.transform = CGAffineTransformMakeScale(.1, .1);
+    _meterPhenoType.transform = CGAffineTransformMakeScale(.1, .1);
+    _readingTime.transform = CGAffineTransformMakeScale(.1, .1);
+    _degrees.transform = CGAffineTransformMakeScale(.1, .1);
+    _netNum.transform = CGAffineTransformMakeScale(.1, .1);
+    _alarm.transform = CGAffineTransformMakeScale(.1, .1);
+    
+    [UIView animateWithDuration:.5 animations:^{
+        _userAddr.transform = CGAffineTransformIdentity;
+        _userName.transform = CGAffineTransformIdentity;
+        _userNum.transform = CGAffineTransformIdentity;
+        _meterNum.transform = CGAffineTransformIdentity;
+        _caliber.transform = CGAffineTransformIdentity;
+        _meterPhenoType.transform = CGAffineTransformIdentity;
+        _readingTime.transform = CGAffineTransformIdentity;
+        _degrees.transform = CGAffineTransformIdentity;
+        _netNum.transform = CGAffineTransformIdentity;
+        _alarm.transform = CGAffineTransformIdentity;
+    }];
+}
+
 - (void)_requestData
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

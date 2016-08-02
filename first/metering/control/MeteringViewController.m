@@ -9,7 +9,7 @@
 #import "MeteringViewController.h"
 #import "MeteringSingleViewController.h"
 #import "SingleViewController.h"
-#import "UIImage+GIF.h"
+#import "TestViewController.h"
 
 @interface MeteringViewController ()<UITableViewDataSource, UITableViewDelegate>
 {
@@ -32,9 +32,104 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
 //    [self _createTableView];
+    
+    UIButton *btn = [[UIButton alloc] init];
+    btn.clipsToBounds = YES;
+    btn.layer.cornerRadius = 10;
+    btn.backgroundColor = [UIColor redColor];
+    [btn setTitle:@"通知+1" forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(btnAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
+    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).with.offset(PanScreenWidth/6);
+        make.top.equalTo(self.view.mas_top).with.offset(100);
+        make.size.equalTo(CGSizeMake(PanScreenWidth/4, 50));
+    }];
+    
+    UIButton *btn2 = [[UIButton alloc] init];
+    btn2.clipsToBounds = YES;
+    btn2.layer.cornerRadius = 10;
+    btn2.backgroundColor = [UIColor redColor];
+    [btn2 setTitle:@"通知-1" forState:UIControlStateNormal];
+    [btn2 addTarget:self action:@selector(btn) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn2];
+    [btn2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.view.mas_right).with.offset(-PanScreenWidth/6);
+        make.top.equalTo(self.view.mas_top).with.offset(100);
+        make.size.equalTo(CGSizeMake(PanScreenWidth/4, 50));
+    }];
+    
+    
+    UIButton *btn3 = [[UIButton alloc] init];
+    btn3.clipsToBounds = YES;
+    btn3.layer.cornerRadius = 10;
+    btn3.backgroundColor = [UIColor redColor];
+    [btn3 setTitle:@"跳转" forState:UIControlStateNormal];
+    [btn3 addTarget:self action:@selector(push) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn3];
+    [btn3 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.view.mas_right).with.offset(-PanScreenWidth/6);
+        make.top.equalTo(self.view.mas_top).with.offset(160);
+        make.size.equalTo(CGSizeMake(PanScreenWidth/4, 50));
+    }];
 }
 
+- (void)push
+{
+    TestViewController *testVC = [[TestViewController alloc] init];
+    [self presentViewController:testVC animated:YES completion:^{
+        
+    }];
+}
 
+static int i = 0;
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (i == 0) {
+        self.tabBarItem.badgeValue = nil;
+        i = 1;
+    }else {
+        
+        self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",i ];
+    }
+}
+//测试：通知加减
+- (void)btnAction
+{
+    if (i > 99) {
+        self.tabBarItem.badgeValue = @"99+";
+    }else {
+        if (i == 0) {
+            self.tabBarItem.badgeValue = nil;
+            i = 1;
+        } else {
+            if (self.tabBarItem.badgeValue == nil) {
+                self.tabBarItem.badgeValue = @"1";
+            }
+            self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",i++];
+        }
+    }
+    
+}
+
+-(void)btn
+{
+    if (i>=1) {
+        
+        self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",--i];
+        if (i==0) {
+            self.tabBarItem.badgeValue = nil;
+        }
+    }else
+    {
+        if (self.tabBarItem.badgeValue == nil) {
+            self.tabBarItem.badgeValue = @"1";
+            i = 1;
+        }
+        self.tabBarItem.badgeValue = nil;
+    }
+    
+}
 - (void)_createTableView
 {
     self.tableView.delegate = self;
@@ -56,6 +151,7 @@
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, PanScreenWidth, 25)];
         label.text = @"此功能暂未推出！";
+        label.textColor = [UIColor darkGrayColor];
         label.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {

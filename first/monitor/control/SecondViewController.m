@@ -38,9 +38,19 @@
     [self.view addGestureRecognizer:edgePanGestureRecognizer];
     
     _imageViewForSecond.userInteractionEnabled = NO;
+    
+//    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(scaleAction:)];
+//    [self.view addGestureRecognizer:pinch];
 
 }
-
+//- (void)scaleAction :(UIPinchGestureRecognizer *)pinchs
+//{
+////    if (pinchs.velocity>0) {
+//    
+//        _imageViewForSecond.frame = CGRectMake(_imageViewForSecond.frame.origin.x, _imageViewForSecond.frame.origin.y, _imageViewForSecond.frame.size.width*pinchs.scale, _imageViewForSecond.frame.size.height*pinchs.scale);
+//        [_imageViewForSecond setNeedsDisplay];
+////    }
+//}
 
 -(void)edgePanGesture:(UIScreenEdgePanGestureRecognizer *)recognizer{
     //计算手指滑的物理距离（滑了多远，与起始位置无关）
@@ -105,4 +115,5 @@
 - (IBAction)PanPopAction:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 @end

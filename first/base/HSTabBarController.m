@@ -27,11 +27,7 @@
     
     //添加自控制器
     HomeViewController *home = [[HomeViewController alloc] init];
-//    UIImage *homeImage = [UIImage imageNamed:@"home2"];
-//    UIImage *homeSelectedImage = [UIImage imageNamed:@"home2_selected"];
-
     [self addOneChlildVc:home title:@"首页" imageName:@"home2@2x" selectedImageName:@"home_selected2@2x"];
-    
     
     MeteringViewController *meter = [[MeteringViewController alloc] init];
     [self addOneChlildVc:meter title:@"抄表" imageName:@"metering@2x" selectedImageName:@"metering_selected@2x"];

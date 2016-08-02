@@ -21,7 +21,8 @@
     [super layoutSubviews];
     
     _userName.text = self.CRModel.meter_name;
-//    x = self.CRModel
+    _x = self.CRModel.x;
+    _y = self.CRModel.y;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -31,9 +32,10 @@
 
 - (IBAction)naviButton:(id)sender {
 
+    NSLog(@"%@-----%@",_x,_y);
     //检测定位功能是否开启
     if([CLLocationManager locationServicesEnabled]){
-        CLLocationCoordinate2D loc = CLLocationCoordinate2DMake(39.26, 117.30);
+        CLLocationCoordinate2D loc = CLLocationCoordinate2DMake([_y integerValue], [_x integerValue]);
         MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
         MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:loc addressDictionary:nil]];
         [MKMapItem openMapsWithItems:@[currentLocation, toLocation]
@@ -73,4 +75,10 @@
     FirstCollectionViewController *showImageVC = [[FirstCollectionViewController alloc] init];
     [[self findVC].navigationController showViewController:showImageVC sender:nil];
 }
+
+
+
+
+
+
 @end

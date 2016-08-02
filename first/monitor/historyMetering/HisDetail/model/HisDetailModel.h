@@ -10,13 +10,13 @@
 
 @interface HisDetailModel : JSONModel
 //用户名
-@property (nonatomic, strong) NSString *meter_name;
+@property (nonatomic, strong) NSString <Optional>*meter_name;
 //用户号
 @property (nonatomic, strong) NSString *meter_id;
 //表类型
-@property (nonatomic, strong) NSString *meter_name2;
+@property (nonatomic, strong) NSString <Optional>*meter_name2;
 //表口径
-@property (nonatomic, strong) NSString *meter_cali;
+@property (nonatomic, strong) NSString <Optional>*meter_cali;
 
 //水表读数
 @property (nonatomic, strong) NSString *collect_num;

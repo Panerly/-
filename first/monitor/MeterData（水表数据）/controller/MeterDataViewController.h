@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface MeterDataViewController : UIViewController
+
+- (IBAction)dateBtn:(UIButton *)sender;
+
 //查询日期
 @property (weak, nonatomic) IBOutlet UITextField *fromDate;
 @property (weak, nonatomic) IBOutlet UITextField *toDate;

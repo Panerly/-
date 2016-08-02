@@ -9,7 +9,6 @@
 #import "QueryViewController.h"
 #import "QueryTableViewCell.h"
 #import "SCViewController.h"
-//#import "SCToastView.h"
 #import "QueryModel.h"
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 
@@ -132,7 +131,7 @@ static CGFloat i = 1.0;
      
         if (pinchs.velocity < 0.0f) {
             
-            i = i-0.1;
+            i = i - 0.2*(pinchs.scale+1);
             if (i == 0) {
                 i = 1.0;
             }
@@ -141,13 +140,16 @@ static CGFloat i = 1.0;
             }
         }else
         {
-            i = 0.1+i;
+            i = i + 0.2*pinchs.scale;
+            if (i >= 50) {
+                i = 50.0;
+            }
         }
     }
     NSLog(@"缩放倍率：%f",i);
     scrollView.contentSize = CGSizeMake(PanScreenWidth*i, 150);
     [chartView removeFromSuperview];
-    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(self.view.frame.origin.x * i, 0,  PanScreenWidth*i, 150) withSource:self withStyle:SCChartLineStyle];
+    chartView = [[SCChart alloc] initwithSCChartDataFrame:CGRectMake(0, 0,  PanScreenWidth*i, 150) withSource:self withStyle:SCChartLineStyle];
     [chartView showInView:scrollView];
 }
 

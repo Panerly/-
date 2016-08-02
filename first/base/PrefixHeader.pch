@@ -50,4 +50,5 @@
 #import "SVProgressHUD.h"
 #import "MJRefresh.h"
 #import "SCToastView.h"
+#import "UIImage+GIF.h"
 #endif

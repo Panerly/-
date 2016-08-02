@@ -12,7 +12,6 @@
 #import "DetailViewController.h"
 #import "CRModel.h"
 #import "DetailModel.h"
-#import "UIImage+GIF.h"
 #import "HisDetailViewController.h"
 #import "MeterEditViewController.h"
 
@@ -42,7 +41,7 @@
         self.title = @"水表修改";
     }
     
-    self.view.backgroundColor = [UIColor colorWithRed:249.0 green:255.0 blue:249.0 alpha:1];
+    self.view.backgroundColor = [UIColor colorWithRed:212.0/255 green:212.0/255 blue:212.0/255 alpha:1];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
      if ([[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0)
@@ -158,7 +157,8 @@
 - (void)_createTabelView
 {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, PanScreenWidth, PanScreenHeight-54*2) style:UITableViewStylePlain];
-    
+//    _tableView.backgroundColor = [UIColor colorWithRed:212/255.0f green:212/255.0f blue:212/255.0f alpha:1];
+    self.tableView.separatorStyle = NO;
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(_requestData)];
     _tableView.mj_header.automaticallyChangeAlpha = YES;
     
@@ -167,6 +167,8 @@
     self.searchController.searchBar.frame = CGRectMake(0, 0, 0, 44);
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.searchController.hidesNavigationBarDuringPresentation = YES;
+    self.searchController.searchBar.barTintColor = [UIColor colorWithRed:214/255.0f green:214/255.0f blue:214/255.0f alpha:1];
+    self.searchController.searchBar.placeholder = @"搜索";
     
     self.searchController.searchBar.delegate = self;
     self.searchController.searchResultsUpdater = self;
@@ -210,9 +212,14 @@
         
         crCell = [[[NSBundle mainBundle] loadNibNamed:@"CurrentReceive" owner:self options:nil] lastObject];
     }
+
+    if (self.searchResults == nil) {
+        
+        tableView.separatorStyle = YES;
+    }
     
     crCell.CRModel = (!self.searchController.active)?_dataArr[indexPath.row] : self.searchResults[indexPath.row];
-
+    
     return crCell;
 }
 
@@ -289,5 +296,11 @@
     }
 }
 
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    [searchBar setShowsCancelButton:YES animated:YES];
+    UIButton *btn=[searchBar valueForKey:@"_cancelButton"];
+    [btn setTitle:@"取消" forState:UIControlStateNormal];
+}
 
 @end

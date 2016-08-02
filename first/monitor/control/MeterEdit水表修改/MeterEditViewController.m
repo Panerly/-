@@ -8,14 +8,20 @@
 
 #import "MeterEditViewController.h"
 
-@interface MeterEditViewController ()<CLLocationManagerDelegate>
+@interface MeterEditViewController ()<CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate>
 {
     NSMutableArray *alarmNsetList;
+    NSArray *_pickerNameArr;
+    NSArray *_pickerTypeArr;
+    NSUserDefaults *defaults;
+    BOOL flag;
 }
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @end
 
 @implementation MeterEditViewController
+
+static int i = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,11 +35,13 @@
     [self _requestData];
     
     _dataArr = [NSMutableArray array];
-    
+
+    flag = NO;
 }
+
 - (void)_getCode
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    defaults = [NSUserDefaults standardUserDefaults];
     
     self.userNameLabel = [defaults objectForKey:@"userName"];
     self.passWordLabel = [defaults objectForKey:@"passWord"];
@@ -63,7 +71,7 @@
         if (responseObject) {
             alarmNsetList = [NSMutableArray array];
             [alarmNsetList removeAllObjects];
-            NSLog(@"水表修改返回数据%@",responseObject);
+//            NSLog(@"水表修改返回数据%@",responseObject);
             for (NSDictionary *dic in [responseObject objectForKey:@"alarmNsetList"]) {
                 [alarmNsetList addObject:[dic objectForKey:@"TorF"]];
                 
@@ -92,7 +100,12 @@
                 [_fromToSwitchBtn setOn:[[alarmNsetList objectAtIndex:6]isEqualToString:@"0"] ? NO : YES];
             }
             
-            _userID.text = [NSString stringWithFormat:@"用户号: %@",[responseObject objectForKey:@"user_id"]];
+            NSMutableAttributedString *attrutedStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"用户号: %@",[responseObject objectForKey:@"user_id"]]];
+            
+            [attrutedStr addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(0, 4)];
+            
+            _userID.attributedText = attrutedStr;
+            
             _installAddrTextField.text = [responseObject objectForKey:@"username"];
             _longitudeTextField.text = [responseObject objectForKey:@"x"];
             _latitudeTextField.text = [responseObject objectForKey:@"y"];
@@ -100,7 +113,11 @@
             _user_addr= [responseObject objectForKey:@"user_addr"];
             
             NSDictionary *dic = [responseObject objectForKey:@"meter1"];
-            _meterID.text = [NSString stringWithFormat:@"表位号: %@",[dic objectForKey:@"meter_id"]];
+            
+            NSMutableAttributedString *attrutedStr_id = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"表位号: %@",[dic objectForKey:@"meter_id"]]];
+            [attrutedStr_id addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(0, 4)];
+            _meterID.attributedText = attrutedStr_id;
+            
             _meter_idTextField.text = [dic objectForKey:@"meter_wid"];
             _connectIDTextField.text = [dic objectForKey:@"comm_id"];
             _collectIDTextField.text = [dic objectForKey:@"collector_id"];
@@ -136,6 +153,7 @@
     _scrollView.contentSize= CGSizeMake(PanScreenWidth, 2*PanScreenHeight);
     _scrollView.scrollEnabled = YES;
     _scrollView.pagingEnabled = NO;
+    _scrollView.delegate = self;
     _scrollView.showsVerticalScrollIndicator = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.backgroundColor = [UIColor whiteColor];
@@ -166,44 +184,121 @@
     }];
 }
 
+- (UILabel *)allocLabel {
+    return [[UILabel alloc] init];
+}
+
 //控件部署
 - (void)_configContent
 {
-    _userID = [[UILabel alloc] init];
+    _userID = [self allocLabel];
+    _meterID = [self allocLabel];
+    _installAddrLabel = [self allocLabel];
+    _meter_idLabel = [self allocLabel];
+    _connectIDLabel = [self allocLabel];
+    _collectIDLabel = [self allocLabel];
+    _installTimeLabel = [self allocLabel];
+    _wheelTypeLabel = [self allocLabel];
+    _regionLabel = [self allocLabel];
+    _meterTypeLabel = [self allocLabel];
+    UILabel *remoteWay = [self allocLabel];
+    _caliberLabel = [self allocLabel];
+    UILabel *remoteType = [self allocLabel];
+    _latitudeLabel = [self allocLabel];
+    _longitudeLabel = [self allocLabel];
+    UILabel *setAlarm = [self allocLabel];
+    _excessiveAlarmLabel = [self allocLabel];
+    _remarksLabel = [self allocLabel];
+    _toLabel = [self allocLabel];
+    _fromLabel = [self allocLabel];
+    UILabel *intervalLabel = [self allocLabel];
+    UILabel *limitOfUsageAlarmUnit = [self allocLabel];
+    _limitOfUsageLabel = [self allocLabel];
+    UILabel *longtimeNotUse = [self allocLabel];
+    UILabel *dayOverFlowUnit = [self allocLabel];
+    UILabel *dayOverFlow = [self allocLabel];
+    UILabel *longTimeNotServerUnit = [self allocLabel];
+    _longTimeNotServer = [self allocLabel];
+    UILabel *reversalAlarmUnit = [self allocLabel];
+    _reversalAlarmLabel = [self allocLabel];
+    UILabel *excessiveAlarmUnit = [self allocLabel];
+    UILabel *alarmIntroduce = [self allocLabel];
+    UILabel *parameterSet = [self allocLabel];
+    UILabel *enableLabel = [self allocLabel];
+    
+    NSMutableArray *labelArr = [NSMutableArray arrayWithObjects:_userID,_meterID,_installAddrLabel,_meter_idLabel,_connectIDLabel,_collectIDLabel,_installTimeLabel,_wheelTypeLabel,_regionLabel,_meterTypeLabel,remoteWay,_caliberLabel,remoteType,_latitudeLabel,_longitudeLabel,setAlarm,_excessiveAlarmLabel,_remarksLabel,_toLabel,_fromLabel,intervalLabel,limitOfUsageAlarmUnit,_limitOfUsageLabel,longtimeNotUse,dayOverFlowUnit,dayOverFlow,longTimeNotServerUnit,_longTimeNotServer,reversalAlarmUnit,_reversalAlarmLabel,excessiveAlarmUnit,alarmIntroduce,parameterSet,enableLabel,nil];
+   
+    for (int i = 0; i < labelArr.count; i++) {
+        
+        if (i<=16) {
+            if (i<2) {
+                ((UILabel *)labelArr[i]).font = [UIFont systemFontOfSize:13];
+                ((UILabel *)labelArr[i]).textColor = [UIColor blackColor];
+            }else {
+            ((UILabel *)labelArr[i]).font = [UIFont systemFontOfSize:13];
+            ((UILabel *)labelArr[i]).textColor = [UIColor blueColor];
+            }
+            
+        } else {
+            
+        ((UILabel *)labelArr[i]).font = [UIFont systemFontOfSize:10.0f];
+        ((UILabel *)labelArr[i]).textColor = [UIColor darkGrayColor];
+            
+        }
+        [_scrollView addSubview:labelArr[i]];
+    }
+    
+    _installAddrTextField = [[UITextField alloc] init];
+    _meter_idTextField = [[UITextField alloc] init];
+    _connectIDTextField = [[UITextField alloc] init];
+    _collectIDTextField = [[UITextField alloc] init];
+    _installTimeTextField = [[UITextField alloc] init];
+    _wheelTypeTextField = [[UITextField alloc] init];
+    _regionTextField = [[UITextField alloc] init];
+    _meterTypeTextField = [[UITextField alloc] init];
+    _caliberTextField = [[UITextField alloc] init];
+    _remoteWayTextField = [[UITextField alloc] init];
+    _remoteTypeTextField = [[UITextField alloc] init];
+    _longitudeTextField = [[UITextField alloc] init];
+    _latitudeTextField = [[UITextField alloc] init];
+    _excessiveAlarmTextField = [[UITextField alloc] init];
+    _reversalAlarmTextField = [[UITextField alloc] init];
+    _longTimeNotServerTextField = [[UITextField alloc] init];
+    _limitOfDayUsageAlarmTextField = [[UITextField alloc] init];
+    _limitOfUsageAlarmTextField = [[UITextField alloc] init];
+    _fromTextField = [[UITextField alloc] init];
+    _toTextField = [[UITextField alloc] init];
+    
+    NSMutableArray *arr = [NSMutableArray arrayWithObjects:_installAddrTextField,_meter_idTextField,_connectIDTextField,_collectIDTextField,_installTimeTextField,_wheelTypeTextField,_regionTextField,_meterTypeTextField,_caliberTextField,_remoteWayTextField,_remoteTypeTextField,_longitudeTextField,_latitudeTextField,_excessiveAlarmTextField,_reversalAlarmTextField,_limitOfDayUsageAlarmTextField,_longTimeNotServerTextField,_limitOfUsageAlarmTextField,_fromTextField,_toTextField, nil];
+    
+    for (int i = 0; i < arr.count; i++) {
+        
+        ((UITextField *)arr[i]).borderStyle = UITextBorderStyleRoundedRect;
+        ((UITextField *)arr[i]).font = [UIFont systemFontOfSize:13];
+        [_scrollView addSubview:arr[i]];
+    }
+    
     _userID.text = @"用户号: ";
-    _userID.font = [UIFont systemFontOfSize:13];
-    _userID.textColor = [UIColor blueColor];
-    [_scrollView addSubview:_userID];
     [_userID mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_scrollView.mas_top).with.offset(15);
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.size.equalTo(CGSizeMake(150, 25));
     }];
     
-    _meterID = [[UILabel alloc] init];
     _meterID.text = @"表位号: ";
-    _meterID.font = [UIFont systemFontOfSize:13];
-    _meterID.textColor = [UIColor blueColor];
-    [_scrollView addSubview:_meterID];
     [_meterID mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_scrollView.mas_top).with.offset(15);
         make.centerX.equalTo(_scrollView.centerX).with.offset(50);
         make.size.equalTo(CGSizeMake(150, 25));
     }];
     
-    _installAddrLabel = [[UILabel alloc] init];
-    _installAddrLabel.textColor = [UIColor blueColor];
     _installAddrLabel.text = @"安装地址: ";
-    _installAddrLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_installAddrLabel];
     [_installAddrLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_meterID.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _installAddrTextField = [[UITextField alloc] init];
-    [_scrollView addSubview:_installAddrTextField];
-    _installAddrTextField.borderStyle = UITextBorderStyleRoundedRect;
+    
     _installAddrTextField.font = [UIFont systemFontOfSize:11];
     [_installAddrTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_installAddrLabel.mas_right);
@@ -212,20 +307,13 @@
         make.height.equalTo(25);
     }];
     
-    _meter_idLabel = [[UILabel alloc] init];
     _meter_idLabel.text = @"表  身  号: ";
-    _meter_idLabel.font = [UIFont systemFontOfSize:13];
-    _meter_idLabel.textColor = [UIColor blueColor];
-    [_scrollView addSubview:_meter_idLabel];
     [_meter_idLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.left).with.offset(10);
         make.top.equalTo(_installAddrLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _meter_idTextField = [[UITextField alloc] init];
-    [_scrollView addSubview:_meter_idTextField];
-    _meter_idTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _meter_idTextField.font = [UIFont systemFontOfSize:13];
+    
     [_meter_idTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_installAddrLabel.mas_right);
         make.top.equalTo(_installAddrLabel.mas_bottom).with.offset(10);
@@ -233,20 +321,13 @@
         make.height.equalTo(25);
     }];
     
-    _connectIDLabel = [[UILabel alloc] init];
-    _connectIDLabel.textColor = [UIColor blueColor];
     _connectIDLabel.text = @"通讯联络号: ";
-    _connectIDLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_connectIDLabel];
     [_connectIDLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_meter_idLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _connectIDTextField = [[UITextField alloc] init];
-    [_scrollView addSubview:_connectIDTextField];
-    _connectIDTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _connectIDTextField.font = [UIFont systemFontOfSize:13];
+    
     [_connectIDTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_installAddrLabel.mas_right);
         make.top.equalTo(_meter_idLabel.mas_bottom).with.offset(10);
@@ -254,20 +335,13 @@
         make.height.equalTo(25);
     }];
     
-    _collectIDLabel = [[UILabel alloc] init];
-    _collectIDLabel.textColor = [UIColor blueColor];
     _collectIDLabel.text = @"采集编号: ";
-    _collectIDLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_collectIDLabel];
     [_collectIDLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_connectIDLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _collectIDTextField = [[UITextField alloc] init];
-    [_scrollView addSubview:_collectIDTextField];
-    _collectIDTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _collectIDTextField.font = [UIFont systemFontOfSize:13];
+    
     [_collectIDTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_installAddrLabel.mas_right);
         make.top.equalTo(_connectIDTextField.mas_bottom).with.offset(10);
@@ -275,21 +349,13 @@
         make.height.equalTo(25);
     }];
     
-    
-    _installTimeLabel = [[UILabel alloc] init];
-    _installTimeLabel.textColor = [UIColor blueColor];
     _installTimeLabel.text = @"安装时间: ";
-    _installTimeLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_installTimeLabel];
     [_installTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_collectIDLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _installTimeTextField = [[UITextField alloc] init];
-    [_scrollView addSubview:_installTimeTextField];
-    _installTimeTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _installTimeTextField.font = [UIFont systemFontOfSize:13];
+    
     [_installTimeTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_installAddrLabel.mas_right);
         make.top.equalTo(_collectIDTextField.mas_bottom).with.offset(10);
@@ -297,21 +363,13 @@
         make.height.equalTo(25);
     }];
     
-    
-    _wheelTypeLabel = [[UILabel alloc] init];
-    _wheelTypeLabel.textColor = [UIColor blueColor];
     _wheelTypeLabel.text = @"字轮类型: ";
-    _wheelTypeLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_wheelTypeLabel];
     [_wheelTypeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_installTimeLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _wheelTypeTextField = [[UITextField alloc] init];
-    [_scrollView addSubview:_wheelTypeTextField];
-    _wheelTypeTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _wheelTypeTextField.font = [UIFont systemFontOfSize:13];
+    
     [_wheelTypeTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_installAddrLabel.mas_right);
         make.top.equalTo(_installTimeTextField.mas_bottom).with.offset(10);
@@ -319,63 +377,63 @@
         make.height.equalTo(25);
     }];
     
-    _regionLabel = [[UILabel alloc] init];
-    _regionLabel.textColor = [UIColor blueColor];
     _regionLabel.text = @"所属区域: ";
-    _regionLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_regionLabel];
     [_regionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_wheelTypeLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _regionTextField = [[UITextField alloc] init];
-    _regionTextField.font = [UIFont systemFontOfSize:13];
-    _regionTextField.borderStyle = UITextBorderStyleRoundedRect;
-    [_scrollView addSubview:_regionTextField];
+    
     [_regionTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_regionLabel.mas_right);
         make.top.equalTo(_wheelTypeLabel.mas_bottom).with.offset(10);
         make.right.equalTo(self.view.right).with.offset(-10);
         make.height.equalTo(25);
     }];
+    UIButton *button = [[UIButton alloc] init];
+    button.tag = 500;
+    button.backgroundColor = [UIColor clearColor];
+    [button addTarget:self action:@selector(changeAttr:) forControlEvents:UIControlEventTouchUpInside];
+    [_scrollView addSubview:button];
+    [button mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_regionLabel.mas_right);
+        make.top.equalTo(_wheelTypeLabel.mas_bottom).with.offset(10);
+        make.right.equalTo(self.view.right).with.offset(-10);
+        make.height.equalTo(25);
+    }];
     
-    
-    _meterTypeLabel = [[UILabel alloc] init];
-    _meterTypeLabel.textColor = [UIColor blueColor];
     _meterTypeLabel.text = @"表具类型: ";
-    _meterTypeLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_meterTypeLabel];
     [_meterTypeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_regionLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _meterTypeTextField = [[UITextField alloc] init];
-    _meterTypeTextField.font = [UIFont systemFontOfSize:13];
-    _meterTypeTextField.borderStyle = UITextBorderStyleRoundedRect;
-    [_scrollView addSubview:_meterTypeTextField];
+    
     [_meterTypeTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_meterTypeLabel.mas_right);
         make.top.equalTo(_regionTextField.mas_bottom).with.offset(10);
         make.right.equalTo(self.view.right).with.offset(-10);
         make.height.equalTo(25);
     }];
+    UIButton *button2 = [[UIButton alloc] init];
+    button2.tag = 501;
+    button2.backgroundColor = [UIColor clearColor];
+    [button2 addTarget:self action:@selector(changeAttr:) forControlEvents:UIControlEventTouchUpInside];
+    [_scrollView addSubview:button2];
+    [button2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_meterTypeLabel.mas_right);
+        make.top.equalTo(_regionTextField.mas_bottom).with.offset(10);
+        make.right.equalTo(self.view.right).with.offset(-10);
+        make.height.equalTo(25);
+    }];
     
-    _caliberLabel = [[UILabel alloc] init];
-    _caliberLabel.textColor = [UIColor blueColor];
     _caliberLabel.text = @"口     经: ";
-    _caliberLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_caliberLabel];
     [_caliberLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_meterTypeLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _caliberTextField = [[UITextField alloc] init];
-    _caliberTextField.font = [UIFont systemFontOfSize:13];
-    _caliberTextField.borderStyle = UITextBorderStyleRoundedRect;
-    [_scrollView addSubview:_caliberTextField];
+    
     [_caliberTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_caliberLabel.mas_right);
         make.top.equalTo(_meterTypeTextField.mas_bottom).with.offset(10);
@@ -383,21 +441,13 @@
         make.height.equalTo(25);
     }];
 
-    
-    UILabel *remoteWay = [[UILabel alloc] init];
-    remoteWay.textColor = [UIColor blueColor];
     remoteWay.text = @"远传方式: ";
-    remoteWay.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:remoteWay];
     [remoteWay mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(_caliberLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _remoteWayTextField = [[UITextField alloc] init];
-    _remoteWayTextField.font = [UIFont systemFontOfSize:13];
-    _remoteWayTextField.borderStyle = UITextBorderStyleRoundedRect;
-    [_scrollView addSubview:_remoteWayTextField];
+    
     [_remoteWayTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(remoteWay.mas_right);
         make.top.equalTo(_caliberTextField.mas_bottom).with.offset(10);
@@ -405,20 +455,14 @@
         make.height.equalTo(25);
     }];
     
-    UILabel *remoteType = [[UILabel alloc] init];
-    remoteType.textColor = [UIColor blueColor];
+    
     remoteType.text = @"远传类型";
-    remoteType.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:remoteType];
     [remoteType mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(remoteWay.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(100, 25));
     }];
-    _remoteTypeTextField = [[UITextField alloc] init];
-    _remoteTypeTextField.font = [UIFont systemFontOfSize:13];
-    _remoteTypeTextField.borderStyle = UITextBorderStyleRoundedRect;
-    [_scrollView addSubview:_remoteTypeTextField];
+    
     [_remoteTypeTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(remoteType.mas_right);
         make.top.equalTo(_remoteWayTextField.mas_bottom).with.offset(10);
@@ -426,40 +470,28 @@
         make.height.equalTo(25);
     }];
     
-    _longitudeLabel = [[UILabel alloc] init];
-    _longitudeLabel.textColor = [UIColor blueColor];
+    
     _longitudeLabel.text = @"经度: ";
-    _longitudeLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_longitudeLabel];
     [_longitudeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(10);
         make.top.equalTo(remoteType.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
-    _longitudeTextField = [[UITextField alloc] init];
-    [_scrollView addSubview:_longitudeTextField];
-    _longitudeTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _longitudeTextField.font = [UIFont systemFontOfSize:13];
+    
     [_longitudeTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_longitudeLabel.mas_right).with.offset(-15);
         make.top.equalTo(remoteType.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(90, 25));
     }];
     
-    _latitudeLabel = [[UILabel alloc] init];
-    _latitudeLabel.textColor = [UIColor blueColor];
+    
     _latitudeLabel.text = @"纬度: ";
-    _latitudeLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_latitudeLabel];
     [_latitudeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(remoteType.mas_bottom).with.offset(10);
         make.centerX.equalTo(_scrollView.centerX).with.offset(5);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
-    _latitudeTextField = [[UITextField alloc] init];
-    [_scrollView addSubview:_latitudeTextField];
-    _latitudeTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _latitudeTextField.font = [UIFont systemFontOfSize:13];
+    
     [_latitudeTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_latitudeLabel.mas_right).with.offset(-15);
         make.top.equalTo(remoteType.mas_bottom).with.offset(10);
@@ -477,80 +509,64 @@
         make.size.equalTo(CGSizeMake(35, 35));
     }];
     
-    UILabel *setAlarm = [[UILabel alloc] init];
-    setAlarm.textColor = [UIColor blueColor];
     setAlarm.text = @"警报参数设置";
-    setAlarm.font = [UIFont systemFontOfSize:18];
-    [_scrollView addSubview:setAlarm];
+    setAlarm.font = [UIFont systemFontOfSize:15.0f];
+    setAlarm.textAlignment = NSTextAlignmentCenter;
     [setAlarm mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_scrollView.mas_centerX);
         make.top.equalTo(_longitudeLabel.mas_bottom).with.offset(30);
         make.size.equalTo(CGSizeMake(120, 35));
     }];
     
-    
     //警报介绍
-    UILabel *alarmIntroduce = [[UILabel alloc] init];
     alarmIntroduce.text = @"警报介绍";
-    alarmIntroduce.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:alarmIntroduce];
+    alarmIntroduce.textColor = [UIColor blackColor];
+    alarmIntroduce.font = [UIFont systemFontOfSize:13.0f];
     [alarmIntroduce mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(setAlarm.mas_bottom);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
     
-    
     //参数设置
-    UILabel *parameterSet = [[UILabel alloc] init];
     parameterSet.text = @"参数设置";
-    parameterSet.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:parameterSet];
+    parameterSet.textColor = [UIColor blackColor];
+    parameterSet.font = [UIFont systemFontOfSize:13.0f];
+    parameterSet.textAlignment = NSTextAlignmentCenter;
     [parameterSet mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_scrollView.centerX);
         make.top.equalTo(setAlarm.mas_bottom);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
     
-    
     //是否启用
-    UILabel *enableLabel = [[UILabel alloc] init];
     enableLabel.text = @"是否启用";
-    enableLabel.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:enableLabel];
+    enableLabel.textColor = [UIColor blackColor];
+    enableLabel.font = [UIFont systemFontOfSize:13.0f];
     [enableLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.view.right);
         make.top.equalTo(setAlarm.mas_bottom);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
     
-    
     //用水过量报警
-    _excessiveAlarmLabel = [[UILabel alloc] init];
     _excessiveAlarmLabel.text = @"用水过量报警";
     _excessiveAlarmLabel.textColor = [UIColor darkGrayColor];
-    _excessiveAlarmLabel.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:_excessiveAlarmLabel];
+    _excessiveAlarmLabel.font = [UIFont systemFontOfSize:10.0f];
     [_excessiveAlarmLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(alarmIntroduce.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(120, 25));
     }];
-    _excessiveAlarmTextField = [[UITextField alloc] init];
-    _excessiveAlarmTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _excessiveAlarmTextField.font = [UIFont systemFontOfSize:13];
+    
     _excessiveAlarmTextField.text = @"100";
-    [_scrollView addSubview:_excessiveAlarmTextField];
     [_excessiveAlarmTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(alarmIntroduce.mas_bottom).with.offset(10);
         make.centerX.equalTo(_scrollView.centerX);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
-    UILabel *excessiveAlarmUnit = [[UILabel alloc] init];
+    
     excessiveAlarmUnit.text = @"吨/时";
-    excessiveAlarmUnit.textColor = [UIColor darkGrayColor];
-    excessiveAlarmUnit.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:excessiveAlarmUnit];
     [excessiveAlarmUnit mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_excessiveAlarmTextField.mas_right).with.offset(5);
         make.top.equalTo(alarmIntroduce.mas_bottom).with.offset(10);
@@ -564,31 +580,20 @@
     }];
     
     //水表倒流
-    _reversalAlarmLabel = [[UILabel alloc] init];
     _reversalAlarmLabel.text = @"水表倒流";
-    _reversalAlarmLabel.textColor = [UIColor darkGrayColor];
-    _reversalAlarmLabel.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:_reversalAlarmLabel];
     [_reversalAlarmLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(_excessiveAlarmLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(120, 25));
     }];
-    _reversalAlarmTextField = [[UITextField alloc] init];
-    _reversalAlarmTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _reversalAlarmTextField.font = [UIFont systemFontOfSize:13];
+    
     _reversalAlarmTextField.text = @"1";
-    [_scrollView addSubview:_reversalAlarmTextField];
     [_reversalAlarmTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_scrollView.centerX);
         make.top.equalTo(excessiveAlarmUnit.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
-    UILabel *reversalAlarmUnit = [[UILabel alloc] init];
     reversalAlarmUnit.text = @"吨/天";
-    reversalAlarmUnit.textColor = [UIColor darkGrayColor];
-    reversalAlarmUnit.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:reversalAlarmUnit];
     [reversalAlarmUnit mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_reversalAlarmTextField.mas_right).with.offset(5);
         make.top.equalTo(_excessiveAlarmTextField.mas_bottom).with.offset(10);
@@ -601,33 +606,22 @@
         make.centerX.equalTo(enableLabel.centerX);
     }];
     
-    
     //长时间不在线
-    UILabel *longTimeNotServer = [[UILabel alloc] init];
-    longTimeNotServer.text = @"长时间不在线";
-    longTimeNotServer.textColor = [UIColor darkGrayColor];
-    longTimeNotServer.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:longTimeNotServer];
-    [longTimeNotServer mas_makeConstraints:^(MASConstraintMaker *make) {
+    _longTimeNotServer.text = @"长时间不在线";
+    [_longTimeNotServer mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(_reversalAlarmLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(120, 25));
     }];
-    _longTimeNotServerTextField = [[UITextField alloc] init];
-    _longTimeNotServerTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _longTimeNotServerTextField.font = [UIFont systemFontOfSize:13];
+    
     _longTimeNotServerTextField.text = @"50";
-    [_scrollView addSubview:_longTimeNotServerTextField];
     [_longTimeNotServerTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_scrollView.centerX);
         make.top.equalTo(_reversalAlarmTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
-    UILabel *longTimeNotServerUnit = [[UILabel alloc] init];
+    
     longTimeNotServerUnit.text = @"小 时";
-    longTimeNotServerUnit.textColor = [UIColor darkGrayColor];
-    longTimeNotServerUnit.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:longTimeNotServerUnit];
     [longTimeNotServerUnit mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_reversalAlarmTextField.mas_right).with.offset(5);
         make.top.equalTo(_reversalAlarmTextField.mas_bottom).with.offset(10);
@@ -640,33 +634,22 @@
         make.centerX.equalTo(enableLabel.centerX);
     }];
     
-    
     //日用量超量程
-    UILabel *dayOverFlow = [[UILabel alloc] init];
     dayOverFlow.text = @"日用量超量程";
-    dayOverFlow.textColor = [UIColor darkGrayColor];
-    dayOverFlow.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:dayOverFlow];
     [dayOverFlow mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
-        make.top.equalTo(longTimeNotServer.mas_bottom).with.offset(10);
+        make.top.equalTo(_longTimeNotServer.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(120, 25));
     }];
-    _limitOfUsageAlarmTextField = [[UITextField alloc] init];
-    _limitOfUsageAlarmTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _limitOfUsageAlarmTextField.font = [UIFont systemFontOfSize:13];
-    _limitOfUsageAlarmTextField.text = @"1000";
-    [_scrollView addSubview:_limitOfUsageAlarmTextField];
-    [_limitOfUsageAlarmTextField mas_makeConstraints:^(MASConstraintMaker *make) {
+    
+    _limitOfDayUsageAlarmTextField.text = @"1000";
+    [_limitOfDayUsageAlarmTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_longTimeNotServerTextField.mas_bottom).with.offset(10);
         make.centerX.equalTo(_scrollView.centerX);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
-    UILabel *dayOverFlowUnit = [[UILabel alloc] init];
+    
     dayOverFlowUnit.text = @"吨/天";
-    dayOverFlowUnit.textColor = [UIColor darkGrayColor];
-    dayOverFlowUnit.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:dayOverFlowUnit];
     [dayOverFlowUnit mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_limitOfUsageAlarmTextField.mas_right).with.offset(5);
         make.top.equalTo(_longTimeNotServerTextField.mas_bottom).with.offset(10);
@@ -675,17 +658,12 @@
     _limitOfDayUsageSwitchBtn = [[UISwitch alloc] init];
     [_scrollView addSubview:_limitOfDayUsageSwitchBtn];
     [_limitOfDayUsageSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(longTimeNotServer.mas_bottom).with.offset(5);
+        make.top.equalTo(_longTimeNotServer.mas_bottom).with.offset(5);
         make.centerX.equalTo(enableLabel.centerX);
     }];
     
-    
     //长时间没有用水
-    UILabel *longtimeNotUse = [[UILabel alloc] init];
     longtimeNotUse.text = @"长时间没有用水";
-    longtimeNotUse.textColor = [UIColor darkGrayColor];
-    longtimeNotUse.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:longtimeNotUse];
     [longtimeNotUse mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(dayOverFlow.mas_bottom).with.offset(10);
@@ -699,31 +677,21 @@
     }];
     
     //月用水上限
-    _limitOfUsageLabel = [[UILabel alloc] init];
     _limitOfUsageLabel.text = @"月用水上限";
-    _limitOfUsageLabel.textColor = [UIColor darkGrayColor];
-    _limitOfUsageLabel.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:_limitOfUsageLabel];
     [_limitOfUsageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(longtimeNotUse.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(120, 25));
     }];
-    _limitOfUsageAlarmTextField = [[UITextField alloc] init];
-    _limitOfUsageAlarmTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _limitOfUsageAlarmTextField.font = [UIFont systemFontOfSize:13];
+    
     _limitOfUsageAlarmTextField.text = @"0";
-    [_scrollView addSubview:_limitOfUsageAlarmTextField];
     [_limitOfUsageAlarmTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(longtimeNotUse.mas_bottom).with.offset(10);
         make.centerX.equalTo(_scrollView.centerX);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
-    UILabel *limitOfUsageAlarmUnit = [[UILabel alloc] init];
+    
     limitOfUsageAlarmUnit.text = @"吨/天";
-    limitOfUsageAlarmUnit.textColor = [UIColor darkGrayColor];
-    limitOfUsageAlarmUnit.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:limitOfUsageAlarmUnit];
     [limitOfUsageAlarmUnit mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_limitOfUsageAlarmTextField.mas_right).with.offset(5);
         make.top.equalTo(longtimeNotUse.mas_bottom).with.offset(10);
@@ -738,47 +706,33 @@
     
     
     //时段用水上限
-    UILabel *intervalLabel = [[UILabel alloc] init];
     intervalLabel.text = @"时段用水上限";
-    intervalLabel.textColor = [UIColor darkGrayColor];
-    intervalLabel.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:intervalLabel];
     [intervalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(_limitOfUsageLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(80, 25));
     }];
-    _fromLabel = [[UILabel alloc] init];
+    
     _fromLabel.text = @"从";
-    _fromLabel.font = [UIFont systemFontOfSize:10.0f];
-    [_scrollView addSubview:_fromLabel];
     [_fromLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(intervalLabel.mas_right);
         make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(15, 25));
     }];
-    _fromTextField = [[UITextField alloc] init];
-    _fromTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _fromTextField.font = [UIFont systemFontOfSize:13];
-    [_scrollView addSubview:_fromTextField];
+    
     [_fromTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_fromLabel.mas_right).with.offset(5);
         make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(60, 25));
     }];
-    _toLabel = [[UILabel alloc] init];
+    
     _toLabel.text = @"到";
-    _toLabel.font = [UIFont systemFontOfSize:10.f];
-    [_scrollView addSubview:_toLabel];
     [_toLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_fromTextField.mas_right).with.offset(5);
         make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(15, 25));
     }];
-    _toTextField = [[UITextField alloc] init];
-    _toTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _toTextField.font = [UIFont systemFontOfSize:13.0f];
-    [_scrollView addSubview:_toTextField];
+    
     [_toTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_toLabel.mas_right).with.offset(5);
         make.top.equalTo(_limitOfUsageAlarmTextField.mas_bottom).with.offset(10);
@@ -793,16 +747,14 @@
     
     
     //备注信息
-    _remarksLabel = [[UILabel alloc] init];
     _remarksLabel.text = @"备注信息";
     _remarksLabel.textColor = [UIColor blueColor];
-    _remarksLabel.font = [UIFont systemFontOfSize:10];
-    [_scrollView addSubview:_remarksLabel];
     [_remarksLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_scrollView.mas_left).with.offset(5);
         make.top.equalTo(intervalLabel.mas_bottom).with.offset(10);
         make.size.equalTo(CGSizeMake(50, 25));
     }];
+    
     _remarksTextView = [[UITextView alloc] init];
     _remarksTextView.font = [UIFont systemFontOfSize:13];
     _remarksTextView.layer.borderColor = [[UIColor blackColor] CGColor];
@@ -816,7 +768,6 @@
         make.right.equalTo(self.view.mas_right).with.offset(-10);
         make.height.equalTo(100);
     }];
-    
     
 }
 
@@ -899,53 +850,79 @@
 //    
 //    NSMutableArray *alarmIsNullArray = [NSMutableArray arrayWithObjects:arr,sevenT, nil];
 //    NSLog(@"最终---%@",alarmIsNullArray);
-//    
-//    [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"正在保存..." duration:2 autoHide:YES];
-//    NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/EditServlet1",self.ipLabel];
-//    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-//    NSDictionary *parameters = @{@"username":self.userNameLabel,
-//                                 @"password":self.passWordLabel,
-//                                 @"db":self.dbLabel,
-//                                 @"meter_id":self.meter_id,
-//                                 @"user_name":_installAddrTextField.text,
-//                                 @"user_addr":_user_addr,
-//                                 @"comm_id":_connectIDTextField.text,
-//                                 @"collector_id":_collectIDTextField.text,
-//                                 @"install_time":_installTimeTextField.text,
-//                                 @"meter_wid":_meter_idTextField.text,
-//                                 @"bz10":_wheelTypeTextField.text,
-//                                 @"collector_area":_regionTextField.text,
-//                                 @"meter_name":_meterTypeTextField.text,
-//                                 @"meter_cali":_caliberTextField.text,
-//                                 @"type":_remoteWayTextField.text,
-//                                 @"type_name":_remoteTypeTextField.text,
-//                                 @"x":_longitudeTextField.text,
-//                                 @"y":_latitudeTextField.text,
-//                                 @"time_first":_fromTextField.text,
-//                                 @"time_last":_toTextField.text,
-//                                 @"user_remark":_remarksTextView.text,
-//                                 @"alarmIsNull":alarmIsNullArray,
-//                                 @"save4edit":@"save4edit",
-//                                 };
-//    
-//    AFHTTPResponseSerializer *serializer = manager.responseSerializer;
-//    
-//    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
-//    
-//    NSURLSessionTask *task =[manager POST:logInUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
-//        
-//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"成功---%@",responseObject);
-//        [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存成功" duration:2 autoHide:YES];
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        NSLog(@"失败---%@",error);
-        [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存成功" duration:2 autoHide:YES];
-//    }];
-//
-//    [task resume];
+    
+    [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"正在保存..." duration:2 autoHide:YES];
+    NSString *logInUrl = [NSString stringWithFormat:@"http://%@/waterweb/EditServlet1",self.ipLabel];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    NSDictionary *parameters = @{@"username":self.userNameLabel,
+                                 @"password":self.passWordLabel,
+                                 @"db":self.dbLabel,
+                                 @"meter_id":self.meter_id,
+                                 @"user_name":_installAddrTextField.text,
+                                 @"user_addr":_user_addr,
+                                 @"comm_id":_connectIDTextField.text,
+                                 @"collector_id":_collectIDTextField.text,
+                                 @"install_time":_installTimeTextField.text,
+                                 @"meter_wid":_meter_idTextField.text,
+                                 @"bz10":_wheelTypeTextField.text,
+                                 @"collector_area":_regionTextField.text,
+                                 @"meter_name":_meterTypeTextField.text,
+                                 @"meter_cali":_caliberTextField.text,
+                                 @"type":_remoteWayTextField.text,
+                                 @"type_name":_remoteTypeTextField.text,
+                                 @"x":_longitudeTextField.text,
+                                 @"y":_latitudeTextField.text,
+                                 @"time_first":_fromTextField.text,
+                                 @"time_last":_toTextField.text,
+                                 @"user_remark":_remarksTextView.text,
+                                 //@"alarmIsNull":alarmIsNullArray,
+                                 @"save4edit":@"save4edit",
+                                 };
+    
+    AFHTTPResponseSerializer *serializer = manager.responseSerializer;
+    
+    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
+    
+    NSURLSessionTask *task =[manager POST:logInUrl parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (responseObject) {
+            
+            if ([[responseObject objectAtIndex:0] isEqualToString:@"1"]) {
+                
+                [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存成功" duration:2 autoHide:YES];
+            } else {
+                [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存失败" duration:2 autoHide:YES];
+            }
+        }
+        
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+
+        [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"保存失败" duration:2 autoHide:YES];
+        
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"错误信息：%@",error] preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        
+        [alertVC addAction:action];
+        [self presentViewController:alertVC animated:YES completion:^{
+            
+        }];
+        
+    }];
+
+    [task resume];
     return nil;
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [_scrollView removeFromSuperview];
+}
 
 // 代理方法实现
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
@@ -957,6 +934,119 @@
 }
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
     NSLog(@"%@",error);
+    [SVProgressHUD showErrorWithStatus:@"定位失败"];
+}
+
+- (void)changeAttr:(UIButton *)sender
+{
+    _pickerNameArr = [NSArray array];
+    _pickerTypeArr = [NSArray array];
+    
+    if (sender.tag == 500) {
+        _pickerTypeArr = nil;
+        i = 500;
+        NSString *string = [defaults objectForKey:@"area_list"];
+        _pickerNameArr = [string componentsSeparatedByString:@","];
+    }else if (sender.tag == 501) {
+        _pickerNameArr = nil;
+        i = 501;
+        NSString *string = [defaults objectForKey:@"meter_name_list"];
+        _pickerTypeArr = [string componentsSeparatedByString:@","];
+    }
+    
+    _pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, PanScreenHeight, PanScreenWidth, 200)];
+//    _pickerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"picker_bg.jpg"]];
+    _pickerView.backgroundColor = [UIColor colorWithRed:244/255.0f green:243/255.0f blue:244/255.0f alpha:1];
+    
+    _pickerView.delegate = self;
+    _pickerView.dataSource = self;
+    if (sender.tag == 500) {
+        for (int i = 0; i < _pickerNameArr.count; i++) {
+            if ([_pickerNameArr[i] isEqualToString:_regionTextField.text]) {
+                [_pickerView selectRow:i inComponent:0 animated:YES];
+                [_pickerView reloadComponent:0];
+            }
+        }
+    } else if (sender.tag == 501) {
+        for (int i = 0; i < _pickerTypeArr.count; i++) {
+            if ([_pickerTypeArr[i] isEqualToString:_meterTypeTextField.text]) {
+                [_pickerView selectRow:i inComponent:0 animated:YES];
+                [_pickerView reloadComponent:0];
+            }
+        }
+    }
+    if (flag == NO) {
+        
+        
+        [self.view addSubview:_pickerView];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            _pickerView.frame = CGRectMake(0, PanScreenHeight-200, PanScreenWidth, 200);
+        } completion:^(BOOL finished) {
+            
+            flag = !flag;
+        }];
+        
+    } else {
+        
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _pickerView.frame = CGRectMake(0, PanScreenHeight, PanScreenWidth, 200);
+            
+        } completion:^(BOOL finished) {
+            
+            [_pickerView removeFromSuperview];
+            flag = !flag;
+        }];
+        
+    }
+    
+}
+
+#pragma mark - UIPickerViewDataSource
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// returns the # of rows in each component..
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (i == 500) {
+        return _pickerNameArr.count;
+    } else
+    return _pickerTypeArr.count;
+}
+#pragma mark - UIPickerViewDelegate
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    if (i == 500) {
+        
+        return _pickerNameArr[row];
+    } else {
+        return _pickerTypeArr[row];
+    }
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if (i == 500) {
+        _regionTextField.text = [NSString stringWithFormat:@"%@",_pickerNameArr[row]];
+    } else if (i == 501) {
+        _meterTypeTextField.text = [NSString stringWithFormat:@"%@",_pickerTypeArr[row]];
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [UIView animateWithDuration:.3 animations:^{
+        
+        _pickerView.frame = CGRectMake(0, PanScreenHeight, PanScreenWidth, 200);
+        
+    } completion:^(BOOL finished) {
+        
+        [_pickerView removeFromSuperview];
+        flag = !flag;
+    }];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

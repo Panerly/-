@@ -32,9 +32,11 @@
     //请求天气信息
     //给个默认城市：杭州
     [self _requestWeatherData:@"杭州"];
-    
+//    [self locationCurrentCity];
+
     [self _createTableView];
 }
+
 
 - (void)_createTableView
 {
@@ -42,7 +44,8 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.scrollEnabled = NO;
-    
+#warning mark - disappear tableView
+    _tableView.alpha = 0;
 }
 
 - (void)locationCurrentCity
@@ -63,7 +66,7 @@
         //设置定位精度
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         //设置距离筛选
-        [self.locationManager setDistanceFilter:100];
+        [self.locationManager setDistanceFilter:10];
         //开始定位
         [self.locationManager startUpdatingLocation];
         [self.view addSubview:loading];
@@ -310,7 +313,7 @@
             if ([cityName rangeOfString:@"市"].location != NSNotFound) {
                  NSInteger index = [cityName rangeOfString:@"市"].location;
                                     cityName = [cityName substringToIndex:index];
-                                    }
+            }
             if ([cityName rangeOfString:@"自治区"].location != NSNotFound) {
                 NSInteger index = [cityName rangeOfString:@"自治区"].location;
                 cityName = [cityName substringToIndex:index];
@@ -331,13 +334,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [[UITableViewCell alloc] init];
-    cell.backgroundColor = [UIColor colorWithWhite:.5 alpha:.5];
+#warning mark - disappear tableViewCell
+    cell.backgroundColor = [UIColor colorWithWhite:.5 alpha:.0];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.text = [NSString stringWithFormat:@"待抄收 10 家"];
     cell.textLabel.textColor = [UIColor whiteColor];

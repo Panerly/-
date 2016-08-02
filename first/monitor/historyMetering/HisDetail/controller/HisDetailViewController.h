@@ -10,6 +10,7 @@
 #import "HisDetailModel.h"
 
 @interface HisDetailViewController : UIViewController
+- (IBAction)dateBtn:(UIButton *)sender;
 //用户号
 @property (weak, nonatomic) IBOutlet UILabel *meter_id;
 //用户名

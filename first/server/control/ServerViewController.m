@@ -7,10 +7,15 @@
 //
 
 #import "ServerViewController.h"
-
+#import "PayViewController.h"
 #import "HelpViewController.h"
 
 @interface ServerViewController ()<CLLocationManagerDelegate>
+
+{
+    UIButton *button;
+    NSMutableArray *arr;
+}
 
 @end
 
@@ -21,12 +26,40 @@
     
     [self _createBtn];
 }
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (!button) {
+        [self _createBtn];
+    }
+    for (int i = 100; i < 105; i++) {
+        
+        ((UIButton *)arr[i-100]).transform = CGAffineTransformTranslate(button.transform, 0, -PanScreenHeight/2);
+//        ((UIButton *)arr[i-100]).transform = CGAffineTransformRotate(button.transform, M_PI);
+    }
+    
+    for (int i = 100; i < 105; i++) {
+        
+        CGFloat duration = (i - 99) * 0.15;
+        
+        [UIView animateWithDuration:duration animations:^{
+            
+            ((UIButton *)arr[i-100]).transform = CGAffineTransformIdentity;
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+}
+
+
 - (void)_createBtn
 {
     self.view.backgroundColor = [UIColor whiteColor];
     CGFloat width = self.view.frame.size.width/6+15;
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];//button的类型;
+    button = [UIButton buttonWithType:UIButtonTypeCustom];//button的类型;
+    arr = [[NSMutableArray alloc] init];
+    [arr removeAllObjects];
     
     NSArray *titleArr = @[@"水费缴纳",@"意见建议",@"帮助说明",@"保修求助",@"服务热线"];
     NSArray *imageArr = @[@"waterCharg",@"suggestions",@"explain",@"help",@"call_icon"];
@@ -53,6 +86,8 @@
             button.titleEdgeInsets = UIEdgeInsetsMake(110, -button.titleLabel.bounds.size.width, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
             
             button.tag = 200+i+j+j;
+            
+            [arr addObject:button];
             
             [button addTarget:self action:@selector(waterCharge:) forControlEvents:UIControlEventTouchUpInside];
             
@@ -88,12 +123,14 @@
     }];
     
     HelpViewController *helpView = [[HelpViewController alloc] init];
+    PayViewController *pay = [[PayViewController alloc] init];
     switch (sender.tag) {
             
         case 200:
-            [alertVC addAction:action];
-            [self presentViewController:alertVC animated:YES completion:^{
-            }];
+//            [alertVC addAction:action];
+//            [self presentViewController:alertVC animated:YES completion:^{
+//            }];
+            [self.navigationController showViewController:pay sender:nil];
         break;
             
         case 201:
