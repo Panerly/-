@@ -612,7 +612,7 @@
                             <constraint firstItem="Rem-Zl-6WT" firstAttribute="leading" secondItem="5Z4-31-3YV" secondAttribute="leadingMargin" constant="-20" id="isy-wl-fej"/>
                             <constraint firstItem="ZNQ-kU-GIa" firstAttribute="centerX" secondItem="5Z4-31-3YV" secondAttribute="centerX" id="keg-gq-aBC"/>
                             <constraint firstItem="oFR-T5-0pF" firstAttribute="top" secondItem="1He-1j-IdL" secondAttribute="bottom" constant="10" id="pBK-ut-jj4">
-                                <variation key="widthClass=compact" constant="0.0"/>
+                                <variation key="widthClass=compact" constant="-64"/>
                             </constraint>
                             <constraint firstItem="1He-1j-IdL" firstAttribute="leading" secondItem="5Z4-31-3YV" secondAttribute="leadingMargin" constant="-20" id="uyg-Xb-rJv"/>
                             <constraint firstItem="3ds-4l-RvD" firstAttribute="centerY" secondItem="5Z4-31-3YV" secondAttribute="centerY" id="y2M-bl-XWZ">

@@ -20,6 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = @"杭水简介";
     _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, PanScreenWidth, PanScreenHeight+30)];
     _webView.delegate = self;
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.rabbitpre.com/m/jyyyI3E"]]];
@@ -55,6 +56,7 @@
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
+    [loading removeFromSuperview];
     [SCToastView showInView:self.view text:@"加载失败！请重试" duration:2.0f autoHide:YES];
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView

@@ -24,8 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    
-    //添加自控制器
+    //添加子控制器
     HomeViewController *home = [[HomeViewController alloc] init];
     [self addOneChlildVc:home title:@"首页" imageName:@"home2@2x" selectedImageName:@"home_selected2@2x"];
     
@@ -44,8 +43,6 @@
 
 - (void)addOneChlildVc:(UIViewController *)childVc title:(NSString *)title imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName
 {
-//        childVc.view.backgroundColor = [UIColor whiteColor];
-    
     //自定义tabbarItem的颜色
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                        [UIColor blackColor], NSForegroundColorAttributeName,

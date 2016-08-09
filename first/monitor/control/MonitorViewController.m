@@ -31,10 +31,12 @@
 //    
 //} AnimationType;
 
-@interface MonitorViewController ()<BHInfiniteScrollViewDelegate>
+@interface MonitorViewController ()<BHInfiniteScrollViewDelegate, UIWebViewDelegate>
 {
     UIButton *button;
     NSMutableArray *arr;
+    UIWebView *_webView;
+    UIImageView *loading;
 }
 @property (nonatomic, strong) BHInfiniteScrollView* infinitePageView;
 @end
@@ -43,7 +45,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:231.0f/255 green:231.0f/255 blue:231.0f/255 alpha:1];
+//    self.view.backgroundColor = [UIColor colorWithRed:231.0f/255 green:231.0f/255 blue:231.0f/255 alpha:1];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_server.jpg"]];
 
 //    [self _createScrollView];
 //    [self _createButton];
@@ -60,10 +63,8 @@
     [self _createPicPlay];
 
     for (int i = 100; i < 104; i++) {
-            
-//        ((UIButton *)arr[i-100]).transform = CGAffineTransformTranslate(button.transform, 0, -PanScreenHeight/2);
+        
         ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeScale(.1, .1);
-
     }
     
     for (int i = 100; i < 104; i++) {
@@ -96,7 +97,7 @@
     _infinitePageView.dotSize = 10;
     _infinitePageView.pageControlAlignmentOffset = CGSizeMake(0, 10);
 //    _infinitePageView.dotColor = [UIColor colorWithRed:91.0f green:154.0f blue:227.0f alpha:.9];
-    _infinitePageView.selectedDotColor = [UIColor blueColor];
+    _infinitePageView.selectedDotColor = [UIColor colorWithRed:91.0f/255 green:154.0f/255 blue:227.0f/255 alpha:.9];
 //    infinitePageView.titleView.textColor = [UIColor whiteColor];
 //    infinitePageView.titleView.margin = 30;
 //    infinitePageView.titleView.hidden = YES;
@@ -121,8 +122,74 @@
 //点击图片做出的响应
 - (void)infiniteScrollView:(BHInfiniteScrollView *)infiniteScrollView didSelectItemAtIndex:(NSInteger)index
 {
+    UIButton *backBtn;
+    if (index == 0) {
+        if (!_webView) {
+            
+            _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64, PanScreenWidth, PanScreenHeight-64)];
+            _webView.delegate = self;
+            backBtn = [[UIButton alloc] init];
+        }
+        [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:introduction]]];
+        backBtn.tintColor = [UIColor redColor];
+        [backBtn setImage:[UIImage imageNamed:@"close@2x"] forState:UIControlStateNormal];
+        [backBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+        [_webView addSubview:backBtn];
+        _webView.transform = CGAffineTransformMakeScale(.01, .01);
+        [UIView animateWithDuration:.3 animations:^{
+            _webView.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+        }];
+
+        [backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_webView.mas_left);
+            make.top.equalTo(_webView.mas_top);
+            make.size.equalTo(CGSizeMake(50, 50));
+        }];
+        
+        UIScreenEdgePanGestureRecognizer *gesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(backAction)];
+        [_webView addGestureRecognizer:gesture];
+        
+        [self.view addSubview:_webView];
+    } else {
     IntroductionViewController *intrVC = [[IntroductionViewController alloc] init];
     [self.navigationController showViewController:intrVC sender:nil];
+    }
+}
+
+- (void)backAction
+{
+    [UIView animateWithDuration:.3 animations:^{
+        _webView.transform = CGAffineTransformMakeScale(.01, .01);
+        loading.transform = CGAffineTransformMakeScale(.01, .01);
+    } completion:^(BOOL finished) {
+        [_webView removeFromSuperview];
+        [loading removeFromSuperview];
+    }];
+}
+
+
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    //刷新控件
+    
+    loading = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    loading.center = self.view.center;
+    
+    UIImage *image = [UIImage sd_animatedGIFNamed:@"刷新1"];
+    [loading setImage:image];
+    [self.view addSubview:loading];
+}
+#pragma mark - UIWebViewdelegate
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [SCToastView showInView:_webView text:@"加载失败！请稍后重试" duration:2.0f autoHide:YES];
+    [loading removeFromSuperview];
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [loading removeFromSuperview];
 }
 
 

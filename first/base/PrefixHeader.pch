@@ -23,6 +23,7 @@
 #define weatherAPIkey @"87aa67335bd8e0739a06cfccc6edecb5"
 #define weatherAPI @"http://apis.baidu.com/apistore/weatherservice/cityname"
 #define hisWeatherAPI @"http://apis.baidu.com/apistore/weatherservice/recentweathers"
+#define introduction @"http://www.hzsberp.com:9999/hzsb"
 //#import "Masonry.h"
 
 

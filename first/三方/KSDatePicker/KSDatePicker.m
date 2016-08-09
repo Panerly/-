@@ -184,7 +184,8 @@
     self.center = [UIApplication sharedApplication].keyWindow.center;
 }
 - (void)hidden
-{   [_maskView removeFromSuperview];
+{
+    [_maskView removeFromSuperview];
     [self removeFromSuperview];
 }
 

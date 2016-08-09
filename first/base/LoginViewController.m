@@ -14,7 +14,7 @@
 #import "ConfigViewController.h"
 //#import "KeychainItemWrapper.h"
 
-@interface LoginViewController ()<UIViewControllerTransitioningDelegate>
+@interface LoginViewController ()<UIViewControllerTransitioningDelegate,UITextFieldDelegate>
 {
     HyLoglnButton *logInButton;
     UIImageView *_hsLogoView;
@@ -252,6 +252,7 @@
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:config];
+    manager.requestSerializer.timeoutInterval= 10;
     
     NSDictionary *parameters = @{@"username":self.userName.text,
                                  @"password":self.passWord.text,
@@ -259,7 +260,7 @@
                                  };
     
     AFHTTPResponseSerializer *serializer = manager.responseSerializer;
-    
+        
     serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"text/html"];
     
     __weak typeof(self) weakSelf = self;
@@ -347,16 +348,33 @@
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"服务器连接失败!" preferredStyle:UIAlertControllerStyleAlert];
-        
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             
         }];
-        
-        [alertVC addAction:action];
-        [self presentViewController:alertVC animated:YES completion:^{
+        if (error.code == -1001) {
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"请求超时!" preferredStyle:UIAlertControllerStyleAlert];
             
-        }];
+            [alertVC addAction:action];
+            [self presentViewController:alertVC animated:YES completion:^{
+                
+            }];
+        } else if (error.code == 3840){
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"配置错误!" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alertVC addAction:action];
+            [self presentViewController:alertVC animated:YES completion:^{
+                
+            }];
+
+        }else {
+            
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"服务器连接失败!" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alertVC addAction:action];
+            [self presentViewController:alertVC animated:YES completion:^{
+                
+            }];
+        }
         
         [logInButton ErrorRevertAnimationCompletion:^{
             
@@ -367,6 +385,8 @@
     [task resume];
     }
 }
+
+
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
@@ -386,6 +406,11 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    _userName.delegate = self;
+    _passWord.delegate = self;
+    _userName.returnKeyType = UIReturnKeyNext;
+    _passWord.returnKeyType = UIReturnKeyDone;
+    
     _flag = 1;
     [UIView animateWithDuration:.25 animations:^{
         
@@ -418,5 +443,32 @@
     [self presentViewController:[[ConfigViewController alloc] init] animated:YES completion:^{
         [configVC setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
     }];
+}
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField;
+{
+    
+    if (textField.returnKeyType == UIReturnKeyNext) {
+        [_userName resignFirstResponder];
+        [_passWord becomeFirstResponder];
+    }
+    if (textField.returnKeyType == UIReturnKeyDone) {
+        //用户结束输入
+        [textField resignFirstResponder];
+        _flag = 1;
+        [UIView animateWithDuration:.25 animations:^{
+            
+            _hsLogoView.transform = CGAffineTransformIdentity;
+            _userName.transform = CGAffineTransformIdentity;
+            _passWord.transform = CGAffineTransformIdentity;
+            _userBaseView.transform = CGAffineTransformIdentity;
+            
+            logInButton.frame = CGRectMake(20, CGRectGetHeight(self.view.bounds) - (40 + 80), [UIScreen mainScreen].bounds.size.width - 40, 40);
+            [_passWord resignFirstResponder];
+            [_userName resignFirstResponder];
+        }];
+    }
+    
+    return YES;
 }
 @end

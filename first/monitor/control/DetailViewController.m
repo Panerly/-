@@ -31,6 +31,8 @@
     [self _requestData];
     
     [self _setValue];
+    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_server.jpg"]];
 }
 - (void)_setValue
 {

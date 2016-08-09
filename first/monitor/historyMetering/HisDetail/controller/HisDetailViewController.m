@@ -194,10 +194,10 @@ static CGFloat i = 0;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat avg = i / _dataArr.count;
-    NSInteger m =  [((HisDetailModel *)self.dataArr[indexPath.row]).collect_avg floatValue];
-    NSLog(@"%ld",m);
-    UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"百分比用量" message:[NSString stringWithFormat:@"\n平均流量值：%lfm³\n\n高于平均用水量：%lfm³",avg,m-avg] preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"百分比用量" message:[NSString stringWithFormat:@"\n平均流量值：%lfm³\n\n低于平均用水量：%lfm³",avg,avg-m] preferredStyle:UIAlertControllerStyleAlert];
+    float m =  [((HisDetailModel *)self.dataArr[indexPath.row]).collect_avg floatValue];
+
+    UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"平均用量值" message:[NSString stringWithFormat:@"\n本期流量值：%lf m³\n\n平均流量值：%lf m³\n\n高于平均用水量：%lf m³",m,avg,m-avg] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"平均用量值" message:[NSString stringWithFormat:@"\n本期流量值：%lf m³\n\n平均流量值：%lf m³\n\n低于平均用水量：%lf m³",m,avg,avg-m] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];

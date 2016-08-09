@@ -12,5 +12,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *money;
 - (IBAction)payBtn:(id)sender;
 @property (weak, nonatomic) IBOutlet UITextField *moneyNum;
+@property (weak, nonatomic) IBOutlet UILabel *createTime;
 
 @end

@@ -51,7 +51,8 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-- (IBAction)curveAction:(id)sender;
+@property (nonatomic, strong) UIButton *btnAction;
+- (IBAction)curveAction:(UIButton *)sender;
 
 @property (weak, nonatomic) IBOutlet UIView *curveView;
 

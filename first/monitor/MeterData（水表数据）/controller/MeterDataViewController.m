@@ -10,11 +10,14 @@
 #import "MeterDataTableViewCell.h"
 #import "MeterDataModel.h"
 #import "KSDatePicker.h"
+#import "MSSCalendarViewController.h"
+#import "MSSCalendarDefine.h"
 
-@interface MeterDataViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface MeterDataViewController ()<UITableViewDelegate, UITableViewDataSource,MSSCalendarViewControllerDelegate>
 {
     NSString *cellID;
     NSUserDefaults *defaults;
+    MSSCalendarViewController *cvc;
 }
 @end
 
@@ -27,46 +30,52 @@
     
     cellID = @"meterDataID";
     
-    self.view.backgroundColor = [UIColor whiteColor];
-    
     [self _getUserInfo];
     
     [self _getSysTime];
     
     [self _setTableView];
     
-    [self _createDatePicker];
+    UIBarButtonItem *calender = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"calendar@2x"] style:UIBarButtonItemStylePlain target:self action:@selector(openCalender)];
+    self.navigationItem.rightBarButtonItems = @[calender];
 }
 
-- (void)_createDatePicker
+- (void)openCalender
 {
-    UIButton *buttonFrom = [[UIButton alloc] init];
-    buttonFrom.backgroundColor = [UIColor clearColor];
-    buttonFrom.tag = 100;
-    [buttonFrom addTarget:self action:@selector(pick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:buttonFrom];
-    [buttonFrom mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.mas_left).with.offset(35);
-        make.top.equalTo(self.view.mas_top).with.offset(100);
-        make.right.equalTo(self.view.centerY).with.offset(-150);
-        make.height.equalTo(35);
-    }];
-    
-    UIButton *buttonTo = [[UIButton alloc] init];
-    buttonTo.backgroundColor = [UIColor clearColor];
-    buttonTo.tag = 101;
-    [buttonTo addTarget:self action:@selector(pick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:buttonTo];
-    [buttonTo mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.center.y);
-        make.top.equalTo(self.view.mas_top).with.offset(100);
-        make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(35);
-    }];
+    cvc = [[MSSCalendarViewController alloc] init];
+    cvc.limitMonth = 12 * 15;// 显示几个月的日历
+    /*
+     MSSCalendarViewControllerLastType 只显示当前月之前
+     MSSCalendarViewControllerMiddleType 前后各显示一半
+     MSSCalendarViewControllerNextType 只显示当前月之后
+     */
+    cvc.type = MSSCalendarViewControllerLastType;
+    cvc.beforeTodayCanTouch = YES;// 今天之后的日期是否可以点击
+    cvc.afterTodayCanTouch = NO;// 今天之前的日期是否可以点击
+    cvc.startDate = [self.fromDate.text integerValue];// 选中开始时间
+    cvc.endDate = [self.toDate.text integerValue];// 选中结束时间
+    /*以下两个属性设为YES,计算中国农历非常耗性能（在5s加载15年以内的数据没有影响）*/
+    cvc.showChineseHoliday = YES;// 是否展示农历节日
+    cvc.showChineseCalendar = YES;// 是否展示农历
+    cvc.showHolidayDifferentColor = YES;// 节假日是否显示不同的颜色
+    cvc.showAlertView = YES;// 是否显示提示弹窗
+    cvc.delegate = self;
+    [self presentViewController:cvc animated:YES completion:nil];
 }
-- (void)pick:(UIButton *)sender
+
+- (void)calendarViewConfirmClickWithStartDate:(NSInteger)startDate endDate:(NSInteger)endDate
 {
-    }
+    _fromDate.text = [NSString stringWithFormat:@"%ld",(long)startDate];
+    _toDate.text = [NSString stringWithFormat:@"%ld",(long)endDate];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat: @"yyyy-MM-dd"];
+    NSString *startDateString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[_fromDate.text integerValue]]];
+    NSString *endDateString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[_toDate.text integerValue]]];
+    _fromDate.text = [NSString stringWithFormat:@"%@",startDateString];
+    _toDate.text = [NSString stringWithFormat:@"%@",endDateString];
+}
+
+
 
 - (void)_setTableView
 {
@@ -127,27 +136,35 @@
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             
             _dataArr = [NSMutableArray array];
+            [_dataArr removeAllObjects];
             
             NSError *error = nil;
             
             if (responseObject) {
                 
-                [SVProgressHUD showInfoWithStatus:@"加载成功"];
-                
-                NSDictionary *dicResponse = [responseObject objectForKey:@"meters"];
-                
-                self.dataNum.text = [NSString stringWithFormat:@"数    量: %@",[responseObject objectForKey:@"count"]];
-                
-                for (NSDictionary *dic in dicResponse) {
+                if ([[responseObject objectForKey:@"count"] integerValue] == 0) {
                     
-                    self.userNameLabel.text = [NSString stringWithFormat:@"用户名: %@",[dic objectForKey:@"user_name"]];
-                    self.userNumLabel.text = [NSString stringWithFormat:@"用户号: %@",[dic objectForKey:@"meter_id"]];
+                    [SCToastView showInView:self.view text:@"暂无数据!" duration:1.5 autoHide:YES];
                     
-                    MeterDataModel *meterDataModel = [[MeterDataModel alloc] initWithDictionary:dic error:&error];
-                    [_dataArr addObject:meterDataModel];
+                } else {
+
+                    [SVProgressHUD showInfoWithStatus:@"加载成功"];
+                    
+                    NSDictionary *dicResponse = [responseObject objectForKey:@"meters"];
+                    
+                    self.dataNum.text = [NSString stringWithFormat:@"数    量: %@",[responseObject objectForKey:@"count"]];
+                    
+                    for (NSDictionary *dic in dicResponse) {
+                        
+                        self.userNameLabel.text = [NSString stringWithFormat:@"用户名: %@",[dic objectForKey:@"user_name"]];
+                        self.userNumLabel.text = [NSString stringWithFormat:@"用户号: %@",[dic objectForKey:@"meter_id"]];
+                        
+                        MeterDataModel *meterDataModel = [[MeterDataModel alloc] initWithDictionary:dic error:&error];
+                        [_dataArr addObject:meterDataModel];
+                    }
+                    
+                    [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
-                
-                [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
             }
             
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -236,6 +253,7 @@
     [_callerLabel resignFirstResponder];
     [_fromDate resignFirstResponder];
     [_toDate resignFirstResponder];
+
     [self _requestData:_fromDate.text :_toDate.text :_callerLabel.text];
 }
 - (IBAction)dateBtn:(UIButton *)sender {

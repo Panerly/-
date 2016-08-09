@@ -18,14 +18,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="idH-Oa-yFT">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="idH-Oa-yFT">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="ZSM-dh-Hvg"/>
                                     <constraint firstAttribute="width" constant="50" id="ckQ-ej-Xvq"/>
                                 </constraints>
-                                <state key="normal" title="配置">
+                                <state key="normal" image="config@2x.png">
                                     <color key="titleColor" red="0.26338778151780984" green="0.87773278977393321" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -330,24 +330,24 @@
                                         <exclude reference="02H-4s-DpS"/>
                                         <exclude reference="uzM-SN-2j8"/>
                                         <exclude reference="zH7-7V-sgm"/>
-                                        <exclude reference="VdH-Hn-GFP"/>
-                                        <exclude reference="eET-0c-pTZ"/>
-                                        <exclude reference="TdQ-Bv-kMq"/>
-                                        <exclude reference="i08-A0-WIp"/>
-                                        <exclude reference="8Je-Tr-rtz"/>
-                                        <exclude reference="Svz-LD-4Y7"/>
-                                        <exclude reference="SSl-EG-gxM"/>
-                                        <exclude reference="rC6-Vq-6Ce"/>
-                                        <exclude reference="iEJ-Zs-AVa"/>
-                                        <exclude reference="nYk-qF-z5a"/>
+                                        <exclude reference="NbC-CC-127"/>
+                                        <exclude reference="VjJ-WL-W2S"/>
                                         <exclude reference="LIG-Vu-fsn"/>
                                         <exclude reference="RqB-Nh-1Ez"/>
                                         <exclude reference="z6W-rL-Hz9"/>
                                         <exclude reference="zQn-mx-ulK"/>
-                                        <exclude reference="NbC-CC-127"/>
-                                        <exclude reference="VjJ-WL-W2S"/>
+                                        <exclude reference="SSl-EG-gxM"/>
+                                        <exclude reference="rC6-Vq-6Ce"/>
                                         <exclude reference="2mr-bJ-Ixe"/>
                                         <exclude reference="NZ6-sB-1BR"/>
+                                        <exclude reference="8Je-Tr-rtz"/>
+                                        <exclude reference="Svz-LD-4Y7"/>
+                                        <exclude reference="TdQ-Bv-kMq"/>
+                                        <exclude reference="i08-A0-WIp"/>
+                                        <exclude reference="VdH-Hn-GFP"/>
+                                        <exclude reference="eET-0c-pTZ"/>
+                                        <exclude reference="iEJ-Zs-AVa"/>
+                                        <exclude reference="nYk-qF-z5a"/>
                                     </mask>
                                 </variation>
                                 <variation key="widthClass=compact">
@@ -365,24 +365,24 @@
                                         <exclude reference="02H-4s-DpS"/>
                                         <exclude reference="uzM-SN-2j8"/>
                                         <include reference="zH7-7V-sgm"/>
-                                        <include reference="VdH-Hn-GFP"/>
-                                        <include reference="eET-0c-pTZ"/>
-                                        <include reference="TdQ-Bv-kMq"/>
-                                        <include reference="i08-A0-WIp"/>
-                                        <include reference="8Je-Tr-rtz"/>
-                                        <include reference="Svz-LD-4Y7"/>
-                                        <include reference="SSl-EG-gxM"/>
-                                        <include reference="rC6-Vq-6Ce"/>
-                                        <include reference="iEJ-Zs-AVa"/>
-                                        <include reference="nYk-qF-z5a"/>
+                                        <include reference="NbC-CC-127"/>
+                                        <include reference="VjJ-WL-W2S"/>
                                         <exclude reference="LIG-Vu-fsn"/>
                                         <include reference="RqB-Nh-1Ez"/>
                                         <exclude reference="z6W-rL-Hz9"/>
                                         <include reference="zQn-mx-ulK"/>
-                                        <include reference="NbC-CC-127"/>
-                                        <include reference="VjJ-WL-W2S"/>
+                                        <include reference="SSl-EG-gxM"/>
+                                        <include reference="rC6-Vq-6Ce"/>
                                         <include reference="2mr-bJ-Ixe"/>
                                         <include reference="NZ6-sB-1BR"/>
+                                        <include reference="8Je-Tr-rtz"/>
+                                        <include reference="Svz-LD-4Y7"/>
+                                        <include reference="TdQ-Bv-kMq"/>
+                                        <include reference="i08-A0-WIp"/>
+                                        <include reference="VdH-Hn-GFP"/>
+                                        <include reference="eET-0c-pTZ"/>
+                                        <include reference="iEJ-Zs-AVa"/>
+                                        <include reference="nYk-qF-z5a"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -418,7 +418,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="aQC-kp-djd" secondAttribute="trailing" constant="20" id="SUd-V6-GWa"/>
                             <constraint firstItem="aQC-kp-djd" firstAttribute="centerX" secondItem="S2v-gQ-Lo4" secondAttribute="centerX" id="dTS-ps-Ote"/>
                             <constraint firstItem="idH-Oa-yFT" firstAttribute="top" secondItem="5bc-NU-PQn" secondAttribute="bottom" id="gNs-WJ-kZ0">
-                                <variation key="widthClass=compact" constant="-10"/>
+                                <variation key="widthClass=compact" constant="0.0"/>
                             </constraint>
                             <constraint firstItem="aQC-kp-djd" firstAttribute="leading" secondItem="S2v-gQ-Lo4" secondAttribute="leadingMargin" constant="20" id="n0D-6I-qmx">
                                 <variation key="widthClass=compact" constant="-20"/>
@@ -490,6 +490,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="config@2x.png" width="200" height="200"/>
         <image name="passWord.png" width="200" height="200"/>
         <image name="user.png" width="200" height="200"/>
     </resources>

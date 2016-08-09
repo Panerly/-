@@ -17,6 +17,7 @@
 {
     NSString *identy;
     NSString *userIdenty;
+    NSUInteger fileSize;
 }
 
 @end
@@ -33,6 +34,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    
+    fileSize = [[SDImageCache sharedImageCache] getSize];
     [_tableView reloadData];
 }
 
@@ -77,7 +80,7 @@
         return @"账户设置";
     }
     else if (section == 1) {
-        return @"";
+        return @"缓存";
     }
     return @"";
 }
@@ -104,10 +107,19 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if (indexPath.section == 1 && indexPath.row == 0) {
-//        NSUInteger fileSize = [[SDImageCache sharedImageCache] getSize];
-//        cell.textLabel.text = [NSString stringWithFormat:@"点击清理      %.1fM",fileSize / 1024.0 / 1024.0];
-//        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        cell.backgroundColor = [UIColor clearColor];
+        UIImageView *cleanImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"moreClear@2x"]];
+        cleanImageView.frame = CGRectMake(10, (50-30)/2, 30, 30);
+        [cell addSubview:cleanImageView];
+        
+        cell.textLabel.text = @"点击清理";
+        cell.textLabel.textColor = [UIColor colorWithRed:81/255.0f green:155/255.0f blue:248/255.0f alpha:1];
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(PanScreenWidth-60, (50-25)/2, 60, 25)];
+        label.text = [NSString stringWithFormat:@"%.1fM",fileSize / 1024.0 / 1024.0];
+        label.font = [UIFont boldSystemFontOfSize:18];
+        [cell addSubview:label];
+        
         return cell;
     }
     if (indexPath.section == 2 && indexPath.row == 0) {
@@ -128,13 +140,27 @@
         
         [self.navigationController showViewController:userInfoVC sender:nil];
     }
-//    if (indexPath.row == 1 && indexPath.row == 0) {
-//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"清理缓存" message:@"是否清理缓存？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        alert.delegate = self;
-//        [alert show];
-//        [tableView cellForRowAtIndexPath:indexPath].selected = NO;
-//        
-//    }
+    if (indexPath.section == 1 && indexPath.row == 0) {
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"清理缓存" message:@"是否清理缓存？" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [[SDImageCache sharedImageCache] cleanDisk];
+            fileSize = [[SDImageCache sharedImageCache] getSize];
+            [self.tableView reloadData];
+            [SCToastView showInView:self.view text:@"已清理" duration:.5f autoHide:YES];
+        }];
+        [alert addAction:cancel];
+        [alert addAction:confirm];
+        
+        [self presentViewController:alert animated:YES completion:^{
+            
+        }];
+        
+        
+        [tableView cellForRowAtIndexPath:indexPath].selected = NO;
+        
+    }
     if (indexPath.section == 2 && indexPath.row == 0) {
         
         LoginViewController *loginVC = [[LoginViewController alloc] init];
@@ -143,15 +169,6 @@
         loginVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
     }
 }
-
-//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//    if (buttonIndex == 1) {
-//        [[SDImageCache sharedImageCache]clearDisk];
-////        [self countCatchSize];
-//        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
-//    }
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

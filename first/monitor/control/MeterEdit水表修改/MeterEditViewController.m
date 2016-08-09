@@ -11,8 +11,17 @@
 @interface MeterEditViewController ()<CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate>
 {
     NSMutableArray *alarmNsetList;
+    //所属区域
     NSArray *_pickerNameArr;
+    //表具类型
     NSArray *_pickerTypeArr;
+    //口径
+    NSArray *_pickerCaliArr;
+    //远传方式
+    NSArray *_pickerWayArr;
+    //远传类型
+    NSArray *_pickerRemoTypeArr;
+    
     NSUserDefaults *defaults;
     BOOL flag;
 }
@@ -440,6 +449,17 @@ static int i = 0;
         make.right.equalTo(self.view.right).with.offset(-10);
         make.height.equalTo(25);
     }];
+    UIButton *button3 = [[UIButton alloc] init];
+    button3.tag = 502;
+    button3.backgroundColor = [UIColor clearColor];
+    [button3 addTarget:self action:@selector(changeAttr:) forControlEvents:UIControlEventTouchUpInside];
+    [_scrollView addSubview:button3];
+    [button3 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_caliberLabel.mas_right);
+        make.top.equalTo(_meterTypeTextField.mas_bottom).with.offset(10);
+        make.right.equalTo(self.view.right).with.offset(-10);
+        make.height.equalTo(25);
+    }];
 
     remoteWay.text = @"远传方式: ";
     [remoteWay mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -449,6 +469,17 @@ static int i = 0;
     }];
     
     [_remoteWayTextField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(remoteWay.mas_right);
+        make.top.equalTo(_caliberTextField.mas_bottom).with.offset(10);
+        make.right.equalTo(self.view.right).with.offset(-10);
+        make.height.equalTo(25);
+    }];
+    UIButton *button4 = [[UIButton alloc] init];
+    button4.tag = 503;
+    button4.backgroundColor = [UIColor clearColor];
+    [button4 addTarget:self action:@selector(changeAttr:) forControlEvents:UIControlEventTouchUpInside];
+    [_scrollView addSubview:button4];
+    [button4 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(remoteWay.mas_right);
         make.top.equalTo(_caliberTextField.mas_bottom).with.offset(10);
         make.right.equalTo(self.view.right).with.offset(-10);
@@ -469,7 +500,17 @@ static int i = 0;
         make.right.equalTo(self.view.right).with.offset(-10);
         make.height.equalTo(25);
     }];
-    
+    UIButton *button5 = [[UIButton alloc] init];
+    button5.tag = 504;
+    button5.backgroundColor = [UIColor clearColor];
+    [button5 addTarget:self action:@selector(changeAttr:) forControlEvents:UIControlEventTouchUpInside];
+    [_scrollView addSubview:button5];
+    [button5 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(remoteType.mas_right);
+        make.top.equalTo(_remoteWayTextField.mas_bottom).with.offset(10);
+        make.right.equalTo(self.view.right).with.offset(-10);
+        make.height.equalTo(25);
+    }];
     
     _longitudeLabel.text = @"经度: ";
     [_longitudeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -926,7 +967,7 @@ static int i = 0;
 
 // 代理方法实现
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
-    NSLog(@"%f,%f",newLocation.coordinate.latitude,newLocation.coordinate.longitude);
+    NSLog(@"经度：%f,纬度：%f",newLocation.coordinate.latitude,newLocation.coordinate.longitude);
     [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"定位成功" duration:2 autoHide:YES];
     _longitudeTextField.text = [NSString stringWithFormat:@"%f",newLocation.coordinate.longitude];
     _latitudeTextField.text = [NSString stringWithFormat:@"%f",newLocation.coordinate.latitude];
@@ -941,17 +982,46 @@ static int i = 0;
 {
     _pickerNameArr = [NSArray array];
     _pickerTypeArr = [NSArray array];
+    _pickerCaliArr = [NSArray array];
+    _pickerWayArr = [NSArray array];
+    _pickerRemoTypeArr = [NSArray array];
     
-    if (sender.tag == 500) {
-        _pickerTypeArr = nil;
+    _pickerNameArr = nil;
+    _pickerTypeArr = nil;
+    _pickerCaliArr = nil;
+    _pickerWayArr = nil;
+    _pickerRemoTypeArr = nil;
+    
+    /*//所属区域
+     NSArray *_pickerNameArr;
+     //表具类型
+     NSArray *_pickerTypeArr;
+     //口径
+     NSArray *_pickerCaliArr;
+     //远传方式
+     NSArray *_pickerWayArr;
+     //远传类型
+     NSArray *_pickerRemoTypeArr;*/
+    if (sender.tag == 500) {//所属区域
         i = 500;
         NSString *string = [defaults objectForKey:@"area_list"];
         _pickerNameArr = [string componentsSeparatedByString:@","];
-    }else if (sender.tag == 501) {
-        _pickerNameArr = nil;
+    }else if (sender.tag == 501) {//表具类型
         i = 501;
         NSString *string = [defaults objectForKey:@"meter_name_list"];
         _pickerTypeArr = [string componentsSeparatedByString:@","];
+    } else if (sender.tag == 502) {//口径
+        i = 502;
+        NSString *string = [defaults objectForKey:@"meter_cali_list"];
+        _pickerCaliArr = [string componentsSeparatedByString:@","];
+    } else if (sender.tag == 503) {//远传方式
+        i = 503;
+        NSString *string = [defaults objectForKey:@"type_list"];
+        _pickerWayArr = [string componentsSeparatedByString:@","];
+    } else if (sender.tag == 504) {//远传类型
+        i = 504;
+        NSString *string = [defaults objectForKey:@"sb_type_list"];
+        _pickerRemoTypeArr = [string componentsSeparatedByString:@","];
     }
     
     _pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, PanScreenHeight, PanScreenWidth, 200)];
@@ -974,9 +1044,30 @@ static int i = 0;
                 [_pickerView reloadComponent:0];
             }
         }
+    } else if (sender.tag == 502) {
+        for (int i = 0; i < _pickerCaliArr.count; i++) {
+            if ([_pickerCaliArr[i] isEqualToString:_caliberTextField.text]) {
+                [_pickerView selectRow:i inComponent:0 animated:YES];
+                [_pickerView reloadComponent:0];
+            }
+        }
+    }else if (sender.tag == 503) {
+        for (int i = 0; i < _pickerWayArr.count; i++) {
+            if ([_pickerWayArr[i] isEqualToString:_remoteWayTextField.text]) {
+                [_pickerView selectRow:i inComponent:0 animated:YES];
+                [_pickerView reloadComponent:0];
+            }
+        }
+    }else if (sender.tag == 504) {
+        for (int i = 0; i < _pickerRemoTypeArr.count; i++) {
+            if ([_pickerRemoTypeArr[i] isEqualToString:_remoteTypeTextField.text]) {
+                [_pickerView selectRow:i inComponent:0 animated:YES];
+                [_pickerView reloadComponent:0];
+            }
+        }
     }
+    
     if (flag == NO) {
-        
         
         [self.view addSubview:_pickerView];
         
@@ -1014,17 +1105,38 @@ static int i = 0;
 {
     if (i == 500) {
         return _pickerNameArr.count;
-    } else
-    return _pickerTypeArr.count;
+    } else if(i == 501){
+        return _pickerTypeArr.count;
+    }else if(i == 502){
+        return _pickerCaliArr.count;
+    }else if(i == 503){
+        return _pickerWayArr.count;
+    }else if(i == 504){
+        return _pickerRemoTypeArr.count;
+    }
+    return 0;
 }
 #pragma mark - UIPickerViewDelegate
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
     if (i == 500) {
         
         return _pickerNameArr[row];
-    } else {
+        
+    } else if(i == 501) {
+        
         return _pickerTypeArr[row];
-    }
+        
+    } else if (i == 502) {
+        
+        return _pickerCaliArr[row];
+        
+    } else if (i == 503) {
+        
+        return _pickerWayArr[row];
+        
+    }else
+        
+        return _pickerRemoTypeArr[row];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -1033,6 +1145,12 @@ static int i = 0;
         _regionTextField.text = [NSString stringWithFormat:@"%@",_pickerNameArr[row]];
     } else if (i == 501) {
         _meterTypeTextField.text = [NSString stringWithFormat:@"%@",_pickerTypeArr[row]];
+    } else if (i == 502) {
+        _caliberTextField.text = [NSString stringWithFormat:@"%@",_pickerCaliArr[row]];
+    } else if (i == 503) {
+        _remoteWayTextField.text = [NSString stringWithFormat:@"%@",_pickerWayArr[row]];
+    } else if (i == 504) {
+        _remoteTypeTextField.text = [NSString stringWithFormat:@"%@",_pickerRemoTypeArr[row]];
     }
 }
 

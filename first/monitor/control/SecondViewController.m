@@ -106,9 +106,9 @@
 
 - (IBAction)tapAction:(id)sender {
     
-    _isHide = !_isHide;
-    [self.navigationController setNavigationBarHidden:_isHide animated:YES];
-    self.tabBarController.tabBar.hidden = _isHide;
+//    _isHide = !_isHide;
+//    [self.navigationController setNavigationBarHidden:_isHide animated:YES];
+//    self.tabBarController.tabBar.hidden = _isHide;
     
 }
 

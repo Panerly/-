@@ -66,7 +66,7 @@
         //设置定位精度
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         //设置距离筛选
-        [self.locationManager setDistanceFilter:10];
+        [self.locationManager setDistanceFilter:5];
         //开始定位
         [self.locationManager startUpdatingLocation];
         [self.view addSubview:loading];
@@ -138,7 +138,7 @@
             
             NSDictionary *responseDic = [responseObject objectForKey:@"retData"];
             
-            self.city.text = [NSString stringWithFormat:@"城市:  %@",[responseDic objectForKey:@"city"]];
+            self.city.text = [NSString stringWithFormat:@"城市:  %@市",[responseDic objectForKey:@"city"]];
             self.windDriection.text = [NSString stringWithFormat:@"风向:  %@",[[responseDic objectForKey:@"today"] objectForKey:@"fengxiang"]];
             self.temLabel.text = [NSString stringWithFormat:@"气温:  最高%@   最低%@",[[responseDic objectForKey:@"today"] objectForKey:@"hightemp"],[[responseDic objectForKey:@"today"] objectForKey:@"lowtemp"]];
             self.time.text = [NSString stringWithFormat:@"日期:  %@",[[responseDic objectForKey:@"today"] objectForKey:@"week"]];
@@ -295,6 +295,7 @@
             CLPlacemark* placemark = placemarks.firstObject;
             
             NSLog(@"定位城市:%@",[[placemark addressDictionary] objectForKey:@"City"]);
+            
             self.city.text = [NSString stringWithFormat:@"城市:  %@",[[placemark addressDictionary] objectForKey:@"City"]];
             
             UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"你的位置" message:[[placemark addressDictionary] objectForKey:@"City"] preferredStyle:UIAlertControllerStyleAlert];

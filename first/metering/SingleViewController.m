@@ -71,7 +71,10 @@ static BOOL flag;
     _scanView.alpha = .8;
     [self.view addSubview:_scanView];
     
-    scanBtn = [[UIButton alloc] init];
+    if (!scanBtn) {
+        
+        scanBtn = [[UIButton alloc] init];
+    }
     [scanBtn setTitle:@"确定" forState:UIControlStateNormal];
     scanBtn.backgroundColor = [UIColor redColor];
     scanBtn.clipsToBounds = YES;
@@ -91,15 +94,24 @@ static BOOL flag;
 - (void)conformBtn
 {
     [UIView animateWithDuration:.5 animations:^{
+        
         _videoPreviewLayer.transform = CATransform3DMakeScale(1.5, 1.5, 1.5);
+        
     } completion:^(BOOL finished) {
         
         [UIView animateWithDuration:.5 animations:^{
+            
             _scanView.transform = CGAffineTransformMakeScale(.01, .01);
             _videoPreviewLayer.transform = CATransform3DMakeScale(.01, .01, .01);
+            
         } completion:^(BOOL finished) {
+            
             [_scanView removeFromSuperview];
             [_videoPreviewLayer removeFromSuperlayer];
+            
+            _scanView = nil;
+            _videoPreviewLayer = nil;
+            
         }];
     }];
 }
@@ -229,7 +241,7 @@ static BOOL flag;
     num = imageValue;
     BOOL isCamera = [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear];
     if (!isCamera) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"本设备不支持摄像头" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"设备不支持摄像头" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         }];
         [alert addAction:action];

@@ -8,7 +8,8 @@
 
 #import "PayViewController.h"
 
-@interface PayViewController ()
+@interface PayViewController ()<UITextFieldDelegate>
+
 
 @end
 
@@ -21,6 +22,16 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
 }
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd  HH:mm:ss"];
+    NSString *time = [formatter stringFromDate:[NSDate date]];
+    _createTime.font = [UIFont systemFontOfSize:15];
+    _createTime.textAlignment = NSTextAlignmentCenter;
+    _createTime.text = [NSString stringWithFormat:@"订单创建时间： %@",time];
+    _moneyNum.delegate = self;
+}
 
 - (instancetype)init
 {
@@ -29,6 +40,27 @@
         self.view = [[[NSBundle mainBundle] loadNibNamed:@"Pay" owner:self options:nil] lastObject];
     }
     return self;
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    return [self validateNumber:string];
+}
+- (BOOL)validateNumber:(NSString*)number {
+    BOOL res = YES;
+    NSCharacterSet* tmpSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    int i = 0;
+    while (i < number.length) {
+        NSString * string = [number substringWithRange:NSMakeRange(i, 1)];
+        NSRange range = [string rangeOfCharacterFromSet:tmpSet];
+        if (range.length == 0) {
+            res = NO;
+            break;
+        }
+        i++;
+    }
+    return res;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

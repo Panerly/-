@@ -19,4 +19,5 @@
 
 @property (nonatomic, strong) NSString *x;
 @property (nonatomic, strong) NSString *y;
+@property (nonatomic, strong) NSString *userNameStr;
 @end
