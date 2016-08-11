@@ -34,9 +34,12 @@
 @interface MonitorViewController ()<BHInfiniteScrollViewDelegate, UIWebViewDelegate>
 {
     UIButton *button;
+    UIButton *litButton;
     NSMutableArray *arr;
+    NSMutableArray *litBtnArr;
     UIWebView *_webView;
     UIImageView *loading;
+    UISegmentedControl *segmentedCtl;
 }
 @property (nonatomic, strong) BHInfiniteScrollView* infinitePageView;
 @end
@@ -45,26 +48,154 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.view.backgroundColor = [UIColor colorWithRed:231.0f/255 green:231.0f/255 blue:231.0f/255 alpha:1];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_server.jpg"]];
-
-//    [self _createScrollView];
-//    [self _createButton];
     
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_server.jpg"]];
+    
+    [self setSegmentedCtl];
 }
+- (void)setSegmentedCtl {
+    segmentedCtl = [[UISegmentedControl alloc] initWithItems:@[@"大表监测",@"小表监测"]];
+    segmentedCtl.frame = CGRectMake(0, 0, PanScreenWidth/3, 30);
+    [segmentedCtl addTarget:self action:@selector(transMeters:) forControlEvents:UIControlEventValueChanged];
+    self.navigationItem.titleView = segmentedCtl;
+    segmentedCtl.selectedSegmentIndex = 0;
+}
+
+//选择大表还是小表
+- (void)transMeters:(UISegmentedControl *)sender {
+    
+    if (sender.selectedSegmentIndex == 0) {//大表监测平台
+        //移除小表
+        for (int j = 200; j < 204; j++) {
+            
+            [((UIButton *)litBtnArr[j-200]) removeFromSuperview];
+            
+//            CGFloat duration = (j - 199) * 0.2;
+//            [UIView animateWithDuration:duration animations:^{
+//                
+//                ((UIButton *)litBtnArr[j-200]).center = self.view.center;
+//                
+//            } completion:^(BOOL finished) {
+//                
+//                [((UIButton *)litBtnArr[j-200]) removeFromSuperview];
+//                if (j == 203) {
+//                    
+//                }
+//            }];
+        }
+        //添加大表及滚动视图
+        [self _createButton];
+        [self _createPicPlay];
+        
+        
+        for (int i = 100; i < 104; i++) {
+            
+            ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeScale(.01, .01);
+        }
+        
+        for (int i = 100; i < 104; i++) {
+            
+            CGFloat duration = (i - 99) * 0.2;
+            
+            [UIView animateWithDuration:duration animations:^{
+                
+                ((UIButton *)arr[i-100]).transform = CGAffineTransformIdentity;
+                
+            } completion:^(BOOL finished) {
+                
+            }];
+        }
+
+        
+    } else {//小表监测平台
+        
+        if (_webView) {//webView没关的话退出
+            [self backAction];
+        }
+        
+        //移除大表btn以及滚动视图
+        for (int i = 100; i < 104; i++) {
+            
+            [UIView animateWithDuration:.5 animations:^{
+                
+                switch (i) {
+                    case 100:
+                        ((UIButton *)arr[i-100]).frame = CGRectMake(0, 0, 10, 10);
+                        break;
+                    case 101:
+                        ((UIButton *)arr[i-100]).frame = CGRectMake(0, PanScreenHeight, 10, 10);
+                        break;
+                    case 102:
+                        ((UIButton *)arr[i-100]).frame = CGRectMake(PanScreenWidth, 0, 10, 10);
+                        break;
+                    case 103:
+                        ((UIButton *)arr[i-100]).frame = CGRectMake(PanScreenWidth, PanScreenHeight, 10, 10);
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
+                _infinitePageView.frame = CGRectMake(0, -[UIScreen mainScreen].bounds.size.height/3, PanScreenWidth, [UIScreen mainScreen].bounds.size.height/3);
+                
+            } completion:^(BOOL finished) {
+                
+                [(UIButton *)arr[i-100] removeFromSuperview];
+                [_infinitePageView removeFromSuperview];
+                _infinitePageView = nil;
+                
+            }];
+        }
+        
+        //创建小表btn并添加animation
+        [self createLitBtn];
+        for (int j = 200; j < 204; j++) {
+            switch (j) {
+                case 200:
+                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, 0);
+                    break;
+                case 201:
+                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, 0);
+                    break;
+                case 202:
+                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(0, -PanScreenWidth/4);
+                    break;
+                case 203:
+                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(0, -PanScreenWidth/4);
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+        [UIView animateWithDuration:.5 animations:^{
+            
+            for (int j = 200; j < 204; j++) {
+                
+                ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformIdentity;
+            }
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+    }
+}
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
     if (!button) {
-        
+    
         [self _createButton];
     }
-    
     [self _createPicPlay];
 
     for (int i = 100; i < 104; i++) {
         
-        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeScale(.1, .1);
+        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeScale(.01, .01);
     }
     
     for (int i = 100; i < 104; i++) {
@@ -74,14 +205,15 @@
         [UIView animateWithDuration:duration animations:^{
             
             ((UIButton *)arr[i-100]).transform = CGAffineTransformIdentity;
-            
+
         } completion:^(BOOL finished) {
-            
+
         }];
     }
     
 }
 
+//轮播图
 - (void)_createPicPlay
 {
     NSArray* urlsArray = @[
@@ -92,11 +224,13 @@
                            ];
 //    NSArray *titleArray = @[@"第一张",@"第二张",@"第三张",@"第四章",@"第五章"];
     CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/3;
-    
-    _infinitePageView = [BHInfiniteScrollView infiniteScrollViewWithFrame:CGRectMake(0, 49, PanScreenWidth, viewHeight) Delegate:self ImagesArray:urlsArray PlageHolderImage:[UIImage imageNamed:@"bg_weather3.jpg"] InfiniteLoop:YES];
+    if (!_infinitePageView) {
+        
+        _infinitePageView = [BHInfiniteScrollView infiniteScrollViewWithFrame:CGRectMake(0, 49, PanScreenWidth, viewHeight) Delegate:self ImagesArray:urlsArray PlageHolderImage:[UIImage imageNamed:@"bg_weather3.jpg"] InfiniteLoop:YES];
+        
+    }
     _infinitePageView.dotSize = 10;
     _infinitePageView.pageControlAlignmentOffset = CGSizeMake(0, 10);
-//    _infinitePageView.dotColor = [UIColor colorWithRed:91.0f green:154.0f blue:227.0f alpha:.9];
     _infinitePageView.selectedDotColor = [UIColor colorWithRed:91.0f/255 green:154.0f/255 blue:227.0f/255 alpha:.9];
 //    infinitePageView.titleView.textColor = [UIColor whiteColor];
 //    infinitePageView.titleView.margin = 30;
@@ -157,7 +291,7 @@
     [self.navigationController showViewController:intrVC sender:nil];
     }
 }
-
+//webview返回btn
 - (void)backAction
 {
     [UIView animateWithDuration:.3 animations:^{
@@ -169,11 +303,10 @@
     }];
 }
 
-
+#pragma mark - UIWebViewdelegate
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     //刷新控件
-    
     loading = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     loading.center = self.view.center;
     
@@ -181,7 +314,7 @@
     [loading setImage:image];
     [self.view addSubview:loading];
 }
-#pragma mark - UIWebViewdelegate
+
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [SCToastView showInView:_webView text:@"加载失败！请稍后重试" duration:2.0f autoHide:YES];
@@ -192,42 +325,86 @@
     [loading removeFromSuperview];
 }
 
-
+//大表监测平台btn
 - (void)_createButton
 {
     CGFloat width = self.view.frame.size.width/5+15;
-    
+
     button = [UIButton buttonWithType:UIButtonTypeCustom];//button的类型;
-    
     arr = [[NSMutableArray alloc] init];
+    [arr removeAllObjects];
     
-    NSArray *titleArr = @[@"实时抄见",@"历史抄见",@"水表数据",@"水表修改",@"用水核算",@"用量查询",@"使用帮助"];
-    NSArray *imageArr = @[@"now",@"his",@"message",@"edit",@"meter",@"dos",@"userhelp"];
+    NSArray *titleArr = @[@"实时抄见",@"历史抄见",@"水表数据",@"水表修改"];
+    NSArray *imageArr = @[@"now",@"his",@"message",@"edit"];
     CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/3;
+    
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             if (j == 0) {
                 button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, 59 + viewHeight, width, width)];
             } else
-            button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width * (j+1) + j*35+viewHeight-15, width, width)];
+               
+                button = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width * (j+1) + j*35+viewHeight-15, width, width)];
             
-            [button setBackgroundImage:[UIImage imageNamed:imageArr[i+i+j]] forState:UIControlStateNormal];
-            button.imageEdgeInsets = UIEdgeInsetsMake(5,13,21,button.titleLabel.bounds.size.width);//设置image在button上的位置（上top，左left，下bottom，右right）这里可以写负值，对上写－5，那么image就象上移动5个像素
+                [button setBackgroundImage:[UIImage imageNamed:imageArr[i+i+j]] forState:UIControlStateNormal];
+                button.imageEdgeInsets = UIEdgeInsetsMake(5,13,21,button.titleLabel.bounds.size.width);//设置image在button上的位置（上top，左left，下bottom，右right）这里可以写负值，对上写－5，那么image就象上移动5个像素
             
-            [button setTitle:titleArr[i+i+j] forState:UIControlStateNormal];//设置button的title
-            button.titleLabel.font = [UIFont systemFontOfSize:16];//title字体大小
-            button.titleLabel.textAlignment = NSTextAlignmentCenter;//设置title的字体居中
-            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];//设置title在一般情况下为白色字体
-            [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];//设置title在button被选中情况下为灰色字体
-            button.titleEdgeInsets = UIEdgeInsetsMake(110, -button.titleLabel.bounds.size.width, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
+                [button setTitle:titleArr[i+i+j] forState:UIControlStateNormal];//设置button的title
+                button.titleLabel.font = [UIFont systemFontOfSize:16];//title字体大小
+                button.titleLabel.textAlignment = NSTextAlignmentCenter;//设置title的字体居中
+                [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];//设置title在一般情况下为白色字体
+                [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];//设置title在button被选中情况下为灰色字体
+                button.titleEdgeInsets = UIEdgeInsetsMake(110, -button.titleLabel.bounds.size.width, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
             
-            button.tag = 100 + i+j+i;
+                button.tag = 100 + i+j+i;
             
-            [arr addObject:button];
+                [arr addObject:button];
             
-            [button addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
+                [button addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
             
-            [self.view addSubview:button];
+                [self.view addSubview:button];
+        }
+        
+    }
+}
+
+//小表监测平台btn
+- (void)createLitBtn
+{
+    CGFloat width = PanScreenWidth/5;
+    
+    litButton = [UIButton buttonWithType:UIButtonTypeCustom];//button的类型;
+    
+    litBtnArr = [[NSMutableArray alloc] init];
+    [litBtnArr removeAllObjects];
+    
+    NSArray *titleArr = @[@"用户浏览",@"日盘点",@"光电直读",@"数据交换"];
+    NSArray *imageArr = @[@"userScan",@"日盘点",@"光电直读",@"数据交换"];
+    
+    CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/5;
+    
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            
+            litButton = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width * j+ j*50+viewHeight-15, width, width)];
+            
+            [litButton setBackgroundImage:[UIImage imageNamed:imageArr[i+i+j]] forState:UIControlStateNormal];
+            litButton.imageEdgeInsets = UIEdgeInsetsMake(5,13,21,button.titleLabel.bounds.size.width);//设置image在button上的位置（上top，左left，下bottom，右right）这里可以写负值，对上写－5，那么image就象上移动5个像素
+            
+            [litButton setTitle:titleArr[i+i+j] forState:UIControlStateNormal];//设置button的title
+            litButton.titleLabel.font = [UIFont systemFontOfSize:16];//title字体大小
+            litButton.titleLabel.textAlignment = NSTextAlignmentCenter;//设置title的字体居中
+            [litButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];//设置title在一般情况下为白色字体
+            [litButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];//设置title在button被选中情况下为灰色字体
+            litButton.titleEdgeInsets = UIEdgeInsetsMake(110, -button.titleLabel.bounds.size.width, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
+            
+            litButton.tag = 200 + i+j+i;
+            
+            [litBtnArr addObject:litButton];
+            
+            [litButton addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [self.view addSubview:litButton];
         }
         
     }

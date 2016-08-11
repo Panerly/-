@@ -966,6 +966,7 @@ static int i = 0;
 }
 
 // 代理方法实现
+#pragma mark - CLLocationManagerDelegate
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     NSLog(@"经度：%f,纬度：%f",newLocation.coordinate.latitude,newLocation.coordinate.longitude);
     [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"定位成功" duration:2 autoHide:YES];

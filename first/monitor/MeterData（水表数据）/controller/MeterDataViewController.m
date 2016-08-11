@@ -240,6 +240,7 @@
     [_fromDate resignFirstResponder];
     [_toDate resignFirstResponder];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     

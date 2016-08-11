@@ -21,7 +21,9 @@
                                 <rect key="frame" x="-60" y="-14" width="121" height="29"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="wu9-Uc-UwJ"/>
+                                    <constraint firstAttribute="width" constant="150" id="wu9-Uc-UwJ">
+                                        <variation key="widthClass=compact" constant="200"/>
+                                    </constraint>
                                 </constraints>
                                 <segments>
                                     <segment title="小表抄收"/>
