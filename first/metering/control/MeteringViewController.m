@@ -240,7 +240,9 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-
+    if (self.view.window == nil && [self isViewLoaded]) {
+        self.view = nil;
+    }
 }
 
 
@@ -356,8 +358,9 @@
 {
     
     MeterInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     cell.backgroundColor = [UIColor clearColor];
+    
     if (!cell) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"MeterInfoTableViewCell" owner:self options:nil] lastObject];
     }
@@ -367,6 +370,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     if (isBitMeter) {
         
         MeteringSingleViewController *meteringVC = [[MeteringSingleViewController alloc] init];

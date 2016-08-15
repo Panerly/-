@@ -87,6 +87,12 @@
 		4548092A1D41F28800FB9D64 /* bg_雪.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4548091E1D41F28800FB9D64 /* bg_雪.jpg */; };
 		4548092D1D41FB3600FB9D64 /* 小到中雨.png in Resources */ = {isa = PBXBuildFile; fileRef = 4548092C1D41FB3600FB9D64 /* 小到中雨.png */; };
 		4548092F1D41FDE100FB9D64 /* bg_小到中雨.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4548092E1D41FDE100FB9D64 /* bg_小到中雨.jpg */; };
+		454936481D615C9D004EC4E0 /* LitMeterListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 454936471D615C9D004EC4E0 /* LitMeterListViewController.m */; };
+		4549364B1D615FF9004EC4E0 /* icon_drop_down@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 454936491D615FF9004EC4E0 /* icon_drop_down@3x.png */; };
+		4549364C1D615FF9004EC4E0 /* icon_drop_up@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4549364A1D615FF9004EC4E0 /* icon_drop_up@3x.png */; };
+		454936551D61673B004EC4E0 /* LitMeterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 454936531D61673B004EC4E0 /* LitMeterDetailViewController.m */; };
+		454936561D61673B004EC4E0 /* LitMeterDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 454936541D61673B004EC4E0 /* LitMeterDetailViewController.xib */; };
+		454936581D6179BD004EC4E0 /* icon_section.png in Resources */ = {isa = PBXBuildFile; fileRef = 454936571D6179BD004EC4E0 /* icon_section.png */; };
 		4555A2281D45E169009D1DC6 /* MJRefreshAutoFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4555A1FC1D45E169009D1DC6 /* MJRefreshAutoFooter.m */; };
 		4555A2291D45E169009D1DC6 /* MJRefreshBackFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4555A1FE1D45E169009D1DC6 /* MJRefreshBackFooter.m */; };
 		4555A22A1D45E169009D1DC6 /* MJRefreshComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4555A2001D45E169009D1DC6 /* MJRefreshComponent.m */; };
@@ -115,6 +121,8 @@
 		456D19561D5C1F2E0038C442 /* 日盘点.png in Resources */ = {isa = PBXBuildFile; fileRef = 456D19521D5C1F2E0038C442 /* 日盘点.png */; };
 		456D19571D5C1F2E0038C442 /* 光电直读.png in Resources */ = {isa = PBXBuildFile; fileRef = 456D19531D5C1F2E0038C442 /* 光电直读.png */; };
 		456D19581D5C1F2E0038C442 /* 数据交换.png in Resources */ = {isa = PBXBuildFile; fileRef = 456D19541D5C1F2E0038C442 /* 数据交换.png */; };
+		456D195C1D5C6DFA0038C442 /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 456D195B1D5C6DFA0038C442 /* refresh@2x.png */; };
+		456D19601D5C70F70038C442 /* 定位@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 456D195F1D5C70F70038C442 /* 定位@3x.png */; };
 		45771F8D1D0E3B5C006BF7F3 /* AppIcon29x29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 45771F871D0E3B5C006BF7F3 /* AppIcon29x29@2x.png */; };
 		45771F8E1D0E3B5C006BF7F3 /* AppIcon29x29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 45771F881D0E3B5C006BF7F3 /* AppIcon29x29@3x.png */; };
 		45771F8F1D0E3B5C006BF7F3 /* AppIcon40x40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 45771F891D0E3B5C006BF7F3 /* AppIcon40x40@2x.png */; };
@@ -145,7 +153,6 @@
 		45771FCF1D0E7DD9006BF7F3 /* 雹.png in Resources */ = {isa = PBXBuildFile; fileRef = 45771FBC1D0E7DD9006BF7F3 /* 雹.png */; };
 		45771FD01D0E7DD9006BF7F3 /* 雾.png in Resources */ = {isa = PBXBuildFile; fileRef = 45771FBD1D0E7DD9006BF7F3 /* 雾.png */; };
 		45771FD11D0E7DD9006BF7F3 /* 霾.png in Resources */ = {isa = PBXBuildFile; fileRef = 45771FBE1D0E7DD9006BF7F3 /* 霾.png */; };
-		45771FF21D0E8583006BF7F3 /* 定位.png in Resources */ = {isa = PBXBuildFile; fileRef = 45771FF11D0E8583006BF7F3 /* 定位.png */; };
 		457CEE0B1D46EAB200E961A6 /* bg_阵雨.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 457CEE0A1D46EAB200E961A6 /* bg_阵雨.jpg */; };
 		457CEE111D47065500E961A6 /* cry1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 457CEE0E1D47065500E961A6 /* cry1.gif */; };
 		457CEE121D47065500E961A6 /* cry2.gif in Resources */ = {isa = PBXBuildFile; fileRef = 457CEE0F1D47065500E961A6 /* cry2.gif */; };
@@ -484,6 +491,14 @@
 		4548091E1D41F28800FB9D64 /* bg_雪.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "bg_雪.jpg"; sourceTree = "<group>"; };
 		4548092C1D41FB3600FB9D64 /* 小到中雨.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "小到中雨.png"; sourceTree = "<group>"; };
 		4548092E1D41FDE100FB9D64 /* bg_小到中雨.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "bg_小到中雨.jpg"; sourceTree = "<group>"; };
+		454936461D615C9D004EC4E0 /* LitMeterListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LitMeterListViewController.h; sourceTree = "<group>"; };
+		454936471D615C9D004EC4E0 /* LitMeterListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LitMeterListViewController.m; sourceTree = "<group>"; };
+		454936491D615FF9004EC4E0 /* icon_drop_down@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_drop_down@3x.png"; sourceTree = "<group>"; };
+		4549364A1D615FF9004EC4E0 /* icon_drop_up@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_drop_up@3x.png"; sourceTree = "<group>"; };
+		454936521D61673B004EC4E0 /* LitMeterDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LitMeterDetailViewController.h; sourceTree = "<group>"; };
+		454936531D61673B004EC4E0 /* LitMeterDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LitMeterDetailViewController.m; sourceTree = "<group>"; };
+		454936541D61673B004EC4E0 /* LitMeterDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LitMeterDetailViewController.xib; sourceTree = "<group>"; };
+		454936571D6179BD004EC4E0 /* icon_section.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_section.png; sourceTree = "<group>"; };
 		4555A1FB1D45E169009D1DC6 /* MJRefreshAutoFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshAutoFooter.h; sourceTree = "<group>"; };
 		4555A1FC1D45E169009D1DC6 /* MJRefreshAutoFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshAutoFooter.m; sourceTree = "<group>"; };
 		4555A1FD1D45E169009D1DC6 /* MJRefreshBackFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBackFooter.h; sourceTree = "<group>"; };
@@ -532,6 +547,8 @@
 		456D19521D5C1F2E0038C442 /* 日盘点.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "日盘点.png"; sourceTree = "<group>"; };
 		456D19531D5C1F2E0038C442 /* 光电直读.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "光电直读.png"; sourceTree = "<group>"; };
 		456D19541D5C1F2E0038C442 /* 数据交换.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "数据交换.png"; sourceTree = "<group>"; };
+		456D195B1D5C6DFA0038C442 /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
+		456D195F1D5C70F70038C442 /* 定位@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "定位@3x.png"; sourceTree = "<group>"; };
 		45771F871D0E3B5C006BF7F3 /* AppIcon29x29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon29x29@2x.png"; sourceTree = "<group>"; };
 		45771F881D0E3B5C006BF7F3 /* AppIcon29x29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon29x29@3x.png"; sourceTree = "<group>"; };
 		45771F891D0E3B5C006BF7F3 /* AppIcon40x40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon40x40@2x.png"; sourceTree = "<group>"; };
@@ -566,7 +583,6 @@
 		45771FBC1D0E7DD9006BF7F3 /* 雹.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "雹.png"; sourceTree = "<group>"; };
 		45771FBD1D0E7DD9006BF7F3 /* 雾.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "雾.png"; sourceTree = "<group>"; };
 		45771FBE1D0E7DD9006BF7F3 /* 霾.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "霾.png"; sourceTree = "<group>"; };
-		45771FF11D0E8583006BF7F3 /* 定位.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "定位.png"; sourceTree = "<group>"; };
 		457CEE0A1D46EAB200E961A6 /* bg_阵雨.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "bg_阵雨.jpg"; sourceTree = "<group>"; };
 		457CEE0E1D47065500E961A6 /* cry1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cry1.gif; sourceTree = "<group>"; };
 		457CEE0F1D47065500E961A6 /* cry2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cry2.gif; sourceTree = "<group>"; };
@@ -1188,6 +1204,50 @@
 				4548092E1D41FDE100FB9D64 /* bg_小到中雨.jpg */,
 			);
 			path = bg_weather;
+			sourceTree = "<group>";
+		};
+		4549363C1D615BA5004EC4E0 /* litMeterMonitor（小表监测） */ = {
+			isa = PBXGroup;
+			children = (
+				454936511D616717004EC4E0 /* litMeterDetail */,
+				454936401D615C0B004EC4E0 /* controller */,
+				454936431D615C0B004EC4E0 /* model */,
+				454936441D615C0B004EC4E0 /* view */,
+			);
+			path = "litMeterMonitor（小表监测）";
+			sourceTree = "<group>";
+		};
+		454936401D615C0B004EC4E0 /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				454936461D615C9D004EC4E0 /* LitMeterListViewController.h */,
+				454936471D615C9D004EC4E0 /* LitMeterListViewController.m */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		454936431D615C0B004EC4E0 /* model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		454936441D615C0B004EC4E0 /* view */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		454936511D616717004EC4E0 /* litMeterDetail */ = {
+			isa = PBXGroup;
+			children = (
+				454936521D61673B004EC4E0 /* LitMeterDetailViewController.h */,
+				454936531D61673B004EC4E0 /* LitMeterDetailViewController.m */,
+				454936541D61673B004EC4E0 /* LitMeterDetailViewController.xib */,
+			);
+			path = litMeterDetail;
 			sourceTree = "<group>";
 		};
 		4555A1F91D45E169009D1DC6 /* MJRefresh */ = {
@@ -1845,6 +1905,7 @@
 				45D44BC71D1D07AB00024E1B /* 刷新4.gif */,
 				458DFC2B1D3612A400EB874A /* 刷新5.gif */,
 				458DFC2D1D36149F00EB874A /* 刷新50.gif */,
+				456D195B1D5C6DFA0038C442 /* refresh@2x.png */,
 			);
 			path = "刷新图片";
 			sourceTree = "<group>";
@@ -2080,7 +2141,7 @@
 				45FF5D0C1D0FAD0400F3D4E4 /* meter.png */,
 				4531FE4A1D238FCF00E2C18F /* save.png */,
 				454004061D29FEB300A8EF2A /* save2.png */,
-				45771FF11D0E8583006BF7F3 /* 定位.png */,
+				456D195F1D5C70F70038C442 /* 定位@3x.png */,
 				45D6350D1D17DAB7004358B8 /* 定位2.png */,
 				45BF599D1D1A51B400F3EFBD /* takephoto.png */,
 				45BF599B1D1A4C3A00F3EFBD /* line.png */,
@@ -2109,7 +2170,10 @@
 				458DFC2F1D36195200EB874A /* down.png */,
 				458DFC311D361BB200EB874A /* down2.png */,
 				458DFC351D3632DD00EB874A /* 2downarrow.png */,
+				454936491D615FF9004EC4E0 /* icon_drop_down@3x.png */,
+				4549364A1D615FF9004EC4E0 /* icon_drop_up@3x.png */,
 				4521A9C81D5811A9003BCDDB /* config@2x.png */,
+				454936571D6179BD004EC4E0 /* icon_section.png */,
 			);
 			path = image;
 			sourceTree = "<group>";
@@ -2137,6 +2201,7 @@
 		45DCA37F1CEF022500E42468 /* monitor(监测) */ = {
 			isa = PBXGroup;
 			children = (
+				4549363C1D615BA5004EC4E0 /* litMeterMonitor（小表监测） */,
 				45EB6AAD1D236835003A2FA0 /* MeterEdit(水表修改) */,
 				452ACC311D20DF8000B50002 /* MeterData（水表数据） */,
 				45FF5D1C1D0FC7E600F3D4E4 /* CurrentReceive(实时抄见) */,
@@ -2464,6 +2529,8 @@
 				458A74EA1D5ADEEA00A53D8C /* MeterInfoTableViewCell.xib in Resources */,
 				45F03A371D5982A3009D8E4C /* moreClear@2x.png in Resources */,
 				45F03A391D598725009D8E4C /* back@2x.png in Resources */,
+				456D19601D5C70F70038C442 /* 定位@3x.png in Resources */,
+				4549364C1D615FF9004EC4E0 /* icon_drop_up@3x.png in Resources */,
 				45BF59A41D1A68CD00F3EFBD /* waterCharg.png in Resources */,
 				452ACC391D20DFF600B50002 /* MeterDataViewController.xib in Resources */,
 				45771F8F1D0E3B5C006BF7F3 /* AppIcon40x40@2x.png in Resources */,
@@ -2472,8 +2539,8 @@
 				45978D711CED7E6400BF3C0E /* LaunchScreen.storyboard in Resources */,
 				45107CED1D52D0C100693E3D /* calendar@2x.png in Resources */,
 				458DFC361D3632DD00EB874A /* 2downarrow.png in Resources */,
+				456D195C1D5C6DFA0038C442 /* refresh@2x.png in Resources */,
 				4521A9C91D5811A9003BCDDB /* config@2x.png in Resources */,
-				45771FF21D0E8583006BF7F3 /* 定位.png in Resources */,
 				4559EEF51D2E229500A80DE6 /* qrcode_icon.png in Resources */,
 				45C705F11D12436D002164C6 /* chart.png in Resources */,
 				45771F8E1D0E3B5C006BF7F3 /* AppIcon29x29@3x.png in Resources */,
@@ -2519,6 +2586,7 @@
 				45D635101D17DAFA004358B8 /* pic.png in Resources */,
 				45BF599E1D1A51B400F3EFBD /* takephoto.png in Resources */,
 				45BF599A1D1A3B9400F3EFBD /* SingleViewController.xib in Resources */,
+				454936561D61673B004EC4E0 /* LitMeterDetailViewController.xib in Resources */,
 				45D44BAD1D1CC4B600024E1B /* HisDetailViewController.xib in Resources */,
 				4521D7251D542712006DA76C /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				458DFC2C1D3612A400EB874A /* 刷新5.gif in Resources */,
@@ -2550,6 +2618,7 @@
 				4548092F1D41FDE100FB9D64 /* bg_小到中雨.jpg in Resources */,
 				45B4435F1CF41FB8000644B2 /* Config.storyboard in Resources */,
 				45EB0C0E1D3E01E70062AE52 /* metering_selected@2x.png in Resources */,
+				454936581D6179BD004EC4E0 /* icon_section.png in Resources */,
 				45771FCB1D0E7DD9006BF7F3 /* 阵雨.png in Resources */,
 				45EB0C0A1D3E01E70062AE52 /* me_selected@2x.png in Resources */,
 				4521D73D1D542C3B006DA76C /* share@2x.png in Resources */,
@@ -2582,6 +2651,7 @@
 				45771FD01D0E7DD9006BF7F3 /* 雾.png in Resources */,
 				45901BA01D41E13100E6249C /* SVProgressHUD.bundle in Resources */,
 				45771F901D0E3B5C006BF7F3 /* AppIcon40x40@3x.png in Resources */,
+				4549364B1D615FF9004EC4E0 /* icon_drop_down@3x.png in Resources */,
 				454809281D41F28800FB9D64 /* bg_大雨.jpg in Resources */,
 				45E7DB181D1B975A0011340D /* userInfor.storyboard in Resources */,
 				45FF5D0D1D0FAD0400F3D4E4 /* edit.png in Resources */,
@@ -2634,6 +2704,7 @@
 				4555A2321D45E169009D1DC6 /* MJRefreshBackStateFooter.m in Sources */,
 				45901B681D41E13100E6249C /* JSONModel.m in Sources */,
 				45901B8A1D41E13100E6249C /* SCPieChartDataItem.m in Sources */,
+				454936481D615C9D004EC4E0 /* LitMeterListViewController.m in Sources */,
 				45D44BBE1D1CFADA00024E1B /* SCCircleCell.m in Sources */,
 				45901B9D1D41E13100E6249C /* UIView+WebCacheOperation.m in Sources */,
 				45901B7B1D41E13100E6249C /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
@@ -2684,6 +2755,7 @@
 				4555A2281D45E169009D1DC6 /* MJRefreshAutoFooter.m in Sources */,
 				458D28BE1D2B6E4600F64790 /* UserNameViewController.m in Sources */,
 				452ACC431D20FF5000B50002 /* SearchResultViewController.m in Sources */,
+				454936551D61673B004EC4E0 /* LitMeterDetailViewController.m in Sources */,
 				45901B6B1D41E13100E6249C /* JSONAPI.m in Sources */,
 				453F2CAC1D2634A70048A4DB /* MeterEditScrollView.m in Sources */,
 				458A74E01D5AD13D00A53D8C /* MeterInfoModel.m in Sources */,
@@ -2939,7 +3011,7 @@
 					"$(PROJECT_DIR)/first/三方/ShareSDK/Extend/SinaWeiboSDK",
 					"$(PROJECT_DIR)/first/三方/ShareSDK/Extend/WeChatSDK",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = hs.hzsb.com;
+				PRODUCT_BUNDLE_IDENTIFIER = hs.hzsbapp.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2969,7 +3041,7 @@
 					"$(PROJECT_DIR)/first/三方/ShareSDK/Extend/SinaWeiboSDK",
 					"$(PROJECT_DIR)/first/三方/ShareSDK/Extend/WeChatSDK",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = hs.hzsb.com;
+				PRODUCT_BUNDLE_IDENTIFIER = hs.hzsbapp.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

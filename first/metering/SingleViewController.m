@@ -194,7 +194,7 @@ static BOOL flag;
     [SCToastView showInView:[UIApplication sharedApplication].keyWindow text:@"定位成功" duration:1 autoHide:YES];
     [_locationManager stopUpdatingLocation];
     
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"确定使用当前坐标 ？" message:[NSString stringWithFormat:@"经度：%f\n\n纬度：%f",newLocation.coordinate.longitude,newLocation.coordinate.latitude] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"使用当前坐标 ？" message:[NSString stringWithFormat:@"\n经度：%f\n\n纬度：%f",newLocation.coordinate.longitude,newLocation.coordinate.latitude] preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         _x = [NSString stringWithFormat:@"%f",newLocation.coordinate.longitude];

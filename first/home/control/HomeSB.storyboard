@@ -201,14 +201,18 @@
                                     </mask>
                                 </variation>
                             </visualEffectView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9k-Wd-7CY">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9k-Wd-7CY">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="cZ7-c0-OKX"/>
-                                    <constraint firstAttribute="width" constant="30" id="uCO-ZD-gmh"/>
+                                    <constraint firstAttribute="height" constant="30" id="cZ7-c0-OKX">
+                                        <variation key="widthClass=compact" constant="40"/>
+                                    </constraint>
+                                    <constraint firstAttribute="width" constant="30" id="uCO-ZD-gmh">
+                                        <variation key="widthClass=compact" constant="40"/>
+                                    </constraint>
                                 </constraints>
-                                <state key="normal" backgroundImage="定位.png">
+                                <state key="normal" backgroundImage="定位@3x.png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="default">
@@ -576,19 +580,46 @@
                                     <outlet property="delegate" destination="LUF-NH-0QI" id="Jbp-Nr-Ogq"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hg3-eF-daM">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="7yK-Ik-Zzw"/>
+                                    <constraint firstAttribute="width" constant="50" id="pOc-mj-bHe"/>
+                                </constraints>
+                                <state key="normal" image="refresh@2x.png"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="7yK-Ik-Zzw"/>
+                                        <exclude reference="pOc-mj-bHe"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="7yK-Ik-Zzw"/>
+                                        <include reference="pOc-mj-bHe"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="refresh:" destination="LUF-NH-0QI" eventType="touchUpInside" id="0Bq-VU-Tsr"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="ZNQ-kU-GIa" secondAttribute="trailing" constant="-20" id="4qe-py-5dj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="q9k-Wd-7CY" secondAttribute="trailing" constant="30" id="5PG-CK-XPF">
-                                <variation key="widthClass=compact" constant="15"/>
+                                <variation key="widthClass=compact" constant="-10"/>
                             </constraint>
                             <constraint firstItem="1He-1j-IdL" firstAttribute="top" secondItem="5Z4-31-3YV" secondAttribute="topMargin" constant="10" id="C7H-Vh-IAd">
                                 <variation key="widthClass=compact" constant="0.0"/>
                             </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="3ds-4l-RvD" secondAttribute="trailing" constant="50" id="Cgr-AE-yRx">
                                 <variation key="widthClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="hg3-eF-daM" firstAttribute="top" secondItem="cVj-ce-wjw" secondAttribute="bottom" constant="30" id="EnR-Dl-zYX">
+                                <variation key="widthClass=compact" constant="10"/>
                             </constraint>
                             <constraint firstItem="Rem-Zl-6WT" firstAttribute="top" secondItem="3ds-4l-RvD" secondAttribute="bottom" constant="14" id="Fym-V0-QLv"/>
                             <constraint firstItem="ZNQ-kU-GIa" firstAttribute="top" secondItem="cVj-ce-wjw" secondAttribute="bottom" id="H8z-SJ-548">
@@ -599,16 +630,22 @@
                             </constraint>
                             <constraint firstItem="3ds-4l-RvD" firstAttribute="top" secondItem="ZNQ-kU-GIa" secondAttribute="bottom" constant="15" id="LkP-8W-s8w"/>
                             <constraint firstItem="ugu-1d-a9s" firstAttribute="leading" secondItem="5Z4-31-3YV" secondAttribute="leadingMargin" constant="-20" id="OHi-OC-WEf"/>
+                            <constraint firstItem="hg3-eF-daM" firstAttribute="centerY" secondItem="q9k-Wd-7CY" secondAttribute="centerY" id="Q8N-aw-YPx"/>
                             <constraint firstItem="ZNQ-kU-GIa" firstAttribute="leading" secondItem="5Z4-31-3YV" secondAttribute="leadingMargin" constant="-20" id="QlH-iu-JxB"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Rem-Zl-6WT" secondAttribute="trailing" constant="-20" id="UH5-4G-VAi"/>
                             <constraint firstAttribute="trailingMargin" secondItem="1He-1j-IdL" secondAttribute="trailing" constant="-20" id="UQ5-6u-yR4"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ugu-1d-a9s" secondAttribute="trailing" constant="-20" id="W8m-fr-6hI"/>
+                            <constraint firstItem="hg3-eF-daM" firstAttribute="leading" secondItem="5Z4-31-3YV" secondAttribute="leadingMargin" constant="15" id="WRf-mB-H7d">
+                                <variation key="widthClass=compact" constant="-10"/>
+                            </constraint>
                             <constraint firstItem="ugu-1d-a9s" firstAttribute="top" secondItem="Rem-Zl-6WT" secondAttribute="bottom" constant="5" id="bpD-nY-Vre"/>
                             <constraint firstItem="3ds-4l-RvD" firstAttribute="leading" secondItem="5Z4-31-3YV" secondAttribute="leadingMargin" constant="50" id="dXs-ct-k3b">
                                 <variation key="widthClass=compact" constant="20"/>
                             </constraint>
                             <constraint firstItem="3ds-4l-RvD" firstAttribute="centerX" secondItem="5Z4-31-3YV" secondAttribute="centerX" id="hl9-FI-JSb"/>
-                            <constraint firstItem="q9k-Wd-7CY" firstAttribute="top" secondItem="cVj-ce-wjw" secondAttribute="bottom" constant="30" id="ina-Pg-iAp"/>
+                            <constraint firstItem="q9k-Wd-7CY" firstAttribute="top" secondItem="cVj-ce-wjw" secondAttribute="bottom" constant="30" id="ina-Pg-iAp">
+                                <variation key="widthClass=compact" constant="15"/>
+                            </constraint>
                             <constraint firstItem="Rem-Zl-6WT" firstAttribute="leading" secondItem="5Z4-31-3YV" secondAttribute="leadingMargin" constant="-20" id="isy-wl-fej"/>
                             <constraint firstItem="ZNQ-kU-GIa" firstAttribute="centerX" secondItem="5Z4-31-3YV" secondAttribute="centerX" id="keg-gq-aBC"/>
                             <constraint firstItem="oFR-T5-0pF" firstAttribute="top" secondItem="1He-1j-IdL" secondAttribute="bottom" constant="10" id="pBK-ut-jj4">
@@ -627,10 +664,14 @@
                                 <exclude reference="q9k-Wd-7CY"/>
                                 <exclude reference="Rem-Zl-6WT"/>
                                 <exclude reference="ugu-1d-a9s"/>
+                                <exclude reference="hg3-eF-daM"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="JeC-K4-rwJ"/>
                                 <exclude reference="pBK-ut-jj4"/>
+                                <exclude reference="EnR-Dl-zYX"/>
+                                <exclude reference="Q8N-aw-YPx"/>
+                                <exclude reference="WRf-mB-H7d"/>
                                 <exclude reference="5PG-CK-XPF"/>
                                 <exclude reference="ina-Pg-iAp"/>
                                 <exclude reference="C7H-Vh-IAd"/>
@@ -661,10 +702,14 @@
                                 <include reference="q9k-Wd-7CY"/>
                                 <include reference="Rem-Zl-6WT"/>
                                 <include reference="ugu-1d-a9s"/>
+                                <include reference="hg3-eF-daM"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="JeC-K4-rwJ"/>
                                 <include reference="pBK-ut-jj4"/>
+                                <include reference="EnR-Dl-zYX"/>
+                                <exclude reference="Q8N-aw-YPx"/>
+                                <include reference="WRf-mB-H7d"/>
                                 <include reference="5PG-CK-XPF"/>
                                 <include reference="ina-Pg-iAp"/>
                                 <include reference="C7H-Vh-IAd"/>
@@ -690,6 +735,8 @@
                     </view>
                     <connections>
                         <outlet property="city" destination="Xo8-eA-KR8" id="XJ9-9d-8tr"/>
+                        <outlet property="positionBtn" destination="q9k-Wd-7CY" id="Pe7-Dt-FU8"/>
+                        <outlet property="refreshBtn" destination="hg3-eF-daM" id="0dZ-Eq-gUe"/>
                         <outlet property="tableView" destination="ugu-1d-a9s" id="Sra-Zn-lgq"/>
                         <outlet property="temLabel" destination="wuX-Rc-fdB" id="j5d-lp-ae0"/>
                         <outlet property="time" destination="seG-i6-UOx" id="gK7-Ip-qk5"/>
@@ -712,13 +759,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H0Q-b1-L3d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="142.5" y="210"/>
+            <point key="canvasLocation" x="72" y="162"/>
         </scene>
     </scenes>
     <resources>
         <image name="bg_weather3.jpg" width="535" height="803"/>
+        <image name="refresh@2x.png" width="535" height="803"/>
         <image name="多云.png" width="256" height="256"/>
-        <image name="定位.png" width="200" height="200"/>
+        <image name="定位@3x.png" width="535" height="803"/>
         <image name="晴.png" width="256" height="256"/>
         <image name="雹.png" width="256" height="256"/>
     </resources>

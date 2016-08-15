@@ -247,8 +247,6 @@
     
     CurrentReceiveTableViewCell *crCell = [tableView dequeueReusableCellWithIdentifier:identy forIndexPath:indexPath];
     
-    crCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
     if (!crCell) {
         
         crCell = [[[NSBundle mainBundle] loadNibNamed:@"CurrentReceive" owner:self options:nil] lastObject];
@@ -267,6 +265,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.isRealTimeOrHis == 0) {
         
         DetailViewController *detailVC = [[DetailViewController alloc] init];

@@ -14,7 +14,7 @@
 @interface HomeViewController ()<CLLocationManagerDelegate,UITableViewDelegate, UITableViewDataSource>
 {
     UIImageView *loading;
-//    NSTimer *timer;
+    NSTimer *timer;
 }
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic, strong) NSDictionary *areaidDic;
@@ -89,9 +89,8 @@
 
 - (void)loadingInfo
 {
-    self.city.text = [NSString stringWithFormat:@"城市:  正在加载"];
     self.weather.text = [NSString stringWithFormat:@"天气:  正在加载"];
-    self.temLabel.text = [NSString stringWithFormat:@"温度:  正在加载"];
+    self.temLabel.text = [NSString stringWithFormat:@"气温:  正在加载"];
     self.windDriection.text = [NSString stringWithFormat:@"风向:  正在加载"];
     self.windForceScale.text = [NSString stringWithFormat:@"风力:  正在加载"];
     self.time.text = [NSString stringWithFormat:@"日期:  正在加载"];
@@ -104,6 +103,10 @@
 - (void)_requestWeatherData:(NSString *)cityName
 {
 //    [SVProgressHUD showWithStatus:@"正在加载天气信息"];
+    
+    self.city.text = [NSString stringWithFormat:@"城市:  %@市",cityName];
+    self.locaCity = cityName;
+    
     [self loadingInfo];
 
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -133,12 +136,15 @@
         
     } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         
+        [timer invalidate];
+        _refreshBtn.transform = CGAffineTransformIdentity;
+        _positionBtn.transform = CGAffineTransformIdentity;
+        
         if (responseObject) {
             [SVProgressHUD showInfoWithStatus:@"加载成功"];
             
             NSDictionary *responseDic = [responseObject objectForKey:@"retData"];
             
-            self.city.text = [NSString stringWithFormat:@"城市:  %@市",[responseDic objectForKey:@"city"]];
             self.windDriection.text = [NSString stringWithFormat:@"风向:  %@",[[responseDic objectForKey:@"today"] objectForKey:@"fengxiang"]];
             self.temLabel.text = [NSString stringWithFormat:@"气温:  最高%@   最低%@",[[responseDic objectForKey:@"today"] objectForKey:@"hightemp"],[[responseDic objectForKey:@"today"] objectForKey:@"lowtemp"]];
             self.time.text = [NSString stringWithFormat:@"日期:  %@",[[responseDic objectForKey:@"today"] objectForKey:@"week"]];
@@ -170,7 +176,7 @@
 //                }
                 [_weather_bg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"bg_%@.jpg",self.todayWeatherInfo.text]]];
                 CATransition *trans = [[CATransition alloc] init];
-                trans.type = kCATransitionReveal;
+                trans.type = @"rippleEffect";
                 trans.duration = .5;
                 [_weather_bg.layer addAnimation:trans forKey:@"transition"];
             }
@@ -182,17 +188,42 @@
             self.weatherPicImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",self.todayWeatherInfo.text]];
             self.todayImage.image = self.weatherPicImage.image;
             
+            
+            //typedef enum : NSUInteger {
+            //    Fade = 1,                   //淡入淡出
+            //    Push,                       //推挤
+            //    Reveal,                     //揭开
+            //    MoveIn,                     //覆盖
+            //    Cube,                       //立方体
+            //    SuckEffect,                 //吮吸
+            //    OglFlip,                    //翻转
+            //    RippleEffect,               //波纹
+            //    PageCurl,                   //翻页
+            //    PageUnCurl,                 //反翻页
+            //    CameraIrisHollowOpen,       //开镜头
+            //    CameraIrisHollowClose,      //关镜头
+            //    CurlDown,                   //下翻页
+            //    CurlUp,                     //上翻页
+            //    FlipFromLeft,               //左翻转
+            //    FlipFromRight,              //右翻转
+            //    
+            //} AnimationType;
+            
             CATransition *transition = [[CATransition alloc] init];
+            CATransition *transition2 = [[CATransition alloc] init];
             transition.type = @"rippleEffect";
+            transition2.type = @"cube";
             transition.duration = .5;
+            transition2.duration = .5;
             [_weatherPicImage.layer addAnimation:transition forKey:@"transition"];
-            [_yesterdayImage.layer addAnimation:transition forKey:@"transition"];
-            [_tomorrowImage.layer addAnimation:transition forKey:@"transition"];
+            [_yesterdayImage.layer addAnimation:transition2 forKey:@"transition"];
+            [_todayImage.layer addAnimation:transition2 forKey:@"transition"];
+            [_tomorrowImage.layer addAnimation:transition2 forKey:@"transition"];
 
         }
         else{
             [SVProgressHUD showErrorWithStatus:@"天气加载失败"];
-            self.city.text = [NSString stringWithFormat:@"城市:  加载失败^_^!"];
+//            self.city.text = [NSString stringWithFormat:@"城市:  加载失败^_^!"];
             self.weather.text = [NSString stringWithFormat:@"天气:  加载失败^_^!"];
             self.temLabel.text = [NSString stringWithFormat:@"温度:  加载失败^_^!"];
             self.windDriection.text = [NSString stringWithFormat:@"风向:  加载失败^_^!"];
@@ -202,16 +233,16 @@
             self.todayWeatherInfo.text = [NSString stringWithFormat:@"加载失败!"];
             self.tomorrowWeather.text = [NSString stringWithFormat:@"加载失败!"];
             
-            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"天气信息加载失败，请重新定位^_^!" preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            
-            [alertVC addAction:action];
-            [self presentViewController:alertVC animated:YES completion:^{
-                
-            }];
+//            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"天气信息加载失败，请重新定位^_^!" preferredStyle:UIAlertControllerStyleAlert];
+//            
+//            UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//                
+//            }];
+//            
+//            [alertVC addAction:action];
+//            [self presentViewController:alertVC animated:YES completion:^{
+//                
+//            }];
         }
         
     }];
@@ -253,10 +284,18 @@
     
 //    [loading setImage:image];
 
-//    timer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(timesOut) userInfo:nil repeats:NO];
+    timer = [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(locatStatue) userInfo:nil repeats:YES];
     
     [self locationCurrentCity];
 }
+- (void)locatStatue {
+    [UIView animateWithDuration:.5 animations:^{
+        _positionBtn.transform = CGAffineTransformMakeScale(.5, .5);
+    } completion:^(BOOL finished) {
+        _positionBtn.transform = CGAffineTransformIdentity;
+    }];
+}
+
 - (void)timesOut{
     [SVProgressHUD showErrorWithStatus:@"定位超时！"];
     [_locationManager stopUpdatingLocation];
@@ -319,7 +358,7 @@
                 NSInteger index = [cityName rangeOfString:@"自治区"].location;
                 cityName = [cityName substringToIndex:index];
             }
-            
+            self.locaCity = cityName;
             [self _requestWeatherData:cityName];
             
         }
@@ -357,6 +396,24 @@
     [self.navigationController showViewController:meteringVC sender:nil];
 }
 
+
+- (IBAction)refresh:(UIButton *)sender {
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(refreshStatus) userInfo:nil repeats:YES];
+    
+    [self _requestWeatherData:self.locaCity];
+}
+
+- (void)refreshStatus {
+    
+    [UIView animateWithDuration:.1 animations:^{
+        
+        _refreshBtn.transform = CGAffineTransformRotate(_refreshBtn.transform, M_PI_4);
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+}
 
 @end
 

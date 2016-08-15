@@ -35,7 +35,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     
-    fileSize = [[SDImageCache sharedImageCache] getSize];
+    fileSize = [[SDImageCache sharedImageCache] getDiskCount];
     [_tableView reloadData];
 }
 
@@ -142,20 +142,37 @@
     }
     if (indexPath.section == 1 && indexPath.row == 0) {
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"清理缓存" message:@"是否清理缓存？" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-        UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [[SDImageCache sharedImageCache] cleanDisk];
-            fileSize = [[SDImageCache sharedImageCache] getSize];
-            [self.tableView reloadData];
-            [SCToastView showInView:self.view text:@"已清理" duration:.5f autoHide:YES];
-        }];
-        [alert addAction:cancel];
-        [alert addAction:confirm];
-        
-        [self presentViewController:alert animated:YES completion:^{
+        if (fileSize/10240/1024.0 > 0) {
             
-        }];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"是否清理缓存？" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                [[SDImageCache sharedImageCache] cleanDisk];
+                fileSize = [[SDImageCache sharedImageCache] getDiskCount];
+                [self.tableView reloadData];
+                
+                [SCToastView showInView:self.view text:@"已清理" duration:.5f autoHide:YES];
+            }];
+            
+            [alert addAction:cancel];
+            [alert addAction:confirm];
+            
+            [self presentViewController:alert animated:YES completion:^{
+                
+            }];
+        } else {
+            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"暂无缓存可清除！" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+           
+            [alert addAction:cancel];
+            
+            [self presentViewController:alert animated:YES completion:^{
+                
+            }];
+
+        }
         
         
         [tableView cellForRowAtIndexPath:indexPath].selected = NO;

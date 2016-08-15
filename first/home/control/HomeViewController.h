@@ -30,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *time;
 
 - (IBAction)position:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *positionBtn;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
@@ -41,5 +42,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *yesLabel;
 @property (weak, nonatomic) IBOutlet UILabel *todLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tomLabel;
+
+@property (nonatomic, strong) NSString *locaCity;
+
+- (IBAction)refresh:(UIButton *)sender;
+
+@property (weak, nonatomic) IBOutlet UIButton *refreshBtn;
 
 @end

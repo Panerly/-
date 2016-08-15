@@ -11,6 +11,7 @@
 #import "MeterDataViewController.h"
 #import "BHInfiniteScrollView.h"
 #import "IntroductionViewController.h"
+#import "LitMeterListViewController.h"
 //typedef enum : NSUInteger {
 //    Fade = 1,                   //淡入淡出
 //    Push,                       //推挤
@@ -40,6 +41,7 @@
     UIWebView *_webView;
     UIImageView *loading;
     UISegmentedControl *segmentedCtl;
+    BOOL isBigMeter;
 }
 @property (nonatomic, strong) BHInfiniteScrollView* infinitePageView;
 @end
@@ -51,8 +53,134 @@
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_server.jpg"]];
     
+    isBigMeter = YES;
+    
     [self setSegmentedCtl];
+    
+    [self addGesture];
 }
+
+- (void)addGesture {
+    UISwipeGestureRecognizer *swipeToLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(gestureLeftAction)];
+    swipeToLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeToLeft];
+    
+    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(gestureRightAction)];
+    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swipeRight];
+}
+
+- (void)gestureRightAction {
+    segmentedCtl.selectedSegmentIndex = 0;
+    isBigMeter = YES;
+    
+    //移除小表
+    for (int j = 200; j < 204; j++) {
+        
+        [((UIButton *)litBtnArr[j-200]) removeFromSuperview];
+    }
+    //添加大表及滚动视图
+    [self _createButton];
+    [self _createPicPlay];
+    
+    
+    for (int i = 100; i < 104; i++) {
+        
+        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeScale(.01, .01);
+    }
+    
+    for (int i = 100; i < 104; i++) {
+        
+        CGFloat duration = (i - 99) * 0.2;
+        
+        [UIView animateWithDuration:duration animations:^{
+            
+            ((UIButton *)arr[i-100]).transform = CGAffineTransformIdentity;
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+
+}
+
+- (void)gestureLeftAction {
+    segmentedCtl.selectedSegmentIndex = 1;
+    isBigMeter = NO;
+    
+    if (_webView) {//webView没关的话退出
+        [self backAction];
+    }
+    
+    //移除大表btn以及滚动视图
+    for (int i = 100; i < 104; i++) {
+        
+        [UIView animateWithDuration:.5 animations:^{
+            
+            switch (i) {
+                case 100:
+                    ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, -PanScreenWidth);
+                    break;
+                case 101:
+                    ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, PanScreenWidth);
+                    break;
+                case 102:
+                    ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeTranslation(PanScreenWidth/4, -PanScreenWidth);
+                    break;
+                case 103:
+                    ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeTranslation(PanScreenWidth/4, PanScreenWidth);
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            _infinitePageView.frame = CGRectMake(0, -[UIScreen mainScreen].bounds.size.height/3, PanScreenWidth, [UIScreen mainScreen].bounds.size.height/3);
+            
+        } completion:^(BOOL finished) {
+            
+            [(UIButton *)arr[i-100] removeFromSuperview];
+            [_infinitePageView removeFromSuperview];
+            _infinitePageView = nil;
+            
+        }];
+    }
+    
+    //创建小表btn并添加animation
+    [self createLitBtn];
+    for (int j = 200; j < 204; j++) {
+        switch (j) {
+            case 200:
+                ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, -PanScreenWidth);
+                break;
+            case 201:
+                ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, PanScreenWidth);
+                break;
+            case 202:
+                ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(PanScreenWidth/4, -PanScreenWidth);
+                break;
+            case 203:
+                ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(PanScreenWidth/4, PanScreenWidth);
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    [UIView animateWithDuration:.5 animations:^{
+        
+        for (int j = 200; j < 204; j++) {
+            
+            ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformIdentity;
+        }
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+
+}
+
 - (void)setSegmentedCtl {
     segmentedCtl = [[UISegmentedControl alloc] initWithItems:@[@"大表监测",@"小表监测"]];
     segmentedCtl.frame = CGRectMake(0, 0, PanScreenWidth/3, 30);
@@ -65,6 +193,9 @@
 - (void)transMeters:(UISegmentedControl *)sender {
     
     if (sender.selectedSegmentIndex == 0) {//大表监测平台
+        
+        isBigMeter = YES;
+        
         //移除小表
         for (int j = 200; j < 204; j++) {
             
@@ -109,6 +240,8 @@
         
     } else {//小表监测平台
         
+        isBigMeter = NO;
+        
         if (_webView) {//webView没关的话退出
             [self backAction];
         }
@@ -120,16 +253,16 @@
                 
                 switch (i) {
                     case 100:
-                        ((UIButton *)arr[i-100]).frame = CGRectMake(0, 0, 10, 10);
+                        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, -PanScreenWidth);
                         break;
                     case 101:
-                        ((UIButton *)arr[i-100]).frame = CGRectMake(0, PanScreenHeight, 10, 10);
+                        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, PanScreenWidth);
                         break;
                     case 102:
-                        ((UIButton *)arr[i-100]).frame = CGRectMake(PanScreenWidth, 0, 10, 10);
+                        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeTranslation(PanScreenWidth/4, -PanScreenWidth);
                         break;
                     case 103:
-                        ((UIButton *)arr[i-100]).frame = CGRectMake(PanScreenWidth, PanScreenHeight, 10, 10);
+                        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeTranslation(PanScreenWidth/4, PanScreenWidth);
                         break;
                         
                     default:
@@ -152,16 +285,16 @@
         for (int j = 200; j < 204; j++) {
             switch (j) {
                 case 200:
-                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, 0);
+                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, -PanScreenWidth);
                     break;
                 case 201:
-                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, 0);
+                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(-PanScreenWidth/4, PanScreenWidth);
                     break;
                 case 202:
-                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(0, -PanScreenWidth/4);
+                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(PanScreenWidth/4, -PanScreenWidth);
                     break;
                 case 203:
-                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(0, -PanScreenWidth/4);
+                    ((UIButton *)litBtnArr[j-200]).transform = CGAffineTransformMakeTranslation(PanScreenWidth/4, PanScreenWidth);
                     break;
                     
                 default:
@@ -183,32 +316,40 @@
     }
 }
 
-
-
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (!button) {
     
-        [self _createButton];
-    }
-    [self _createPicPlay];
-
-    for (int i = 100; i < 104; i++) {
+    if (isBigMeter) {
         
-        ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeScale(.01, .01);
-    }
-    
-    for (int i = 100; i < 104; i++) {
-        
-        CGFloat duration = (i - 99) * 0.2;
-        
-        [UIView animateWithDuration:duration animations:^{
+        if (!button) {
             
-            ((UIButton *)arr[i-100]).transform = CGAffineTransformIdentity;
-
-        } completion:^(BOOL finished) {
-
-        }];
+            [self _createButton];
+        }
+        [self _createPicPlay];
+        
+        for (int i = 100; i < 104; i++) {
+            
+            ((UIButton *)arr[i-100]).transform = CGAffineTransformMakeScale(.01, .01);
+        }
+        
+        for (int i = 100; i < 104; i++) {
+            
+            CGFloat duration = (i - 99) * 0.2;
+            
+            [UIView animateWithDuration:duration animations:^{
+                
+                ((UIButton *)arr[i-100]).transform = CGAffineTransformIdentity;
+                
+            } completion:^(BOOL finished) {
+                
+            }];
+        }
+    } else {
+        
+        if (!litButton) {
+            
+            [self createLitBtn];
+        }
     }
     
 }
@@ -217,10 +358,10 @@
 - (void)_createPicPlay
 {
     NSArray* urlsArray = @[
-                           @"http://60.191.39.206:8000/waterweb/IMAGE/homeimage1.png",
-                           @"http://60.191.39.206:8000/waterweb/IMAGE/homeimage2.png",
-                           @"http://60.191.39.206:8000/waterweb/IMAGE/homeimage3.png",
-                           @"http://60.191.39.206:8000/waterweb/IMAGE/homeimage4.png",
+                           @"http://60.191.39.206:8000/waterweb/IMAGE/ios_image/04.png",
+                           @"http://60.191.39.206:8000/waterweb/IMAGE/ios_image/03.png",
+                           @"http://60.191.39.206:8000/waterweb/IMAGE/ios_image/02.png",
+                           @"http://60.191.39.206:8000/waterweb/IMAGE/ios_image/01.png",
                            ];
 //    NSArray *titleArray = @[@"第一张",@"第二张",@"第三张",@"第四章",@"第五章"];
     CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/3;
@@ -231,11 +372,13 @@
     }
     _infinitePageView.dotSize = 10;
     _infinitePageView.pageControlAlignmentOffset = CGSizeMake(0, 10);
+    _infinitePageView.dotColor = [UIColor whiteColor];
     _infinitePageView.selectedDotColor = [UIColor colorWithRed:91.0f/255 green:154.0f/255 blue:227.0f/255 alpha:.9];
-//    infinitePageView.titleView.textColor = [UIColor whiteColor];
-//    infinitePageView.titleView.margin = 30;
-//    infinitePageView.titleView.hidden = YES;
-//    infinitePageView.titlesArray = titleArray;
+//    _infinitePageView.titleView.textColor = [UIColor whiteColor];
+//    _infinitePageView.titleView.margin = 30;
+//    _infinitePageView.titleView.hidden = NO;
+//    _infinitePageView.titleView.center = _infinitePageView.center;
+//    _infinitePageView.titlesArray = titleArray;
     _infinitePageView.scrollTimeInterval = 2;
     _infinitePageView.autoScrollToNextPage = YES;
     _infinitePageView.delegate = self;
@@ -260,7 +403,7 @@
     if (index == 0) {
         if (!_webView) {
             
-            _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64, PanScreenWidth, PanScreenHeight-64)];
+            _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64, PanScreenWidth, PanScreenHeight-64-49)];
             _webView.delegate = self;
             backBtn = [[UIButton alloc] init];
         }
@@ -310,7 +453,7 @@
     loading = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     loading.center = self.view.center;
     
-    UIImage *image = [UIImage sd_animatedGIFNamed:@"刷新1"];
+    UIImage *image = [UIImage sd_animatedGIFNamed:@"刷新5"];
     [loading setImage:image];
     [self.view addSubview:loading];
 }
@@ -378,7 +521,7 @@
     litBtnArr = [[NSMutableArray alloc] init];
     [litBtnArr removeAllObjects];
     
-    NSArray *titleArr = @[@"用户浏览",@"日盘点",@"光电直读",@"数据交换"];
+    NSArray *titleArr = @[@"             用户浏览",@"             日盘点",@"              光电直读",@"               数据交换"];
     NSArray *imageArr = @[@"userScan",@"日盘点",@"光电直读",@"数据交换"];
     
     CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height/5;
@@ -386,11 +529,14 @@
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             
-            litButton = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width * j+ j*50+viewHeight-15, width, width)];
+            litButton = [[UIButton alloc] initWithFrame:CGRectMake(PanScreenWidth/2 * i + PanScreenWidth/8, width * j+ j*80+viewHeight-15, width, width)];
             
             [litButton setBackgroundImage:[UIImage imageNamed:imageArr[i+i+j]] forState:UIControlStateNormal];
             litButton.imageEdgeInsets = UIEdgeInsetsMake(5,13,21,button.titleLabel.bounds.size.width);//设置image在button上的位置（上top，左left，下bottom，右right）这里可以写负值，对上写－5，那么image就象上移动5个像素
             
+            litButton.layer.shadowOffset = CGSizeMake(1, 1.5);
+            litButton.layer.shadowColor = [[UIColor blackColor]CGColor];
+            litButton.layer.shadowOpacity = .80f;
             [litButton setTitle:titleArr[i+i+j] forState:UIControlStateNormal];//设置button的title
             litButton.titleLabel.font = [UIFont systemFontOfSize:16];//title字体大小
             litButton.titleLabel.textAlignment = NSTextAlignmentCenter;//设置title的字体居中
@@ -414,18 +560,22 @@
 {
     CurrentReceiveViewController *currentReceiveVC = [[CurrentReceiveViewController alloc] init];
     MeterDataViewController *dataVC = [[MeterDataViewController alloc] init];
+    LitMeterListViewController *litMeterVC = [[LitMeterListViewController alloc] init];
+    
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"此功能暂未退出" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+    [alertVC addAction:confirm];
     
     switch (sender.tag) {
             
             case 100:
+            
             currentReceiveVC.isRealTimeOrHis = 0;
             [self.navigationController showViewController:currentReceiveVC sender:nil];
-            
             break;
             
             case 101:
             currentReceiveVC.isRealTimeOrHis = 1;
-//            currentReceiveVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController showViewController:currentReceiveVC sender:nil];
             
             break;
@@ -436,8 +586,23 @@
             break;
             case 103:
             currentReceiveVC.isRealTimeOrHis = 2;
-//            currentReceiveVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController showViewController:currentReceiveVC sender:nil];
+            
+            break;
+        case 200://小表列表
+            [self.navigationController showViewController:litMeterVC sender:nil];
+            
+            break;
+        case 201:
+            [self presentViewController:alertVC animated:YES completion:nil];
+            
+            break;
+        case 202:
+            [self presentViewController:alertVC animated:YES completion:nil];
+            
+            break;
+        case 203:
+            [self presentViewController:alertVC animated:YES completion:nil];
             
             break;
             
